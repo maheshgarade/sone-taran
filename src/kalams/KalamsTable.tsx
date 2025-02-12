@@ -3,6 +3,7 @@ import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper
 import InfoIcon from "@mui/icons-material/Info";
 import { Visibility, Edit, Delete } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
+import { calculateAnnualCompoundInterest } from "../utils/interestCalculatorUtils";
 
 // Define the interfaces
 interface Address {
@@ -141,7 +142,7 @@ const KalamsTable: React.FC = () => {
                 </TableCell>
                 <TableCell>{customer.loan.loanStartDate}</TableCell>
                 <TableCell>₹{customer.loan.customerAmt}</TableCell>
-                <TableCell>₹{customer.loan.totalAmt}</TableCell>
+                <TableCell>₹{calculateAnnualCompoundInterest(customer.loan.customerAmt, customer.loan.customerROI * 12, 48, 15 )}</TableCell>
                 <TableCell>{customer.loan.customerROI}%</TableCell>
                 <TableCell>{customer.merchant.shopName}</TableCell>
                 <TableCell>{calculateTodaysValue()}</TableCell>

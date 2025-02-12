@@ -35,7 +35,7 @@ const menuItems = [
   { text: "Log Out", path: "/logout" },
 ];
 
-const drawerWidth = 240;
+const drawerWidth = 170;
 
 const App = () => {
   const theme = useTheme();

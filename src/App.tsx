@@ -38,7 +38,7 @@ const menuItems = [
   { text: "Log Out", path: "/logout" },
 ];
 
-const drawerWidth = 240;
+const drawerWidth = 170;
 
 const BreadcrumbsComponent = () => {
   const location = useLocation();
@@ -63,7 +63,7 @@ const App = () => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const [mobileOpen, setMobileOpen] = useState(false);
-  const location = useLocation(); // ✅ No more error because <BrowserRouter> is in index.js
+  const location = useLocation();
 
   const toggleDrawer = () => {
     setMobileOpen(!mobileOpen);
