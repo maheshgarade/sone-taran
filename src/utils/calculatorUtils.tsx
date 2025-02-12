@@ -107,3 +107,31 @@ export const interestBreakdown = (principal: number, annualRate: number, totalMo
 
 // let breakdown = interestBreakdown(customerLoan, annualROI, totalMonths, totalDays);
 // console.log(breakdown);
+
+
+export const calculateMonthsAndDays = (startDate: string) => {
+    const start = new Date(startDate);
+    const end = new Date(); // Today's date
+
+    let years = end.getFullYear() - start.getFullYear();
+    let months = end.getMonth() - start.getMonth();
+    let days = end.getDate() - start.getDate();
+
+    // Adjust if days are negative
+    if (days < 0) {
+        const previousMonthDays = new Date(end.getFullYear(), end.getMonth(), 0).getDate();
+        days += previousMonthDays;
+        months--; // Borrowing a month
+    }
+
+    // Adjust if months are negative
+    if (months < 0) {
+        years--;
+        months += 12;
+    }
+
+    const totalMonths = years * 12 + months;
+    
+    // ✅ Ensuring the correct day count (Include the end date)
+    return { totalMonths: totalMonths + 1, days }; 
+}

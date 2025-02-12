@@ -3,7 +3,7 @@ import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper
 import InfoIcon from "@mui/icons-material/Info";
 import { Visibility, Edit, Delete } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
-import { calculateAnnualCompoundInterest } from "../utils/interestCalculatorUtils";
+import { calculateAnnualCompoundInterest, calculateMonthsAndDays } from "../utils/calculatorUtils";
 
 // Define the interfaces
 interface Address {
@@ -120,48 +120,55 @@ const KalamsTable: React.FC = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {customers.map((customer, index) => (
-              <TableRow key={index}>
-                <TableCell>{index + 1}</TableCell>
-                <TableCell>{index + 1001}</TableCell> {/* Example ID */}
-                
-                {/* Customer Name + Info Icon */}
-                <TableCell>
-                  {customer.customer.name}
-                  <IconButton onClick={() => setSelectedCustomer(customer.customer)}>
-                    <InfoIcon fontSize="small" color="primary" />
-                  </IconButton>
-                </TableCell>
+  {customers.map((customer, index) => {
+    const { totalMonths, days } = calculateMonthsAndDays(customer.loan.loanStartDate);
+    console.log('totalMonths ', totalMonths, 'days ', days)
+    return (
+      <TableRow key={index}>
+        <TableCell>{index + 1}</TableCell>
+        <TableCell>{index + 1001}</TableCell>
 
-                {/* Kalam Name + Info Icon */}
-                <TableCell>
-                  {customer.kalam.name}
-                  <IconButton onClick={() => setSelectedKalam(customer.kalam)}>
-                    <InfoIcon fontSize="small" color="primary" />
-                  </IconButton>
-                </TableCell>
-                <TableCell>{customer.loan.loanStartDate}</TableCell>
-                <TableCell>₹{customer.loan.customerAmt}</TableCell>
-                <TableCell>₹{calculateAnnualCompoundInterest(customer.loan.customerAmt, customer.loan.customerROI * 12, 48, 15 )}</TableCell>
-                <TableCell>{customer.loan.customerROI}%</TableCell>
-                <TableCell>{customer.merchant.shopName}</TableCell>
-                <TableCell>{calculateTodaysValue()}</TableCell>
-                <TableCell>Valid</TableCell>
-                <TableCell>
-  <IconButton onClick={() => navigate(`/kalams/${index + 1001}`)}>
-    <Visibility fontSize="small" color="primary" />
-  </IconButton>
-  <IconButton>
-    <Edit fontSize="small" color="secondary" />
-  </IconButton>
-  <IconButton>
-    <Delete fontSize="small" color="error" />
-  </IconButton>
-</TableCell>
+        {/* Customer Name + Info Icon */}
+        <TableCell>
+          {customer.customer.name}
+          <IconButton onClick={() => setSelectedCustomer(customer.customer)}>
+            <InfoIcon fontSize="small" color="primary" />
+          </IconButton>
+        </TableCell>
 
-              </TableRow>
-            ))}
-          </TableBody>
+        {/* Kalam Name + Info Icon */}
+        <TableCell>
+          {customer.kalam.name}
+          <IconButton onClick={() => setSelectedKalam(customer.kalam)}>
+            <InfoIcon fontSize="small" color="primary" />
+          </IconButton>
+        </TableCell>
+
+        <TableCell>{customer.loan.loanStartDate}</TableCell>
+        <TableCell>₹{customer.loan.customerAmt}</TableCell>
+        <TableCell>
+          ₹{calculateAnnualCompoundInterest(customer.loan.customerAmt, customer.loan.customerROI * 12, totalMonths, days)}
+        </TableCell>
+        <TableCell>{customer.loan.customerROI}%</TableCell>
+        <TableCell>{customer.merchant.shopName}</TableCell>
+        <TableCell>{calculateTodaysValue()}</TableCell>
+        <TableCell>-</TableCell>
+        <TableCell>
+          <IconButton onClick={() => navigate(`/kalams/${index + 1001}`)}>
+            <Visibility fontSize="small" color="primary" />
+          </IconButton>
+          <IconButton>
+            <Edit fontSize="small" color="secondary" />
+          </IconButton>
+          <IconButton>
+            <Delete fontSize="small" color="error" />
+          </IconButton>
+        </TableCell>
+      </TableRow>
+    );
+  })}
+</TableBody>
+
         </Table>
       </TableContainer>
 
