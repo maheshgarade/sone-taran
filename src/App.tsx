@@ -19,7 +19,7 @@ import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import KalamsTable from "./kalams/KalamsTable";
 import KalamDetails from "./kalams/KalamDetails";
-import Calculator from "./calculators/calculators/Calculator";
+import Calculator from "./calculators/Calculator";
 
 // Pages
 const Dashboard = () => <h1>Dashboard Page</h1>;
