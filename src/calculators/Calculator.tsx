@@ -2,6 +2,7 @@ import * as React from 'react';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
+import { calculatorTabs } from '../constants/CalculatorTabs';
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -41,19 +42,18 @@ export default function Calculator() {
 
   return (
     <Box sx={{ width: '100%' }}>
-      
       <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-        <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
-          <Tab label="Gold Valuation" {...a11yProps(0)} />
-          <Tab label="Loan Duration" {...a11yProps(1)} />
+        <Tabs value={value} onChange={handleChange} aria-label="dynamic tabs example">
+          {calculatorTabs.map((tab, index) => (
+            <Tab label={tab.tabName} {...a11yProps(index)} key={index} />
+          ))}
         </Tabs>
       </Box>
-      <CustomTabPanel value={value} index={0}>
-        Gold Valuation
-      </CustomTabPanel>
-      <CustomTabPanel value={value} index={1}>
-      Loan Duration
-      </CustomTabPanel>
+      {calculatorTabs.map((tab, index) => (
+        <CustomTabPanel value={value} index={index} key={index}>
+          {React.createElement(tab.component)} {/* Dynamically render the component */}
+        </CustomTabPanel>
+      ))}
     </Box>
   );
 }
