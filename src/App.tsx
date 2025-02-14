@@ -19,13 +19,14 @@ import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import KalamsTable from "./kalams/KalamsTable";
 import KalamDetails from "./kalams/KalamDetails";
+import Calculator from "./calculators/calculators/Calculator";
 
 // Pages
 const Dashboard = () => <h1>Dashboard Page</h1>;
 const Kalams = () => <h1><KalamsTable/></h1>;
 const Customers = () => <h1>Customers Page</h1>;
 const Settings = () => <h1>Settings Page</h1>;
-const Calculators = () => <h1>Calculators Page</h1>;
+const Calculators = () => <Calculator />;
 const Logout = () => <h1>Logging Out...</h1>;
 
 // Menu Items

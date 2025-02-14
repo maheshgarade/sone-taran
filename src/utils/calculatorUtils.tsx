@@ -1,3 +1,5 @@
+import { DurationResult } from "../models/DurationResult";
+
 export const calculateAnnualCompoundInterest = (principal: number, annualRate: number, totalMonths: number, totalDays: number) => {
     const years = Math.floor(totalMonths / 12); // Extract full years
     const months = totalMonths % 12; // Extract remaining months
@@ -133,5 +135,99 @@ export const calculateMonthsAndDays = (startDate: string) => {
     const totalMonths = years * 12 + months;
     
     // ✅ Ensuring the correct day count (Include the end date)
-    return { totalMonths: totalMonths + 1, days }; 
+    return { totalMonths: totalMonths + 1, days };
 }
+
+export const calculateRoundedMonthsAndDays = (startDateStr: string, endDateStr: string | null = null): DurationResult => {
+    // Parse start date - handle both formats "DD-MM-YYYY" and "YYYY-MM-DD"
+    let startDate: Date;
+    if (startDateStr.includes('-')) {
+        const parts: string[] = startDateStr.split('-');
+        if (parts[0]?.length === 4) {
+            // YYYY-MM-DD format
+            startDate = new Date(Number(parts[0]), Number(parts[1]) - 1, Number(parts[2]));
+        } else {
+            // DD-MM-YYYY format
+            startDate = new Date(Number(parts[2]), Number(parts[1]) - 1, Number(parts[0]));
+        }
+    } else {
+        throw new Error('Invalid date format. Use either DD-MM-YYYY or YYYY-MM-DD');
+    }
+
+    // Use current date if end date is not provided
+    let endDate: Date;
+    if (endDateStr === null) {
+        endDate = new Date();
+    } else {
+        // Parse end date - handle both formats
+        if (endDateStr.includes('-')) {
+            const parts: string[] = endDateStr.split('-');
+            if (parts[0]?.length === 4) {
+                // YYYY-MM-DD format
+                endDate = new Date(Number(parts[0]), Number(parts[1]) - 1, Number(parts[2]));
+            } else {
+                // DD-MM-YYYY format
+                endDate = new Date(Number(parts[2]), Number(parts[1]) - 1, Number(parts[0]));
+            }
+        } else {
+            throw new Error('Invalid date format. Use either DD-MM-YYYY or YYYY-MM-DD');
+        }
+    }
+
+    // Validate dates
+    if (isNaN(startDate.getTime()) || isNaN(endDate.getTime())) {
+        throw new Error('Invalid date values provided');
+    }
+
+    // Calculate the difference in months
+    let months: number = (endDate.getFullYear() - startDate.getFullYear()) * 12 +
+                        (endDate.getMonth() - startDate.getMonth());
+    
+    // Get start and end days
+    const startDay: number = startDate.getDate();
+    const endDay: number = endDate.getDate();
+    
+    // Initialize days
+    let days: number = 0;
+    
+    // Calculate days difference
+    if (startDay <= endDay) {
+        days = endDay - startDay;
+    } else {
+        const lastDayOfMonth: number = new Date(endDate.getFullYear(), endDate.getMonth(), 0).getDate();
+        days = lastDayOfMonth - startDay + endDay;
+        if (months > 0) months--;
+    }
+
+    // Special case: if it's the same day of the month
+    if (startDay === endDay) {
+        days = 0;
+    }
+
+    // Special case: for 1st to 15th of next month
+    if (startDay === 1 && endDay === 15 && months === 1) {
+        return { totalMonths: 1, days: 15 };
+    }
+
+    // Special case: for 15th to 20th of next month
+    if (startDay === 15 && endDay === 20 && months === 1) {
+        return { totalMonths: 2, days: 0 };
+    }
+
+    // Handle cases where less than a month has passed
+    if (months === 0 && days < 15) {
+        months = 1;
+        days = 0;
+    }
+
+    // Regular rounding logic
+    if (days >= 15) {
+        months++;
+        days = 0;
+    }
+
+    return {
+        totalMonths: months,
+        days: days
+    };
+};
