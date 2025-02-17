@@ -4,8 +4,8 @@ import * as Yup from 'yup';
 import { Button, Box, Typography } from '@mui/material';
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
-import { calculateRoundedMonthsAndDays } from '../../utils/calculatorUtils';
 import { DurationResult } from '../../models/DurationResult';
+import { calculateRoundedMonthsAndDays } from '../../utils/CountDays';
 
 const LoanDurationCalculator = () => {
   const [durationResult, setDurationResult] = useState<DurationResult | null>(null);
