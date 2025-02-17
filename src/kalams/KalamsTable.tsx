@@ -122,7 +122,8 @@ const KalamsTable: React.FC = () => {
           </TableHead>
           <TableBody>
   {customers.map((customer, index) => {
-    const { totalMonths, days } = calculateMonthsAndDays(customer.loan.loanStartDate);
+    const loanStartDate = new Date(customer.loan.loanStartDate);
+    const { totalMonths, days } = calculateMonthsAndDays(loanStartDate);
     return (
       <TableRow key={index}>
         <TableCell>{index + 1}</TableCell>
