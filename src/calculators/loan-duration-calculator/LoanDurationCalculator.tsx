@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import { Button, Box, Typography, Divider } from '@mui/material';
+import { Button, Box, Typography } from '@mui/material';
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { DurationResult } from '../../models/DurationResult';
@@ -95,7 +95,6 @@ const LoanDurationCalculator = () => {
           </Typography>
         </Box>
       )}
-      <Divider/>
       {roundOffDuration && (
         <Box sx={{ mt: 3, p: 2, border: '1px solid #ccc', borderRadius: '4px', backgroundColor: '#f9f9f9' }}>
           <Typography variant="h6">Round Off Loan Duration:</Typography>
