@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import { Button, Box, Typography } from '@mui/material';
+import { Button, Box, Typography, Container, Paper } from '@mui/material';
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { DurationResult } from '../../models/DurationResult';
@@ -48,64 +48,71 @@ const LoanDurationCalculator = () => {
 
   return (
     <LocalizationProvider dateAdapter={AdapterDateFns}>
-      <Box component="form" onSubmit={formik.handleSubmit} sx={{ mt: 2 }}>
-        <DatePicker
-          label="Start Date"
-          value={formik.values.startDate}
-          onChange={(newValue) => formik.setFieldValue('startDate', newValue)}
-          slotProps={{
-            textField: {
-              fullWidth: true,
-              margin: 'normal',
-              error: Boolean(formik.touched.startDate && formik.errors.startDate),
-              helperText: formik.touched.startDate && formik.errors.startDate,
-            },
-          }}
-        />
-        <DatePicker
-          label="End Date"
-          value={formik.values.endDate}
-          onChange={(newValue) => formik.setFieldValue('endDate', newValue)}
-          slotProps={{
-            textField: {
-              fullWidth: true,
-              margin: 'normal',
-              error: Boolean(formik.touched.endDate && formik.errors.endDate),
-              helperText: formik.touched.endDate && formik.errors.endDate,
-            },
-          }}
-        />
-        <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 2 }}>
-          <Button color="primary" variant="contained" type="submit">
-            Calculate Duration
-          </Button>
-          <Button color="secondary" variant="outlined" onClick={handleReset}>
-            Reset
-          </Button>
-        </Box>
-      </Box>
-      {actualDuration && (
-        <Box sx={{ mt: 3, p: 2, border: '1px solid #ccc', borderRadius: '4px', backgroundColor: '#f9f9f9' }}>
-          <Typography variant="h6">Actual Loan Duration:</Typography>
-          <Typography variant="body1">
-            {actualDuration.totalMonths} month{actualDuration.totalMonths > 1 ? 's' : null}
+      <Container maxWidth="sm">
+        <Paper elevation={3} sx={{ padding: 4, marginTop: 4 }}>
+          <Typography variant="h4" align="center" gutterBottom>
+              Loan Duration
           </Typography>
-          <Typography variant="body1">
-            {actualDuration.days} day{actualDuration.days > 1 ? 's' : null}
-          </Typography>
-        </Box>
-      )}
-      {roundOffDuration && (
-        <Box sx={{ mt: 3, p: 2, border: '1px solid #ccc', borderRadius: '4px', backgroundColor: '#f9f9f9' }}>
-          <Typography variant="h6">Round Off Loan Duration:</Typography>
-          <Typography variant="body1">
-            {roundOffDuration.totalMonths} month{roundOffDuration.totalMonths > 1 ? 's' : null}
-          </Typography>
-          <Typography variant="body1">
-            {roundOffDuration.days} day{roundOffDuration.days > 1 ? 's' : null}
-          </Typography>
-        </Box>
-      )}
+          <Box component="form" onSubmit={formik.handleSubmit} sx={{ mt: 2 }}>
+            <DatePicker
+              label="Start Date"
+              value={formik.values.startDate}
+              onChange={(newValue) => formik.setFieldValue('startDate', newValue)}
+              slotProps={{
+                textField: {
+                  fullWidth: true,
+                  margin: 'normal',
+                  error: Boolean(formik.touched.startDate && formik.errors.startDate),
+                  helperText: formik.touched.startDate && formik.errors.startDate,
+                },
+              }}
+            />
+            <DatePicker
+              label="End Date"
+              value={formik.values.endDate}
+              onChange={(newValue) => formik.setFieldValue('endDate', newValue)}
+              slotProps={{
+                textField: {
+                  fullWidth: true,
+                  margin: 'normal',
+                  error: Boolean(formik.touched.endDate && formik.errors.endDate),
+                  helperText: formik.touched.endDate && formik.errors.endDate,
+                },
+              }}
+            />
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 2 }}>
+              <Button color="primary" variant="contained" type="submit">
+                Calculate Duration
+              </Button>
+              <Button color="secondary" variant="outlined" onClick={handleReset}>
+                Reset
+              </Button>
+            </Box>
+          </Box>
+          {actualDuration && (
+            <Box sx={{ mt: 3, p: 2, border: '1px solid #ccc', borderRadius: '4px', backgroundColor: '#f9f9f9' }}>
+              <Typography variant="h6">Actual Loan Duration:</Typography>
+              <Typography variant="body1">
+                {actualDuration.totalMonths} month{actualDuration.totalMonths > 1 ? 's' : null}
+              </Typography>
+              <Typography variant="body1">
+                {actualDuration.days} day{actualDuration.days > 1 ? 's' : null}
+              </Typography>
+            </Box>
+          )}
+          {roundOffDuration && (
+            <Box sx={{ mt: 3, p: 2, border: '1px solid #ccc', borderRadius: '4px', backgroundColor: '#f9f9f9' }}>
+              <Typography variant="h6">Round Off Loan Duration:</Typography>
+              <Typography variant="body1">
+                {roundOffDuration.totalMonths} month{roundOffDuration.totalMonths > 1 ? 's' : null}
+              </Typography>
+              <Typography variant="body1">
+                {roundOffDuration.days} day{roundOffDuration.days > 1 ? 's' : null}
+              </Typography>
+            </Box>
+          )}
+        </Paper>
+      </Container>
     </LocalizationProvider>
   );
 };
