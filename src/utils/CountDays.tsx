@@ -1,10 +1,10 @@
 import { DurationResult } from "../models/DurationResult";
 
-export const calculateMonthsAndDays = (startDate: string, endDate?: string | null): DurationResult => {
-    const start = new Date(startDate);
+export const calculateMonthsAndDays = (startDate: Date | null, endDate?: Date | null): DurationResult => {
+    const start = startDate ? new Date(startDate) : new Date();
     const end = endDate ? new Date(endDate) : new Date();
 
-    console.log('startDate ',startDate);
+    console.log('startDate ',start);
     console.log('endDate ',endDate);
 
     // Calculate the number of full months
@@ -51,7 +51,7 @@ const roundMonthsAndDays = (months: number, days: number): DurationResult => {
 }
 
 // Updated function to calculate and round months and days
-export const calculateRoundedMonthsAndDays = (startDate: string, endDate: string | null = null): DurationResult => {
+export const calculateRoundedMonthsAndDays = (startDate: Date | null, endDate: Date | null): DurationResult => {
     // Calculate the raw months and days
     const rawResult = calculateMonthsAndDays(startDate, endDate);
 
@@ -85,8 +85,8 @@ const testCalculateRoundedMonthsAndDays = () => {
     ];
 
     testCases.forEach((testCase, index) => {
-        const startDate = testCase.start;
-        const endDate = testCase.end;
+        const startDate = new Date(testCase.start);
+        const endDate = new Date(testCase.end);
         const result = calculateRoundedMonthsAndDays(startDate, endDate);
         const passed = JSON.stringify(result) === JSON.stringify(testCase.expected);
         console.log(`Test Case ${index + 1}: ${passed ? 'PASS' : 'FAIL'}`);

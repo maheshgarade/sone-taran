@@ -28,10 +28,10 @@ const LoanDurationCalculator = () => {
       const { startDate, endDate } = values;
 
       // Convert dates to string format (e.g., "YYYY-MM-DD")
-      const startDateStr = startDate ? startDate.toISOString().split('T')[0] : '';
-      const endDateStr = endDate ? endDate.toISOString().split('T')[0] : null;
+      // const startDateStr = startDate ? startDate.toISOString().split('T')[0] : '';
+      // const endDateStr = endDate ? endDate.toISOString().split('T')[0] : null;
 
-      const duration: DurationResult = calculateRoundedMonthsAndDays(startDateStr, endDateStr);
+      const duration: DurationResult = calculateRoundedMonthsAndDays(startDate, endDate);
       setDurationResult(duration);
     },
   });
