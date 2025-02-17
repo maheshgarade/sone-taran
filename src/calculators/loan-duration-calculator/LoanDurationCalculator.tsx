@@ -80,11 +80,11 @@ const LoanDurationCalculator = () => {
                 },
               }}
             />
-            <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 2 }}>
-              <Button color="primary" variant="contained" type="submit">
-                Calculate Duration
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 2, gap: 2 }}>
+              <Button fullWidth color="primary" variant="contained" type="submit">
+                Calculate
               </Button>
-              <Button color="secondary" variant="outlined" onClick={handleReset}>
+              <Button fullWidth color="secondary" variant="outlined" onClick={handleReset}>
                 Reset
               </Button>
             </Box>
