@@ -9,9 +9,15 @@ import {
   Paper,
   Container,
 } from "@mui/material";
+import PercentageSlider from "../../shared/percentage-slider/PercentageSlider";
 
 const GoldValuation = () => {
   const [goldValue, setGoldValue] = useState<number | null>(null);
+  const [selectedPercentage, setSelectedPercentage] = useState<number>(0);
+
+  const handlePercentageChange = (newPercentage: number) => {
+    setSelectedPercentage(newPercentage);
+  };
 
   // Formik configuration
   const formik = useFormik({
@@ -19,8 +25,10 @@ const GoldValuation = () => {
       grossWeight: "",
       netWeight: "",
       purity: "",
-      goldRate: "",
+      metalRate: "",
       roi: "",
+      loanAmount: "",
+      loanDuration: "",
     },
     validationSchema: Yup.object({
       grossWeight: Yup.number()
@@ -41,7 +49,7 @@ const GoldValuation = () => {
         .required("Purity is required")
         .min(0, "Purity must be greater than 0")
         .max(100, "Purity cannot exceed 100"),
-      goldRate: Yup.number()
+      metalRate: Yup.number()
         .required("Gold Rate is required")
         .positive("Gold Rate must be positive"),
       roi: Yup.number()
@@ -49,11 +57,11 @@ const GoldValuation = () => {
         .positive("ROI must be positive"),
     }),
     onSubmit: (values) => {
-      const { netWeight, purity, goldRate, roi } = values;
+      const { netWeight, purity, metalRate, roi } = values;
 
       // Calculate gold value
       const pureGoldWeight = (parseFloat(netWeight) * (parseFloat(purity) / 100));
-      const goldValueWithoutROI = pureGoldWeight * parseFloat(goldRate);
+      const goldValueWithoutROI = pureGoldWeight * parseFloat(metalRate);
       const goldValueWithROI = goldValueWithoutROI * (1 + parseFloat(roi) / 100);
 
       setGoldValue(goldValueWithROI);
@@ -76,6 +84,7 @@ const GoldValuation = () => {
           onSubmit={formik.handleSubmit}
           sx={{ display: "flex", flexDirection: "column", gap: 3 }}
         >
+          <Box sx={{ display: "flex", flexDirection: "row", gap: 3 }}>
           <TextField
             fullWidth
             type="number"
@@ -102,6 +111,8 @@ const GoldValuation = () => {
             error={formik.touched.netWeight && Boolean(formik.errors.netWeight)}
             helperText={formik.touched.netWeight && formik.errors.netWeight}
           />
+          </Box>
+          <Box sx={{ display: "flex", flexDirection: "row", gap: 3 }}>
           <TextField
             fullWidth
             type="number"
@@ -117,15 +128,17 @@ const GoldValuation = () => {
           <TextField
             fullWidth
             type="number"
-            id="goldRate"
-            name="goldRate"
-            label="Gold Rate (per gram)"
-            value={formik.values.goldRate}
+            id="metalRate"
+            name="metalRate"
+            label="Metal Rate (per gram)"
+            value={formik.values.metalRate}
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
-            error={formik.touched.goldRate && Boolean(formik.errors.goldRate)}
-            helperText={formik.touched.goldRate && formik.errors.goldRate}
+            error={formik.touched.metalRate && Boolean(formik.errors.metalRate)}
+            helperText={formik.touched.metalRate && formik.errors.metalRate}
           />
+          </Box>
+          <Box sx={{ display: "flex", flexDirection: "row", gap: 3 }}>
           <TextField
             fullWidth
             type="number"
@@ -138,6 +151,36 @@ const GoldValuation = () => {
             error={formik.touched.roi && Boolean(formik.errors.roi)}
             helperText={formik.touched.roi && formik.errors.roi}
           />
+          <TextField
+            fullWidth
+            type="number"
+            id="loanAmount"
+            name="loanAmount"
+            label="Loan Amount"
+            value={formik.values.roi}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            error={formik.touched.loanAmount && Boolean(formik.errors.loanAmount)}
+            helperText={formik.touched.loanAmount && formik.errors.loanAmount}
+          />
+          </Box>
+          <Box sx={{ display: "flex", flexDirection: "row", gap: 3 }}>
+          <TextField
+            fullWidth
+            type="number"
+            id="loanDuration"
+            name="loanDuration"
+            label="Loan Duration"
+            value={formik.values.loanDuration}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            error={formik.touched.loanDuration && Boolean(formik.errors.loanDuration)}
+            helperText={formik.touched.loanDuration && formik.errors.loanDuration}
+          />
+          </Box>
+          <Box sx={{ display: "flex", flexDirection: "row", gap: 3 }}>
+            <PercentageSlider onPercentageChange={handlePercentageChange} />
+          </Box>
           <Box sx={{ display: "flex", justifyContent: "space-between", gap: 2 }}>
             <Button
               fullWidth
@@ -172,6 +215,7 @@ const GoldValuation = () => {
             <Typography variant="body1">
               {goldValue.toFixed(2)} (including ROI)
             </Typography>
+            <Typography>{selectedPercentage}</Typography>
           </Box>
         )}
       </Paper>
