@@ -31,13 +31,15 @@ export const calculateMonthsAndDays = (startDate: Date | null, endDate?: Date | 
 }
 
 // Updated rounding function to fix Test Case 2, 15, and 19
-const roundMonthsAndDays = (months: number, days: number): DurationResult => {
-    console.log(months, days)
+const roundMonthsAndDays = (months: number, days: number, waiveOneDayInterest: boolean = false): DurationResult => {
+    // console.log(months, days);
+    // console.log('waiveInterest', waiveOneDayInterest)
+    const daysStartRange = waiveOneDayInterest ? 2 :1;
     if (months === 0 && days > 1) {
         // If months is 0 and days > 1, round to 1 month and 0 days
         return { totalMonths: 1, days: 0 };
     } else if (months > 0) {
-        if (days >= 1 && days <= 15) {
+        if (days >= daysStartRange && days <= 15) {
             // If days are between 1 and 15, round to 15 days
             return { totalMonths: months, days: 15 };
         } else if (days > 15) {
@@ -46,17 +48,17 @@ const roundMonthsAndDays = (months: number, days: number): DurationResult => {
         }
     }
     // Default case (no rounding needed)
-    return { totalMonths: months, days: days };
+    return { totalMonths: months, days: days === 1 ? 0 : days };
     
 }
 
 // Updated function to calculate and round months and days
-export const calculateRoundedMonthsAndDays = (startDate: Date | null, endDate: Date | null): DurationResult => {
+export const calculateRoundedMonthsAndDays = (startDate: Date | null, endDate: Date | null, waiveOneDayInterest?: boolean): DurationResult => {
     // Calculate the raw months and days
     const rawResult = calculateMonthsAndDays(startDate, endDate);
 
     // Round the result based on the conditions
-    return roundMonthsAndDays(rawResult.totalMonths, rawResult.days);
+    return roundMonthsAndDays(rawResult.totalMonths, rawResult.days, waiveOneDayInterest);
 }
 
 // Test cases

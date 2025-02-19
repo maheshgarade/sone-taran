@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import { Button, Box, Typography, Container, Paper } from '@mui/material';
+import { Button, Box, Typography, Container, Paper, Checkbox, FormControlLabel } from '@mui/material';
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { DurationResult } from '../../models/DurationResult';
@@ -15,6 +15,7 @@ const LoanDurationCalculator = () => {
     initialValues: {
       startDate: null as Date | null,
       endDate: null as Date | null,
+      waiveOneDayInterest: false,
     },
     validationSchema: Yup.object({
       startDate: Yup.date().required('Start date is required'),
@@ -26,14 +27,10 @@ const LoanDurationCalculator = () => {
         }),
     }),
     onSubmit: (values) => {
-      const { startDate, endDate } = values;
+      const { startDate, endDate, waiveOneDayInterest } = values;
 
-      // Convert dates to string format (e.g., "YYYY-MM-DD")
-      // const startDateStr = startDate ? startDate.toISOString().split('T')[0] : '';
-      // const endDateStr = endDate ? endDate.toISOString().split('T')[0] : null;
-
-      const roundedDuration: DurationResult = calculateRoundedMonthsAndDays(startDate, endDate);
-      const actualDuration: DurationResult = calculateMonthsAndDays(startDate, endDate)
+      const roundedDuration: DurationResult = calculateRoundedMonthsAndDays(startDate, endDate, waiveOneDayInterest);
+      const actualDuration: DurationResult = calculateMonthsAndDays(startDate, endDate);
 
       setRoundOffDuration(roundedDuration);
       setActualDuration(actualDuration);
@@ -80,6 +77,17 @@ const LoanDurationCalculator = () => {
                 },
               }}
             />
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={formik.values.waiveOneDayInterest}
+                  onChange={formik.handleChange}
+                  name="waiveOneDayInterest"
+                />
+              }
+              label="1 Day Interest Free"
+            />
+            {/* एक दिवसाचा व्याज माफ */}
             <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 2, gap: 2 }}>
               <Button fullWidth color="primary" variant="contained" type="submit">
                 Calculate
