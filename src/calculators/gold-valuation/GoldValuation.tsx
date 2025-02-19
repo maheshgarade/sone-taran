@@ -12,23 +12,24 @@ import {
 import PercentageSlider from "../../shared/percentage-slider/PercentageSlider";
 
 const GoldValuation = () => {
-  const [goldValue, setGoldValue] = useState<number | null>(null);
-  const [selectedPercentage, setSelectedPercentage] = useState<number>(0);
+  // const [selectedPercentage, setSelectedPercentage] = useState<number>(0);
+  const [metalValue, setMetalValue] = useState<number | null>(0);
 
   const handlePercentageChange = (newPercentage: number) => {
-    setSelectedPercentage(newPercentage);
+    formik.setFieldValue('loanPercentage', newPercentage);
   };
 
   // Formik configuration
   const formik = useFormik({
     initialValues: {
-      grossWeight: "",
-      netWeight: "",
-      purity: "",
-      metalRate: "",
-      roi: "",
-      loanAmount: "",
-      loanDuration: "",
+      grossWeight: 0,
+      netWeight: 0,
+      purity: 0,
+      metalRate: 0,
+      roi: 0,
+      loanAmount: 0,
+      loanDuration: 0,
+      loanPercentage: 0,
     },
     validationSchema: Yup.object({
       grossWeight: Yup.number()
@@ -57,20 +58,26 @@ const GoldValuation = () => {
         .positive("ROI must be positive"),
     }),
     onSubmit: (values) => {
-      const { netWeight, purity, metalRate, roi } = values;
+      const { netWeight, purity, metalRate, roi, loanAmount, loanDuration, loanPercentage } = values;
 
       // Calculate gold value
-      const pureGoldWeight = (parseFloat(netWeight) * (parseFloat(purity) / 100));
-      const goldValueWithoutROI = pureGoldWeight * parseFloat(metalRate);
-      const goldValueWithROI = goldValueWithoutROI * (1 + parseFloat(roi) / 100);
+      const pureGoldWeight = netWeight * purity / 100;
+      const metalValue = pureGoldWeight * metalRate;
 
-      setGoldValue(goldValueWithROI);
+      setMetalValue(metalValue)
+      console.log('pureGoldWeight ', pureGoldWeight)
+      console.log('metalValue ', metalValue)
+      console.log('loanAmount ', loanAmount)
+      console.log('loanDuration ', loanDuration)
+      console.log('roi ', roi)
+      console.log('loanPercentage ', loanPercentage);
+
     },
   });
 
   const handleReset = () => {
     formik.resetForm();
-    setGoldValue(null);
+    setMetalValue(null);
   };
 
   return (
@@ -157,7 +164,7 @@ const GoldValuation = () => {
             id="loanAmount"
             name="loanAmount"
             label="Loan Amount"
-            value={formik.values.roi}
+            value={formik.values.loanAmount}
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
             error={formik.touched.loanAmount && Boolean(formik.errors.loanAmount)}
@@ -201,7 +208,7 @@ const GoldValuation = () => {
             </Button>
           </Box>
         </Box>
-        {goldValue !== null && (
+        {metalValue && (
           <Box
             sx={{
               mt: 3,
@@ -211,11 +218,26 @@ const GoldValuation = () => {
               backgroundColor: "#f9f9f9",
             }}
           >
-            <Typography variant="h6">Gold Valuation Result:</Typography>
-            <Typography variant="body1">
-              {goldValue.toFixed(2)} (including ROI)
-            </Typography>
-            <Typography>{selectedPercentage}</Typography>
+            <Typography variant="h6">Loan Eligibility:</Typography>
+            <Typography>Item Value:{metalValue}</Typography>
+            <Typography>Loan Amount {formik.values.loanPercentage}%:{Math.floor(metalValue * formik.values.loanPercentage / 100)}</Typography>
+            <Typography>Loan Duration:{1}</Typography>
+          </Box>
+        )}
+        {metalValue && (
+          <Box
+            sx={{
+              mt: 3,
+              p: 2,
+              border: "1px solid #ccc",
+              borderRadius: "4px",
+              backgroundColor: "#f9f9f9",
+            }}
+          >
+            <Typography variant="h6">Customer Requirement:</Typography>
+            <Typography>Loan Amount:{formik.values.loanAmount}</Typography>
+            <Typography>Amount in percentage:{(formik.values.loanAmount / metalValue * 100).toFixed(2)}</Typography>
+            <Typography>Loan Duration:{formik.values.loanDuration}</Typography>
           </Box>
         )}
       </Paper>
