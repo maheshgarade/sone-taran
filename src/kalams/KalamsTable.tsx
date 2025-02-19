@@ -3,8 +3,8 @@ import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper
 import InfoIcon from "@mui/icons-material/Info";
 import { Visibility, Edit, Delete } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
-import { calculateAnnualCompoundInterest } from "../utils/calculatorUtils";
-import { calculateMonthsAndDays } from "../utils/CountDays";
+import { calculateAnnualCompoundInterest } from "../utils/InterestCalculatorUtil";
+import { calculateMonthsAndDays } from "../utils/CountDaysUtil";
 
 // Define the interfaces
 interface Address {

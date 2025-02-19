@@ -5,7 +5,7 @@ import { Button, Box, Typography, Container, Paper, Checkbox, FormControlLabel }
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { DurationResult } from '../../models/DurationResult';
-import { calculateMonthsAndDays, calculateRoundedMonthsAndDays } from '../../utils/CountDays';
+import { calculateMonthsAndDays, calculateRoundedMonthsAndDays } from '../../utils/CountDaysUtil';
 
 const LoanDurationCalculator = () => {
   const [actualDuration, setActualDuration] = useState<DurationResult | null>(null);
