@@ -104,9 +104,9 @@ const GoldValuation = () => {
   };
 
   return (
-    <Container maxWidth="sm">
-      <Paper elevation={3} sx={{ padding: 4, marginTop: 4 }}>
-        <Typography variant="h4" align="center" gutterBottom>
+    <Container maxWidth="md" sx={{pl: 0, pr: 0}}>
+      <Paper elevation={3} sx={{ padding: 4, marginTop: 1.8 }}>
+        <Typography variant="h4" align="center" sx={{ mb: 4 }}>
           Gold Valuation
         </Typography>
         <Box
