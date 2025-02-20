@@ -10,13 +10,32 @@ import {
   Container,
 } from "@mui/material";
 import PercentageSlider from "../../shared/percentage-slider/PercentageSlider";
+import { calculateMaxLoanTenure2 } from "../../utils/MaxLoanTenureUtil";
 
 const GoldValuation = () => {
   // const [selectedPercentage, setSelectedPercentage] = useState<number>(0);
-  const [metalValue, setMetalValue] = useState<number | null>(0);
+  const [metalValue, setMetalValue] = useState<number | null>(null);
+  const [maxLoanTenure, setMaxLoanTenure] = useState<number>(0);
 
   const handlePercentageChange = (newPercentage: number) => {
     formik.setFieldValue('loanPercentage', newPercentage);
+  
+    // Calculate maxLoanTenure based on the current form values
+    const { netWeight, purity, metalRate, roi } = formik.values;
+  
+    // Calculate gold value
+    const pureGoldWeight = netWeight * purity / 100;
+    const metalValue = pureGoldWeight * metalRate;
+  
+    // Calculate maxLoanTenure
+    const calculatedMaxLoanTenure = calculateMaxLoanTenure2(
+      Math.floor(metalValue * newPercentage / 100),
+      pureGoldWeight * metalRate,
+      roi * 12
+    );
+  
+    // Update the state
+    setMaxLoanTenure(calculatedMaxLoanTenure);
   };
 
   // Formik configuration
@@ -63,14 +82,17 @@ const GoldValuation = () => {
       // Calculate gold value
       const pureGoldWeight = netWeight * purity / 100;
       const metalValue = pureGoldWeight * metalRate;
+      const maxLoanTenure = calculateMaxLoanTenure2(Math.floor(metalValue * loanPercentage / 100), pureGoldWeight * metalRate, roi * 12)
 
-      setMetalValue(metalValue)
-      console.log('pureGoldWeight ', pureGoldWeight)
-      console.log('metalValue ', metalValue)
+      setMetalValue(metalValue);
+      setMaxLoanTenure(maxLoanTenure);
+      console.log('maxLoanTenure ', maxLoanTenure)
+      // console.log('pureGoldWeight ', pureGoldWeight)
+      // console.log('metalValue ', metalValue)
       console.log('loanAmount ', loanAmount)
       console.log('loanDuration ', loanDuration)
-      console.log('roi ', roi)
-      console.log('loanPercentage ', loanPercentage);
+      // console.log('roi ', roi)
+      // console.log('loanPercentage ', loanPercentage);
 
     },
   });
@@ -78,6 +100,7 @@ const GoldValuation = () => {
   const handleReset = () => {
     formik.resetForm();
     setMetalValue(null);
+    setMaxLoanTenure(0);
   };
 
   return (
@@ -186,7 +209,10 @@ const GoldValuation = () => {
           />
           </Box>
           <Box sx={{ display: "flex", flexDirection: "row", gap: 3 }}>
-            <PercentageSlider onPercentageChange={handlePercentageChange} />
+          <PercentageSlider 
+              value={formik.values.loanPercentage}
+              onPercentageChange={handlePercentageChange} 
+            />
           </Box>
           <Box sx={{ display: "flex", justifyContent: "space-between", gap: 2 }}>
             <Button
@@ -221,7 +247,7 @@ const GoldValuation = () => {
             <Typography variant="h6">Loan Eligibility:</Typography>
             <Typography>Item Value:{metalValue}</Typography>
             <Typography>Loan Amount {formik.values.loanPercentage}%:{Math.floor(metalValue * formik.values.loanPercentage / 100)}</Typography>
-            <Typography>Loan Duration:{1}</Typography>
+            <Typography>Loan Duration:{maxLoanTenure}</Typography>
           </Box>
         )}
         {metalValue && (

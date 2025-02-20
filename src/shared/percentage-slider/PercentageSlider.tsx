@@ -1,17 +1,13 @@
-import { useState } from 'react';
 import { Slider, Typography, Box } from '@mui/material';
 
 interface PercentageSliderProps {
-  onPercentageChange: (value: number) => void; // Define the type for the onPercentageChange function
+  value: number; 
+  onPercentageChange: (value: number) => void;
 }
 
-const PercentageSlider: React.FC<PercentageSliderProps> = ({ onPercentageChange }) => {
-  const [value, setValue] = useState(0);
-
+const PercentageSlider: React.FC<PercentageSliderProps> = ({ value, onPercentageChange }) => {
   const handleSliderChange = (event: Event, newValue: number | number[]) => {
-    console.log('event ', event);
     const newValueNumber = Array.isArray(newValue) ? newValue[0] : newValue;
-    setValue(newValueNumber);
     onPercentageChange(newValueNumber); // Call the parent function to pass the value
   };
 
@@ -25,7 +21,7 @@ const PercentageSlider: React.FC<PercentageSliderProps> = ({ onPercentageChange 
           aria-labelledby="percentage-slider"
           min={0}
           max={100}
-          valueLabelDisplay="off" // This will show the value on the slider
+          valueLabelDisplay="off"
         />
         <Typography variant="h6" sx={{ marginLeft: 2 }}>{value}%</Typography>
       </Box>
