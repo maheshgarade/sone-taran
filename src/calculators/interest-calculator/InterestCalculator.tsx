@@ -67,10 +67,10 @@ const InterestCalculator = () => {
 
   return (
     <LocalizationProvider dateAdapter={AdapterDateFns}>
-      <Container maxWidth="sm">
-        <Paper elevation={3} sx={{ padding: 4, marginTop: 4 }}>
-          <Typography variant="h4" align="center" gutterBottom>
-            Interest Calculator
+      <Container maxWidth="md">
+        <Paper elevation={3} sx={{ padding: 4, marginTop: 1.8 }}>
+          <Typography variant="h6" align="center" sx={{ mb: 4 }}>
+            Compound Interest Calculator
           </Typography>
           <Box
             component="form"

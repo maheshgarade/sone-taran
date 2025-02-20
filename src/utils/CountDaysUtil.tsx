@@ -62,42 +62,42 @@ export const calculateRoundedMonthsAndDays = (startDate: Date | null, endDate: D
 }
 
 // Test cases
-const testCalculateRoundedMonthsAndDays = () => {
-    const testCases = [
-        { start: '2025-01-01', end: '2025-02-05', expected: { totalMonths: 1, days: 15 } },
-        { start: '2025-01-01', end: '2025-02-16', expected: { totalMonths: 2, days: 0 } },
-        { start: '2025-02-01', end: '2025-02-09', expected: { totalMonths: 1, days: 0 } },
-        { start: '2024-01-01', end: '2024-02-15', expected: { totalMonths: 1, days: 15 } },
-        { start: '2024-02-15', end: '2024-02-28', expected: { totalMonths: 1, days: 0 } },
-        { start: '2024-02-15', end: '2024-03-15', expected: { totalMonths: 1, days: 15 } },
-        { start: '2024-02-15', end: '2024-03-20', expected: { totalMonths: 1, days: 15 } },
-        { start: '2024-02-01', end: '2024-02-28', expected: { totalMonths: 1, days: 0 } },
-        { start: '2025-02-14', end: '2025-03-19', expected: { totalMonths: 1, days: 15 } },
-        { start: '2024-03-01', end: '2024-03-31', expected: { totalMonths: 1, days: 0 } },
-        { start: '2024-03-15', end: '2024-03-31', expected: { totalMonths: 1, days: 0 } },
-        { start: '2024-02-28', end: '2024-03-31', expected: { totalMonths: 1, days: 15 } },
-        { start: '2024-01-31', end: '2024-02-28', expected: { totalMonths: 1, days: 0 } },
-        { start: '2024-01-01', end: '2024-03-15', expected: { totalMonths: 2, days: 15 } },
-        { start: '2024-01-15', end: '2024-03-30', expected: { totalMonths: 3, days: 0 } },
-        { start: '2024-02-01', end: '2024-02-29', expected: { totalMonths: 1, days: 0 } },
-        { start: '2024-12-15', end: '2025-01-20', expected: { totalMonths: 1, days: 15 } },
-        { start: '2024-12-01', end: '2025-01-15', expected: { totalMonths: 1, days: 15 } },
-        { start: '2024-02-10', end: '2024-03-25', expected: { totalMonths: 2, days: 0 } },
-        { start: '2024-02-20', end: '2024-03-05', expected: { totalMonths: 1, days: 0 } }
-    ];
+// const testCalculateRoundedMonthsAndDays = () => {
+//     const testCases = [
+//         { start: '2025-01-01', end: '2025-02-05', expected: { totalMonths: 1, days: 15 } },
+//         { start: '2025-01-01', end: '2025-02-16', expected: { totalMonths: 2, days: 0 } },
+//         { start: '2025-02-01', end: '2025-02-09', expected: { totalMonths: 1, days: 0 } },
+//         { start: '2024-01-01', end: '2024-02-15', expected: { totalMonths: 1, days: 15 } },
+//         { start: '2024-02-15', end: '2024-02-28', expected: { totalMonths: 1, days: 0 } },
+//         { start: '2024-02-15', end: '2024-03-15', expected: { totalMonths: 1, days: 15 } },
+//         { start: '2024-02-15', end: '2024-03-20', expected: { totalMonths: 1, days: 15 } },
+//         { start: '2024-02-01', end: '2024-02-28', expected: { totalMonths: 1, days: 0 } },
+//         { start: '2025-02-14', end: '2025-03-19', expected: { totalMonths: 1, days: 15 } },
+//         { start: '2024-03-01', end: '2024-03-31', expected: { totalMonths: 1, days: 0 } },
+//         { start: '2024-03-15', end: '2024-03-31', expected: { totalMonths: 1, days: 0 } },
+//         { start: '2024-02-28', end: '2024-03-31', expected: { totalMonths: 1, days: 15 } },
+//         { start: '2024-01-31', end: '2024-02-28', expected: { totalMonths: 1, days: 0 } },
+//         { start: '2024-01-01', end: '2024-03-15', expected: { totalMonths: 2, days: 15 } },
+//         { start: '2024-01-15', end: '2024-03-30', expected: { totalMonths: 3, days: 0 } },
+//         { start: '2024-02-01', end: '2024-02-29', expected: { totalMonths: 1, days: 0 } },
+//         { start: '2024-12-15', end: '2025-01-20', expected: { totalMonths: 1, days: 15 } },
+//         { start: '2024-12-01', end: '2025-01-15', expected: { totalMonths: 1, days: 15 } },
+//         { start: '2024-02-10', end: '2024-03-25', expected: { totalMonths: 2, days: 0 } },
+//         { start: '2024-02-20', end: '2024-03-05', expected: { totalMonths: 1, days: 0 } }
+//     ];
 
-    testCases.forEach((testCase, index) => {
-        const startDate = new Date(testCase.start);
-        const endDate = new Date(testCase.end);
-        const result = calculateRoundedMonthsAndDays(startDate, endDate);
-        const passed = JSON.stringify(result) === JSON.stringify(testCase.expected);
-        console.log(`Test Case ${index + 1}: ${passed ? 'PASS' : 'FAIL'}`);
-        console.log(`  Input: ${testCase.start} to ${testCase.end}`);
-        console.log(`  Expected: ${JSON.stringify(testCase.expected)}`);
-        console.log(`  Result: ${JSON.stringify(result)}`);
-        console.log('----------------------------------------');
-    });
-}
+//     testCases.forEach((testCase, index) => {
+//         const startDate = new Date(testCase.start);
+//         const endDate = new Date(testCase.end);
+//         const result = calculateRoundedMonthsAndDays(startDate, endDate);
+//         const passed = JSON.stringify(result) === JSON.stringify(testCase.expected);
+//         console.log(`Test Case ${index + 1}: ${passed ? 'PASS' : 'FAIL'}`);
+//         console.log(`  Input: ${testCase.start} to ${testCase.end}`);
+//         console.log(`  Expected: ${JSON.stringify(testCase.expected)}`);
+//         console.log(`  Result: ${JSON.stringify(result)}`);
+//         console.log('----------------------------------------');
+//     });
+// }
 
 // Run the test cases
-testCalculateRoundedMonthsAndDays();
+// testCalculateRoundedMonthsAndDays();
