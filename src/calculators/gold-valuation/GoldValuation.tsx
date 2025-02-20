@@ -120,7 +120,7 @@ const GoldValuation = () => {
             type="number"
             id="grossWeight"
             name="grossWeight"
-            label="Gross Weight (grams)"
+            label="Gross Wt (grams)"
             value={formik.values.grossWeight}
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
@@ -134,7 +134,7 @@ const GoldValuation = () => {
             type="number"
             id="netWeight"
             name="netWeight"
-            label="Net Weight (grams)"
+            label="Net Wt (grams)"
             value={formik.values.netWeight}
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
@@ -200,7 +200,7 @@ const GoldValuation = () => {
             type="number"
             id="loanDuration"
             name="loanDuration"
-            label="Loan Duration"
+            label="Loan Duration (months)"
             value={formik.values.loanDuration}
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
