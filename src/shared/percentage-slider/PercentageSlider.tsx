@@ -7,6 +7,7 @@ interface PercentageSliderProps {
 
 const PercentageSlider: React.FC<PercentageSliderProps> = ({ value, onPercentageChange }) => {
   const handleSliderChange = (event: Event, newValue: number | number[]) => {
+    console.log(event);
     const newValueNumber = Array.isArray(newValue) ? newValue[0] : newValue;
     onPercentageChange(newValueNumber); // Call the parent function to pass the value
   };
