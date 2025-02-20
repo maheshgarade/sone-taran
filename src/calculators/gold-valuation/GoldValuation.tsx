@@ -24,14 +24,14 @@ const GoldValuation = () => {
     const { netWeight, purity, metalRate, roi } = formik.values;
   
     // Calculate gold value
-    const pureGoldWeight = netWeight * purity / 100;
-    const metalValue = pureGoldWeight * metalRate;
+    const pureGoldWeight = netWeight || 0 * (purity || 0) / 100;
+    const metalValue = pureGoldWeight * (metalRate || 0);
   
     // Calculate maxLoanTenure
     const calculatedMaxLoanTenure = calculateMaxLoanTenure2(
       Math.floor(metalValue * newPercentage / 100),
-      pureGoldWeight * metalRate,
-      roi * 12
+      pureGoldWeight * (metalRate || 0),
+      (roi || 0) * 12
     );
   
     // Update the state
@@ -41,13 +41,13 @@ const GoldValuation = () => {
   // Formik configuration
   const formik = useFormik({
     initialValues: {
-      grossWeight: 0,
-      netWeight: 0,
-      purity: 0,
-      metalRate: 0,
-      roi: 0,
-      loanAmount: 0,
-      loanDuration: 0,
+      grossWeight: null,
+      netWeight: null,
+      purity: null,
+      metalRate: null,
+      roi: null,
+      loanAmount: null,
+      loanDuration: null,
       loanPercentage: 0,
     },
     validationSchema: Yup.object({
@@ -80,9 +80,9 @@ const GoldValuation = () => {
       const { netWeight, purity, metalRate, roi, loanAmount, loanDuration, loanPercentage } = values;
 
       // Calculate gold value
-      const pureGoldWeight = netWeight * purity / 100;
-      const metalValue = pureGoldWeight * metalRate;
-      const maxLoanTenure = calculateMaxLoanTenure2(Math.floor(metalValue * loanPercentage / 100), pureGoldWeight * metalRate, roi * 12)
+      const pureGoldWeight = netWeight || 0 * (purity || 0) / 100;
+      const metalValue = pureGoldWeight * (metalRate || 0);
+      const maxLoanTenure = calculateMaxLoanTenure2(Math.floor(metalValue * loanPercentage / 100), pureGoldWeight * (metalRate || 0), (roi || 0) * 12)
 
       setMetalValue(metalValue);
       setMaxLoanTenure(maxLoanTenure);
@@ -262,7 +262,7 @@ const GoldValuation = () => {
           >
             <Typography variant="h6">Customer Requirement:</Typography>
             <Typography>Loan Amount:{formik.values.loanAmount}</Typography>
-            <Typography>Amount in percentage:{(formik.values.loanAmount / metalValue * 100).toFixed(2)}</Typography>
+            <Typography>Amount in percentage:{((formik.values.loanAmount || 0)/ metalValue * 100).toFixed(2)}</Typography>
             <Typography>Loan Duration:{formik.values.loanDuration}</Typography>
           </Box>
         )}
