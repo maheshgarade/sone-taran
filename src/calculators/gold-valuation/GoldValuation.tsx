@@ -16,6 +16,7 @@ const GoldValuation = () => {
   // const [selectedPercentage, setSelectedPercentage] = useState<number>(0);
   const [metalValue, setMetalValue] = useState<number | null>(null);
   const [maxLoanTenure, setMaxLoanTenure] = useState<number>(0);
+  const [calculated, setCalculated] = useState<boolean>(false);
 
   const handlePercentageChange = (newPercentage: number) => {
     formik.setFieldValue('loanPercentage', newPercentage);
@@ -83,10 +84,11 @@ const GoldValuation = () => {
       // Calculate gold value
       const pureGoldWeight = Number(netWeight) * Number(purity) / 100;
       const metalValue = pureGoldWeight * Number(metalRate);
-      const maxLoanTenure = calculateMaxLoanTenure2(Math.floor(metalValue * loanPercentage / 100), pureGoldWeight * parseInt(metalRate), roi * 12)
+      const maxLoanTenure = calculateMaxLoanTenure2(Math.floor(metalValue * loanPercentage / 100), pureGoldWeight * Number(metalRate), Number(roi) * 12)
 
-      // setMetalValue(metalValue);
+      setMetalValue(metalValue);
       setMaxLoanTenure(maxLoanTenure);
+      setCalculated(true); 
       console.log('maxLoanTenure ', maxLoanTenure)
       // console.log('pureGoldWeight ', pureGoldWeight)
       // console.log('metalValue ', metalValue)
@@ -102,6 +104,7 @@ const GoldValuation = () => {
     formik.resetForm();
     setMetalValue(null);
     setMaxLoanTenure(0);
+    setCalculated(false);
   };
 
   return (
@@ -235,7 +238,7 @@ const GoldValuation = () => {
             </Button>
           </Box>
         </Box>
-        {(metalValue != null && metalValue > 0) && (
+        {calculated && metalValue != null && metalValue > 0 && (
           <Box
             sx={{
               mt: 3,
@@ -251,7 +254,7 @@ const GoldValuation = () => {
             <Typography>Loan Duration:{maxLoanTenure}</Typography>
           </Box>
         )}
-        {(metalValue != null && metalValue > 0) && (
+        {calculated && metalValue != null && metalValue > 0 && (
           <Box
             sx={{
               mt: 3,
