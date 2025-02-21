@@ -1,15 +1,21 @@
+import GetKalamsData from '../hooks/getKalamsData';
+import styles from './Kalams.module.scss';
 import KalamCard from './kalam-card/KalamCard';
 import KalamsTable from './kalam-table/KalamsTable';
-import styles from './Kalams.module.scss'; // Import the SCSS module
 
 const Kalams = () => {
+    const { data, loading, error } = GetKalamsData();
+
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>Error: {error.message}</div>;
+
   return (
     <div>
       <div className={styles.mobileView}>
-        <KalamCard />
+        <KalamCard data={data} />
       </div>
       <div className={styles.desktopView}>
-        <KalamsTable />
+        <KalamsTable data={data} />
       </div>
     </div>
   );

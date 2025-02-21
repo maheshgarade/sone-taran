@@ -5,6 +5,7 @@ import { Visibility, Edit, Delete } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 import { calculateAnnualCompoundInterest } from "../../utils/InterestCalculatorUtil";
 import { calculateMonthsAndDays } from "../../utils/CountDaysUtil";
+import { KalamProps } from "../models/KalamProps";
 
 // Define the interfaces
 interface Address {
@@ -92,7 +93,9 @@ const customers: CustomerData[] = [
   }
 ];
 
-const KalamsTable: React.FC = () => {
+const KalamsTable: React.FC<KalamProps> = (props) => {
+  const { data } = props;
+  console.log(data);
   const [selectedCustomer, setSelectedCustomer] = useState<Customer | null>(null);
   const [selectedKalam, setSelectedKalam] = useState<Kalam | null>(null);
   const navigate = useNavigate();
