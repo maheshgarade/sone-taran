@@ -17,6 +17,7 @@ interface TableRow {
   total: number;
   unit: string;
   roi: number;
+  rate: number;
 }
 
 interface CompoundInterestTableProps {
@@ -52,12 +53,12 @@ const CompoundInterestTable: React.FC<CompoundInterestTableProps> = ({ data }) =
     return new Intl.NumberFormat('en-IN', {
       style: 'currency',
       currency: 'INR',
-      maximumFractionDigits: 2
+      maximumFractionDigits: 0
     }).format(amount);
   };
 
   const formatRoi = (roi: number) => {
-    return `${roi.toFixed(2)}%`;
+    return `${roi}%`;
   };
 
   return (
@@ -86,7 +87,7 @@ const CompoundInterestTable: React.FC<CompoundInterestTableProps> = ({ data }) =
               </StyledTableCell>
               <StyledTableCell>
                 <div style={{ color: 'rgba(0, 0, 0, 0.6)' }}>
-                  {formatCurrency(row.principal)} × {formatRoi(row.roi)}
+                  {formatCurrency(row.principal)} × {formatRoi(row.rate)}
                 </div>
                 <div style={{ fontWeight: 500, marginTop: 4 }}>
                   = {formatCurrency(row.interest)}
