@@ -16,7 +16,7 @@ import {
 import MenuIcon from "@mui/icons-material/Menu";
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
-import CustomerTable from "../kalams/KalamsTable";
+import CustomerTable from "../kalams/kalam-table/KalamsTable";
 
 // Import your pages
 const Dashboard = () => <h1>Dashboard Page</h1>;

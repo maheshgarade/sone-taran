@@ -17,16 +17,15 @@ import {
 import MenuIcon from "@mui/icons-material/Menu";
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
-import KalamsTable from "./kalams/KalamsTable";
-import KalamDetails from "./kalams/KalamDetails";
-import Calculator from "./calculators/Calculator";
+import KalamDetails from "./kalams/kalam-details/KalamDetails";
+import Calculators from "./calculators/Calculators";
+import ExpandableCard from "./shared/expandable-card/ExpandableCard";
+import Kalams from "./kalams/Kalams";
 
 // Pages
 const Dashboard = () => <h1>Dashboard Page</h1>;
-const Kalams = () => <h1><KalamsTable/></h1>;
-const Customers = () => <h1>Customers Page</h1>;
+const Customers = () => <h1> <ExpandableCard/></h1>;
 const Settings = () => <h1>Settings Page</h1>;
-const Calculators = () => <Calculator />;
 const Logout = () => <h1>Logging Out...</h1>;
 
 // Menu Items
@@ -123,7 +122,7 @@ const App = () => {
       </Drawer>
 
       {/* Main Content Area */}
-      <Box component="main" sx={{ flexGrow: 1, p: 3, mt: 8 }}>
+      <Box component="main" sx={{ flexGrow: 1, p: 1, mt: 8 }}>
         <BreadcrumbsComponent />
         <Routes>
           <Route path="/" element={<Dashboard />} />
