@@ -42,6 +42,7 @@ export const interestBreakdown = (principal: number, annualRate: number, totalMo
     const years = Math.floor(totalMonths / 12); // Extract full years
     const months = totalMonths % 12; // Extract remaining months
     const rate = annualRate / 100;
+    const monthlyInterest = annualRate / 12; // Monthly ROI
 
     let amount = principal;
     const breakdown = [];
@@ -57,6 +58,8 @@ export const interestBreakdown = (principal: number, annualRate: number, totalMo
             principal: Math.round(amount),
             interest: Math.round(interest),
             total: Math.round(total),
+            roi: monthlyInterest,
+            rate: rate,
         });
 
         amount = total; // Update principal for next year
@@ -74,6 +77,8 @@ export const interestBreakdown = (principal: number, annualRate: number, totalMo
             principal: Math.round(amount),
             interest: Math.round(interestForMonths),
             total: Math.round(total),
+            roi: monthlyInterest,
+            rate: rate,
         });
 
         amount = total; // Update principal for remaining days
@@ -91,6 +96,8 @@ export const interestBreakdown = (principal: number, annualRate: number, totalMo
             principal: Math.round(amount),
             interest: Math.round(interestForDays),
             total: Math.round(total),
+            roi: totalDays >= 15 ? (Number(monthlyInterest) / 2) : monthlyInterest,
+            rate: rate,
         });
 
         amount = total; // Final amount

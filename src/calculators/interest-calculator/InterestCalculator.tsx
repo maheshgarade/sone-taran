@@ -7,13 +7,20 @@ import {
   TextField,
   Paper,
   Container,
+  Checkbox,
+  FormControlLabel,
 } from "@mui/material";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { useState } from "react";
+import { calculateMonthsAndDays, calculateRoundedMonthsAndDays } from "../../utils/CountDaysUtil";
+import { calculateAnnualCompoundInterest, interestBreakdown } from "../../utils/InterestCalculatorUtil";
+import { InterestBreakdown } from "../../models/InterestBreakdown";
+import CompoundInterestTable from "../../shared/compound-interest-table/CompoundInterestTable";
 
 const InterestCalculator = () => {
-  const [interestResult, setInterestResult] = useState<number | null>(null);
+  const [totalInterest, setTotalInterest] = useState<number | null>(null);
+  const [totalInterestBreakdown, setTotalInterestBreakdown] = useState<InterestBreakdown[]>([]);
 
   // Formik configuration
   const formik = useFormik({
@@ -22,6 +29,8 @@ const InterestCalculator = () => {
       endDate: null as Date | null,
       loanAmount: "",
       roi: "",
+      waiveOneDayInterest: false,
+      roundOffLoanDuration: true,
     },
     validationSchema: Yup.object({
       startDate: Yup.date().required("Start Date is required"),
@@ -43,26 +52,22 @@ const InterestCalculator = () => {
         .positive("ROI must be positive"),
     }),
     onSubmit: (values) => {
-      const { startDate, endDate, loanAmount, roi } = values;
-
-      // Calculate the time difference in years
-      const start = new Date(startDate!);
-      const end = new Date(endDate!);
-      const timeDiff = end.getTime() - start.getTime();
-      const yearsDiff = timeDiff / (1000 * 60 * 60 * 24 * 365);
-
-      // Calculate compound interest
-      const compoundInterest =
-        parseFloat(loanAmount) * Math.pow(1 + parseFloat(roi) / 100, yearsDiff) -
-        parseFloat(loanAmount);
-
-      setInterestResult(compoundInterest);
+      const { startDate, endDate, loanAmount, roi, waiveOneDayInterest, roundOffLoanDuration } = values;
+      const duration = roundOffLoanDuration ? calculateRoundedMonthsAndDays(startDate, endDate, waiveOneDayInterest) : calculateMonthsAndDays(startDate, endDate);
+      const compoundInterest = calculateAnnualCompoundInterest(Number(loanAmount), Number(roi) * 12, duration.totalMonths, duration.days)
+      const compoundInterestBreakdown = interestBreakdown(Number(loanAmount), Number(roi) * 12, duration.totalMonths, duration.days)
+      console.log('duration ', duration);
+      console.log('compoundInterest ', compoundInterest);
+      console.log('compoundInterestBreakdown ', compoundInterestBreakdown);
+      setTotalInterest(compoundInterest)
+      setTotalInterestBreakdown(compoundInterestBreakdown);
     },
   });
 
   const handleReset = () => {
     formik.resetForm();
-    setInterestResult(null);
+    setTotalInterest(null);
+    setTotalInterestBreakdown([])
   };
 
   return (
@@ -77,35 +82,38 @@ const InterestCalculator = () => {
             onSubmit={formik.handleSubmit}
             sx={{ display: "flex", flexDirection: "column", gap: 3 }}
           >
-            <DatePicker
-              label="Start Date"
-              value={formik.values.startDate}
-              onChange={(newValue) => formik.setFieldValue("startDate", newValue)}
-              slotProps={{
-                textField: {
-                  fullWidth: true,
-                  error: Boolean(
-                    formik.touched.startDate && formik.errors.startDate
-                  ),
-                  helperText:
-                    formik.touched.startDate && formik.errors.startDate,
-                },
-              }}
-            />
-            <DatePicker
-              label="End Date"
-              value={formik.values.endDate}
-              onChange={(newValue) => formik.setFieldValue("endDate", newValue)}
-              slotProps={{
-                textField: {
-                  fullWidth: true,
-                  error: Boolean(
-                    formik.touched.endDate && formik.errors.endDate
-                  ),
-                  helperText: formik.touched.endDate && formik.errors.endDate,
-                },
-              }}
-            />
+            <Box sx={{ display: "flex", flexDirection: "row", gap: 3 }}>
+              <DatePicker
+                label="Start Date"
+                value={formik.values.startDate}
+                onChange={(newValue) => formik.setFieldValue("startDate", newValue)}
+                slotProps={{
+                  textField: {
+                    fullWidth: true,
+                    error: Boolean(
+                      formik.touched.startDate && formik.errors.startDate
+                    ),
+                    helperText:
+                      formik.touched.startDate && formik.errors.startDate,
+                  },
+                }}
+              />
+              <DatePicker
+                label="End Date"
+                value={formik.values.endDate}
+                onChange={(newValue) => formik.setFieldValue("endDate", newValue)}
+                slotProps={{
+                  textField: {
+                    fullWidth: true,
+                    error: Boolean(
+                      formik.touched.endDate && formik.errors.endDate
+                    ),
+                    helperText: formik.touched.endDate && formik.errors.endDate,
+                  },
+                }}
+              />
+            </Box>
+            <Box sx={{ display: "flex", flexDirection: "row", gap: 3 }}>
             <TextField
               fullWidth
               type="number"
@@ -132,6 +140,29 @@ const InterestCalculator = () => {
               error={formik.touched.roi && Boolean(formik.errors.roi)}
               helperText={formik.touched.roi && formik.errors.roi}
             />
+            </Box>
+            <Box>
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={formik.values.waiveOneDayInterest}
+                    onChange={formik.handleChange}
+                    name="waiveOneDayInterest"
+                  />
+                }
+                label="1 Day Interest Free"
+              />
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={formik.values.roundOffLoanDuration}
+                    onChange={formik.handleChange}
+                    name="roundOffLoanDuration"
+                  />
+                }
+                label="Round off Loan Duration"
+              />
+            </Box>
             <Box sx={{ display: "flex", justifyContent: "space-between", gap: 2 }}>
               <Button
                 fullWidth
@@ -152,7 +183,7 @@ const InterestCalculator = () => {
               </Button>
             </Box>
           </Box>
-          {interestResult !== null && (
+          {totalInterest !== null && (
             <Box
               sx={{
                 mt: 3,
@@ -162,10 +193,21 @@ const InterestCalculator = () => {
                 backgroundColor: "#f9f9f9",
               }}
             >
-              <Typography variant="h6">Compound Interest Result:</Typography>
-              <Typography variant="body1">
-                {interestResult.toFixed(2)}
-              </Typography>
+              <Typography variant="h6">Total Interest: {totalInterest}</Typography>
+            </Box>
+          )}
+          {totalInterestBreakdown?.length > 0 && (
+            <Box
+              sx={{
+                mt: 3,
+                p: 2,
+                border: "1px solid #ccc",
+                borderRadius: "4px",
+                backgroundColor: "#f9f9f9",
+              }}
+            >
+              <Typography variant="h6">Interest Breakdown: {totalInterest}</Typography>
+              <CompoundInterestTable data={totalInterestBreakdown} />
             </Box>
           )}
         </Paper>
