@@ -19,14 +19,11 @@ import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import KalamDetails from "./kalams/kalam-details/KalamDetails";
 import Calculators from "./calculators/Calculators";
-import ExpandableCard from "./shared/expandable-card/ExpandableCard";
 import Kalams from "./kalams/Kalams";
-
-// Pages
-const Dashboard = () => <h1>Dashboard Page</h1>;
-const Customers = () => <h1> <ExpandableCard/></h1>;
-const Settings = () => <h1>Settings Page</h1>;
-const Logout = () => <h1>Logging Out...</h1>;
+import Dashboard from "./dashboard/Dashboard";
+import Customers from "./customers/Customers";
+import Logout from "./logout/Logout";
+import Settings from "./settings/Settings";
 
 // Menu Items
 const menuItems = [
