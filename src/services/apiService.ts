@@ -1,8 +1,9 @@
 import axios from "axios";
 
 // Create a reusable axios instance with a base URL
+//import.meta.env.BASE_URL
 const apiClient = axios.create({
-  baseURL: import.meta.env.BASE_URL,
+  baseURL: "https://sone-taran-backend.onrender.com/api",
   headers: {
     "Content-Type": "application/json",
   },
@@ -11,7 +12,7 @@ const apiClient = axios.create({
 // API methods
 const fetchKalamsData = async () => {
   try {
-    const response = await apiClient.get("/kalams");
+    const response = await apiClient.get("/loan/getLoans");
     return response.data;
   } catch (error) {
     console.error("Error fetching Kalams data:", error);

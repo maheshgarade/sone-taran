@@ -1,10 +1,10 @@
-import GetKalamsData from '../hooks/getKalamsData';
+import useKalamsData from '../hooks/useKalamsData';
 import styles from './Kalams.module.scss';
 import KalamCard from './kalam-card/KalamCard';
 import KalamsTable from './kalam-table/KalamsTable';
 
 const Kalams = () => {
-    const { data, loading, error } = GetKalamsData();
+    const { data, loading, error } = useKalamsData();
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error.message}</div>;

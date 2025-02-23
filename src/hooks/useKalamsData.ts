@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import apiService from "../services/apiService";
 
-const GetKalamsData = () => {
+const useKalamsData = () => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
@@ -28,4 +28,4 @@ const GetKalamsData = () => {
   return { data, loading, error };
 };
 
-export default GetKalamsData;
+export default useKalamsData;
