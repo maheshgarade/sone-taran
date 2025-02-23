@@ -16,11 +16,10 @@ import {
 import MenuIcon from "@mui/icons-material/Menu";
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
-import CustomerTable from "../kalams/kalam-table/KalamsTable";
 
 // Import your pages
 const Dashboard = () => <h1>Dashboard Page</h1>;
-const Kalams = () => <h1><CustomerTable /></h1>;
+const Kalams = () => <h1>Kalams Page</h1>;
 const Customers = () => <h1>Customers Page</h1>;
 const Settings = () => <h1>Settings Page</h1>;
 const Calculators = () => <h1>Calculators Page</h1>;
