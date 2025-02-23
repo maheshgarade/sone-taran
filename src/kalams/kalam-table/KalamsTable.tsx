@@ -120,7 +120,7 @@ const KalamsTable: React.FC<KalamProps> = (props) => {
               
               <TableCell>Today's Value</TableCell>
               <TableCell>Validity</TableCell>
-              <TableCell>Actions</TableCell>
+              <TableCell>View Profile</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -160,12 +160,6 @@ const KalamsTable: React.FC<KalamProps> = (props) => {
         <TableCell>
           <IconButton onClick={() => navigate(`/kalams/${index + 1001}`)}>
             <Visibility fontSize="small" color="primary" />
-          </IconButton>
-          <IconButton>
-            <Edit fontSize="small" color="secondary" />
-          </IconButton>
-          <IconButton>
-            <Delete fontSize="small" color="error" />
           </IconButton>
         </TableCell>
       </TableRow>
