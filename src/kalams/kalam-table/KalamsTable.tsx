@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, IconButton, Dialog, DialogTitle, DialogContent, List, ListItem, ListItemText } from "@mui/material";
 import InfoIcon from "@mui/icons-material/Info";
-import { Visibility, Edit, Delete } from "@mui/icons-material";
+import { Visibility } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 import { calculateAnnualCompoundInterest } from "../../utils/InterestCalculatorUtil";
 import { calculateMonthsAndDays } from "../../utils/CountDaysUtil";
