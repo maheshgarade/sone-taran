@@ -6,98 +6,14 @@ import { useNavigate } from "react-router-dom";
 import { calculateAnnualCompoundInterest } from "../../utils/InterestCalculatorUtil";
 import { calculateMonthsAndDays } from "../../utils/CountDaysUtil";
 import { KalamProps } from "../models/KalamProps";
+import { CustomerDetails, KalamDetails } from "../models/Kalam";
 
-// Define the interfaces
-interface Address {
-  street: string;
-  city: string;
-  zip: number;
-}
-
-interface Customer {
-  name: string;
-  phone: number[];
-  address: Address;
-}
-
-interface Kalam {
-  name: string;
-  type: string;
-  netWeight: number;
-  grossWeight: number;
-  purity: number;
-  goldRateAtLoan: number;
-}
-
-interface Loan {
-  totalAmt: number;
-  customerAmt: number;
-  dukandarAmt: number;
-  customerROI: number;
-  merchantROI: number;
-  loanStartDate: string;
-}
-
-interface Merchant {
-  name: string;
-  shopName: string;
-  address: Address;
-  phone: number[];
-}
-
-interface CustomerData {
-  customer: Customer;
-  kalam: Kalam;
-  loan: Loan;
-  merchant: Merchant;
-}
-
-// Sample Data
-const customers: CustomerData[] = [
-  {
-    customer: {
-      name: "Mangal Aastul",
-      phone: [9850929698, 9850929689],
-      address: {
-        street: "Maa Ganga Colony",
-        city: "Pune",
-        zip: 411017
-      }
-    },
-    kalam: {
-      name: "Pendant Mani",
-      type: "gold",
-      netWeight: 4,
-      grossWeight: 4,
-      purity: 80,
-      goldRateAtLoan: 8200
-    },
-    loan: {
-      totalAmt: 12000,
-      customerAmt: 5000,
-      dukandarAmt: 7000,
-      customerROI: 3,
-      merchantROI: 2,
-      loanStartDate: "3-2-2021"
-    },
-    merchant: {
-      name: "Rajhans",
-      shopName: "Guru Gold",
-      address: {
-        street: "Maa Ganga Colony",
-        city: "Pune",
-        zip: 411017
-      },
-      phone: [9850929698]
-    }
-  }
-];
 
 const KalamsTable: React.FC<KalamProps> = (props) => {
   const { data } = props;
   console.log(data);
-  const [selectedCustomer, setSelectedCustomer] = useState<Customer | null>(null);
-  const [selectedKalam, setSelectedKalam] = useState<Kalam | null>(null);
+  const [selectedCustomer, setSelectedCustomer] = useState<CustomerDetails | null>(null);
+  const [selectedKalam, setSelectedKalam] = useState<KalamDetails | null>(null);
   const navigate = useNavigate();
 
   const calculateTodaysValue = () => '-';
@@ -124,37 +40,37 @@ const KalamsTable: React.FC<KalamProps> = (props) => {
             </TableRow>
           </TableHead>
           <TableBody>
-  {customers.map((customer, index) => {
-    const loanStartDate = new Date(customer.loan.loanStartDate);
+  {data.map((kalam, index) => {
+    const loanStartDate = new Date(kalam.kalam.loanDetails.loanStartDate);
     const { totalMonths, days } = calculateMonthsAndDays(loanStartDate);
     return (
-      <TableRow key={index}>
+      <TableRow key={kalam._id}>
         <TableCell>{index + 1}</TableCell>
-        <TableCell>{index + 1001}</TableCell>
+        <TableCell>{kalam.kalam.loanId}</TableCell>
 
         {/* Customer Name + Info Icon */}
         <TableCell>
-          {customer.customer.name}
-          <IconButton onClick={() => setSelectedCustomer(customer.customer)}>
+          {kalam.customerDetails.name}
+          <IconButton onClick={() => setSelectedCustomer(kalam.customerDetails)}>
             <InfoIcon fontSize="small" color="primary" />
           </IconButton>
         </TableCell>
 
         {/* Kalam Name + Info Icon */}
         <TableCell>
-          {customer.kalam.name}
-          <IconButton onClick={() => setSelectedKalam(customer.kalam)}>
+          {kalam.kalam.details.name}
+          <IconButton onClick={() => setSelectedKalam(kalam.kalam)}>
             <InfoIcon fontSize="small" color="primary" />
           </IconButton>
         </TableCell>
 
-        <TableCell>{customer.loan.loanStartDate}</TableCell>
-        <TableCell>₹{customer.loan.customerAmt}</TableCell>
+        <TableCell>{kalam.kalam.loanDetails.loanStartDate}</TableCell>
+        <TableCell>₹{kalam.kalam.loanDetails.customerAmt}</TableCell>
         <TableCell>
-          ₹{calculateAnnualCompoundInterest(customer.loan.customerAmt, customer.loan.customerROI * 12, totalMonths, days)}
+          ₹{calculateAnnualCompoundInterest(kalam.kalam.loanDetails.customerAmt, kalam.kalam.loanDetails.customerROI * 12, totalMonths, days)}
         </TableCell>
-        <TableCell>{customer.loan.customerROI}%</TableCell>
-        <TableCell>{customer.merchant.shopName}</TableCell>
+        <TableCell>{kalam.kalam.loanDetails.customerROI}%</TableCell>
+        <TableCell>{kalam.merchantDetails.shopName}</TableCell>
         <TableCell>{calculateTodaysValue()}</TableCell>
         <TableCell>-</TableCell>
         <TableCell>
@@ -179,7 +95,7 @@ const KalamsTable: React.FC<KalamProps> = (props) => {
               <ListItem>
                 <ListItemText primary="Address" secondary={`${selectedCustomer.address.street}, ${selectedCustomer.address.city} - ${selectedCustomer.address.zip}`} />
               </ListItem>
-              {selectedCustomer.phone.map((phone, index) => (
+              {selectedCustomer.contact.map((phone, index) => (
                 <ListItem key={index} component="a" href={`tel:${phone}`}>
                   <ListItemText primary="Phone" secondary={phone} />
                 </ListItem>
@@ -196,19 +112,19 @@ const KalamsTable: React.FC<KalamProps> = (props) => {
           {selectedKalam && (
             <List>
               <ListItem>
-                <ListItemText primary="Type" secondary={selectedKalam.type} />
+                <ListItemText primary="Type" secondary={selectedKalam.details.materialType} />
               </ListItem>
               <ListItem>
-                <ListItemText primary="Net Weight" secondary={`${selectedKalam.netWeight}g`} />
+                <ListItemText primary="Net Weight" secondary={`${selectedKalam.details.netWeight}g`} />
               </ListItem>
               <ListItem>
-                <ListItemText primary="Gross Weight" secondary={`${selectedKalam.grossWeight}g`} />
+                <ListItemText primary="Gross Weight" secondary={`${selectedKalam.details.grossWeight}g`} />
               </ListItem>
               <ListItem>
-                <ListItemText primary="Purity" secondary={`${selectedKalam.purity}%`} />
+                <ListItemText primary="Purity" secondary={`${selectedKalam.details.purity}%`} />
               </ListItem>
               <ListItem>
-                <ListItemText primary="Gold Rate at Loan" secondary={`₹${selectedKalam.goldRateAtLoan}`} />
+                <ListItemText primary="Gold Rate at Loan" secondary={`₹${selectedKalam.details.goldRateAtLoan}`} />
               </ListItem>
             </List>
           )}

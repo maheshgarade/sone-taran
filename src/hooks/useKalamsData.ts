@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react";
 import apiService from "../services/apiService";
+import { Kalam } from "../kalams/models/Kalam";
 
 const useKalamsData = () => {
-  const [data, setData] = useState([]);
+  const [data, setData] = useState<Kalam[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
 
