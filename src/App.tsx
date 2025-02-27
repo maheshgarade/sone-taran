@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, Suspense, lazy } from "react";
 import { Routes, Route, Link, useLocation } from "react-router-dom";
 import {
   Drawer,
@@ -17,13 +17,15 @@ import {
 import MenuIcon from "@mui/icons-material/Menu";
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
-import KalamDetails from "./kalams/kalam-details/KalamDetails";
-import Calculators from "./calculators/Calculators";
-import Kalams from "./kalams/Kalams";
 import Dashboard from "./dashboard/Dashboard";
 import Customers from "./customers/Customers";
 import Logout from "./logout/Logout";
 import Settings from "./settings/Settings";
+import Calculators from "./calculators/Calculators";
+import KalamDetails from "./kalams/kalam-details/KalamDetails";
+
+// Lazy load Kalams
+const Kalams = lazy(() => import("./kalams/Kalams"));
 
 // Menu Items
 const menuItems = [
@@ -121,15 +123,17 @@ const App = () => {
       {/* Main Content Area */}
       <Box component="main" sx={{ flexGrow: 1, p: 1, mt: 8 }}>
         <BreadcrumbsComponent />
-        <Routes>
-          <Route path="/" element={<Dashboard />} />
-          <Route path="/kalams" element={<Kalams />} />
-          <Route path="/kalams/:id" element={<KalamDetails />} />
-          <Route path="/customers" element={<Customers />} />
-          <Route path="/settings" element={<Settings />} />
-          <Route path="/calculators" element={<Calculators />} />
-          <Route path="/logout" element={<Logout />} />
-        </Routes>
+        <Suspense fallback={<div>Loading...</div>}>
+          <Routes>
+            <Route path="/" element={<Dashboard />} />
+            <Route path="/kalams" element={<Kalams />} />
+            <Route path="/kalams/:id" element={<KalamDetails />} />
+            <Route path="/customers" element={<Customers />} />
+            <Route path="/settings" element={<Settings />} />
+            <Route path="/calculators" element={<Calculators />} />
+            <Route path="/logout" element={<Logout />} />
+          </Routes>
+        </Suspense>
       </Box>
     </Box>
   );

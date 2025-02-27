@@ -1,4 +1,4 @@
-import { createContext, useState, useCallback, ReactNode, useEffect } from 'react';
+import { createContext, useState, useCallback, ReactNode } from 'react';
 import apiService from '../services/apiService';
 import { Kalam } from '../kalams/models/Kalam';
 
@@ -14,16 +14,14 @@ const KalamsDataContext = createContext<KalamsDataContextProps | undefined>(unde
 
 export const KalamsDataProvider = ({ children }: { children: ReactNode }) => {
   const [data, setData] = useState<Kalam[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState<Error | null>(null);
-  const [hasFetched, setHasFetched] = useState(false);
 
   const fetchData = useCallback(async () => {
     try {
       setLoading(true);
       const result = await apiService.fetchKalamsData();
       setData(result);
-      setHasFetched(true);
       setLoading(false);
     } catch (error) {
       if (error instanceof Error) {
@@ -35,14 +33,7 @@ export const KalamsDataProvider = ({ children }: { children: ReactNode }) => {
     }
   }, []);
 
-  useEffect(() => {
-    if (!hasFetched) {
-      fetchData();
-    }
-  }, [fetchData, hasFetched]);
-
   const invalidateCache = useCallback(() => {
-    setHasFetched(false);
     fetchData();
   }, [fetchData]);
 
