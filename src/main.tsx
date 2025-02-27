@@ -4,13 +4,16 @@ import './index.css'
 import { StyledEngineProvider } from '@mui/material/styles'
 import App from './App.tsx'
 import { BrowserRouter } from "react-router-dom";
+import ContextsProvider from './context/ContextsProvider.tsx'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <StyledEngineProvider injectFirst>
-      <BrowserRouter>
-        <App />
-      </BrowserRouter>
+      <ContextsProvider>
+        <BrowserRouter>
+          <App />
+        </BrowserRouter>
+      </ContextsProvider>
     </StyledEngineProvider>    
   </StrictMode>
 )
