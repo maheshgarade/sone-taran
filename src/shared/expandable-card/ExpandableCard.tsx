@@ -1,101 +1,54 @@
 import React, { useState } from 'react';
 import {
   Card,
-  CardHeader,
   CardContent,
-  CardActions,
   Typography,
   Button,
   Collapse,
-  IconButton,
   Avatar,
-  IconButtonProps,
+  Box,
 } from '@mui/material';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import { styled } from '@mui/material/styles';
-import { red } from '@mui/material/colors';
-import MoreVertIcon from '@mui/icons-material/MoreVert';
-
-interface ExpandMoreProps extends IconButtonProps {
-  expand: boolean;
-}
-
-const ExpandMore = styled((props: ExpandMoreProps) => {
-  const { expand, ...other } = props;
-  console.log(expand);
-  return <IconButton {...other} />;
-})(({ theme }) => ({
-  marginLeft: 'auto',
-  transition: theme.transitions.create('transform', {
-    duration: theme.transitions.duration.shortest,
-  }),
-  variants: [
-    {
-      props: ({ expand }) => !expand,
-      style: {
-        transform: 'rotate(0deg)',
-      },
-    },
-    {
-      props: ({ expand }) => !!expand,
-      style: {
-        transform: 'rotate(180deg)',
-      },
-    },
-  ],
-}));
+import { purple } from '@mui/material/colors';
+import StatusChip from '../status-chip/StatusChip';
 
 const ExpandableCard: React.FC = () => {
   const [expanded, setExpanded] = useState(false);
 
-  const handleExpandClick = () => {
+  // Toggle the expanded state when the card is clicked
+  const handleCardClick = () => {
     setExpanded(!expanded);
   };
 
   return (
-    <Card sx={{ maxWidth: 345 }}>
-      <CardHeader
-        avatar={
-          <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
-            R
-          </Avatar>
-        }
-        action={
-          <IconButton aria-label="settings">
-            <MoreVertIcon />
-          </IconButton>
-        }
-        title="Expandable Card"
-        subheader="September 14, 2023"
-      />
-      <CardContent>
-        <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-          Click the button below to expand or collapse this card.
-        </Typography>
-      </CardContent>
-      <CardActions disableSpacing>
-        <ExpandMore
-          expand={expanded}
-          onClick={handleExpandClick}
-          aria-expanded={expanded}
-          aria-label="show more"
+    <Card onClick={handleCardClick} sx={{ cursor: 'pointer' }}>
+      <Box
+          sx={{
+            display: 'flex',
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'space-between'
+          }}
         >
-          <ExpandMoreIcon />
-        </ExpandMore>
-      </CardActions>
+          <Avatar sx={{ bgcolor: purple[500], height: 38 }} variant='square'>123</Avatar>
+          <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+            Raghu Sathe
+            </Typography>
+          <StatusChip status="active" />
+      </Box>
+
       <Collapse in={expanded} timeout="auto" unmountOnExit>
         <CardContent>
           <Typography paragraph>
             This is the expanded content of the card. You can add more details here.
           </Typography>
           <Button variant="contained" color="primary">
-            Action 1
+            View
           </Button>
           <Button variant="contained" color="secondary" sx={{ marginLeft: '8px' }}>
-            Action 2
+            Edit
           </Button>
-          <Button variant="contained" color="inherit" sx={{ marginLeft: '8px' }}>
-            Action 3
+          <Button variant="contained" color="error" sx={{ marginLeft: '8px' }}>
+            Delete
           </Button>
         </CardContent>
       </Collapse>
