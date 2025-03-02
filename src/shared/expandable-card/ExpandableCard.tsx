@@ -43,39 +43,69 @@ const ExpandableCard: React.FC = () => {
         sx={{
           display: 'flex',
           flexDirection: 'row',
-          alignItems: 'flex-start',
+          alignItems: 'center',
           justifyContent: 'space-between',
+          marginBottom: '5px',
         }}
       >
-        <Avatar sx={{ bgcolor: purple[500], height: 32 }} variant="square">
+        <Avatar sx={{ bgcolor: purple[500], height: 36 }} variant="square">
           123
         </Avatar>
-        <Box>
-          <Typography>Raghu Sathe</Typography>
-          <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-            Ganthan
-            <IconButton onClick={handleOpenModal} sx={{ marginLeft: 1 }}>
-              <InfoIcon fontSize="small" color="primary" />
-            </IconButton>
-          </Typography>
+        <Box
+          sx={{
+            display: 'flex',
+            flexDirection: 'row',
+            alignItems: 'center',
+            gap: 1,
+          }}
+        >
+          <Box>
+            <Typography variant="h6">Raghu Sathe</Typography>
+          </Box>
+          <Box sx={{ marginTop: '8px' }}>
+            <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+              Ganthan
+              <IconButton
+                onClick={handleOpenModal}
+                sx={{ marginLeft: 1, padding: 0 }}
+              >
+                <InfoIcon fontSize="small" color="primary" />
+              </IconButton>
+            </Typography>
+          </Box>
         </Box>
         <StatusChip status="active" />
       </Box>
       <Divider />
-      <Box sx={{ display: 'flex' }}>
+      <Box sx={{ display: 'flex', gap: 1, padding: '0.6rem' }}>
         <Box>
-          <Typography>Date: {'12 Dec 2024'}</Typography>
-          <Typography>Valid Till: {'12 Dec 2024'}</Typography>
+          <Typography variant="subtitle2" gutterBottom>
+            Date: {'12 Dec 2024'}
+          </Typography>
+          <Typography variant="subtitle2" gutterBottom>
+            Valid Till: {'12 Dec 2024'}
+          </Typography>
         </Box>
+        <Divider orientation="vertical" flexItem />
         <Box>
-          <Typography>Amt: {12000}</Typography>
-          <Typography>ROI: {'3%'}</Typography>
+          <Typography variant="subtitle2" gutterBottom>
+            Amt: {12000}
+          </Typography>
+          <Typography variant="subtitle2" gutterBottom>
+            ROI: {'3%'}
+          </Typography>
         </Box>
+        <Divider orientation="vertical" flexItem />
         <Box>
-          <Typography>Merchant: {'Swapnil'}</Typography>
-          <Typography>Due: {12000}</Typography>
+          <Typography variant="subtitle2" gutterBottom>
+            Merchant: {'Swapnil'}
+          </Typography>
+          <Typography variant="subtitle2" gutterBottom>
+            Due: {12000}
+          </Typography>
         </Box>
       </Box>
+      <Divider />
       <Collapse in={expanded} timeout="auto" unmountOnExit>
         <CardContent>
           <Typography paragraph>
