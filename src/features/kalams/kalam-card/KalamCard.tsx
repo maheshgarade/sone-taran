@@ -1,4 +1,4 @@
-import ExpandableCard from '../../shared/expandable-card/ExpandableCard'
+import ExpandableCard from '../../../shared/expandable-card/ExpandableCard';
 import { KalamProps } from '../models/KalamProps';
 
 export default function KalamCard(props: KalamProps) {

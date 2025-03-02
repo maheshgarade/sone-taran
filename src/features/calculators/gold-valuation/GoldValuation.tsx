@@ -9,8 +9,8 @@ import {
   Paper,
   Container,
 } from "@mui/material";
-import PercentageSlider from "../../shared/percentage-slider/PercentageSlider";
-import { calculateMaxLoanTenure2 } from "../../utils/MaxLoanTenureUtil";
+import { calculateMaxLoanTenure2 } from "../../../utils/MaxLoanTenureUtil";
+import PercentageSlider from "../../../shared/percentage-slider/PercentageSlider";
 
 const GoldValuation = () => {
   // const [selectedPercentage, setSelectedPercentage] = useState<number>(0);

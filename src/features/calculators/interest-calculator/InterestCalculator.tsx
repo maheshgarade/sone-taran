@@ -13,10 +13,10 @@ import {
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { useState } from "react";
-import { calculateMonthsAndDays, calculateRoundedMonthsAndDays } from "../../utils/CountDaysUtil";
-import { calculateAnnualCompoundInterest, interestBreakdown } from "../../utils/InterestCalculatorUtil";
-import { InterestBreakdown } from "../../models/InterestBreakdown";
-import CompoundInterestTable from "../../shared/compound-interest-table/CompoundInterestTable";
+import { InterestBreakdown } from "../../../models/InterestBreakdown";
+import CompoundInterestTable from "../../../shared/compound-interest-table/CompoundInterestTable";
+import { calculateRoundedMonthsAndDays, calculateMonthsAndDays } from "../../../utils/CountDaysUtil";
+import { calculateAnnualCompoundInterest, interestBreakdown } from "../../../utils/InterestCalculatorUtil";
 
 const InterestCalculator = () => {
   const [totalInterest, setTotalInterest] = useState<number | null>(null);

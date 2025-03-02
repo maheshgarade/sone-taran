@@ -17,15 +17,13 @@ import {
 import MenuIcon from "@mui/icons-material/Menu";
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
-import Dashboard from "./dashboard/Dashboard";
-import Customers from "./customers/Customers";
-import Logout from "./logout/Logout";
-import Settings from "./settings/Settings";
-import Calculators from "./calculators/Calculators";
-import KalamDetails from "./kalams/kalam-details/KalamDetails";
+import { Dashboard, Settings, Logout } from "@mui/icons-material";
+import Calculators from "./features/calculators/Calculators";
+import Customers from "./features/customers/Customers";
+import KalamDetails from "./features/kalams/kalam-details/KalamDetails";
 
 // Lazy load Kalams
-const Kalams = lazy(() => import("./kalams/Kalams"));
+const Kalams = lazy(() => import("./features/kalams/Kalams"));
 
 // Menu Items
 const menuItems = [

@@ -3,10 +3,10 @@ import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper
 import InfoIcon from "@mui/icons-material/Info";
 import { Visibility } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
-import { calculateAnnualCompoundInterest } from "../../utils/InterestCalculatorUtil";
-import { calculateMonthsAndDays } from "../../utils/CountDaysUtil";
 import { KalamProps } from "../models/KalamProps";
 import { CustomerDetails, KalamDetails } from "../models/Kalam";
+import { calculateMonthsAndDays } from "../../../utils/CountDaysUtil";
+import { calculateAnnualCompoundInterest } from "../../../utils/InterestCalculatorUtil";
 
 
 const KalamsTable: React.FC<KalamProps> = (props) => {

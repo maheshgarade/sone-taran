@@ -1,8 +1,8 @@
 import { useEffect } from 'react';
-import useKalamsData from '../hooks/useKalamsData';
 import styles from './Kalams.module.scss';
 import KalamCard from './kalam-card/KalamCard';
 import KalamsTable from './kalam-table/KalamsTable';
+import useKalamsData from '../../hooks/useKalamsData';
 
 const Kalams = () => {
   const { data, loading, error, fetchIfNeeded } = useKalamsData();
