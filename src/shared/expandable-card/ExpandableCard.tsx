@@ -77,31 +77,73 @@ const ExpandableCard: React.FC = () => {
         <StatusChip status="active" />
       </Box>
       <Divider />
-      <Box sx={{ display: 'flex', gap: 1, padding: '0.6rem' }}>
+      <Box sx={{ display: 'flex', gap: 1, padding: '0.5rem' }}>
         <Box>
-          <Typography variant="subtitle2" gutterBottom>
-            Date: {'12 Dec 2024'}
+          <Typography sx={{ fontSize: '12px' }} variant="body1" gutterBottom>
+            <Typography
+              sx={{ fontSize: '12px' }}
+              component="span"
+              fontWeight="bold"
+            >
+              Date:
+            </Typography>
+            {' 12 Dec 2024'}
           </Typography>
-          <Typography variant="subtitle2" gutterBottom>
-            Valid Till: {'12 Dec 2024'}
+          <Typography sx={{ fontSize: '12px' }} variant="body1" gutterBottom>
+            <Typography
+              sx={{ fontSize: '12px' }}
+              component="span"
+              fontWeight="bold"
+            >
+              Valid Till:
+            </Typography>
+            {' 12 Dec 2024'}
           </Typography>
         </Box>
         <Divider orientation="vertical" flexItem />
         <Box>
-          <Typography variant="subtitle2" gutterBottom>
-            Amt: {12000}
+          <Typography sx={{ fontSize: '12px' }} variant="body1" gutterBottom>
+            <Typography
+              sx={{ fontSize: '12px' }}
+              component="span"
+              fontWeight="bold"
+            >
+              Amt:
+            </Typography>
+            {' 12000'}
           </Typography>
-          <Typography variant="subtitle2" gutterBottom>
-            ROI: {'3%'}
+          <Typography sx={{ fontSize: '12px' }} variant="body1" gutterBottom>
+            <Typography
+              sx={{ fontSize: '12px' }}
+              component="span"
+              fontWeight="bold"
+            >
+              ROI:
+            </Typography>
+            {' 3%'}
           </Typography>
         </Box>
         <Divider orientation="vertical" flexItem />
         <Box>
-          <Typography variant="subtitle2" gutterBottom>
-            Merchant: {'Swapnil'}
+          <Typography sx={{ fontSize: '12px' }} variant="body1" gutterBottom>
+            <Typography
+              component="span"
+              fontWeight="bold"
+              sx={{ fontSize: '12px' }}
+            >
+              Merchant:
+            </Typography>
+            {' Swapnil'}
           </Typography>
-          <Typography variant="subtitle2" gutterBottom>
-            Due: {12000}
+          <Typography sx={{ fontSize: '12px' }} variant="body1" gutterBottom>
+            <Typography
+              sx={{ fontSize: '12px' }}
+              component="span"
+              fontWeight="bold"
+            >
+              Due:
+            </Typography>
+            {' 12000'}
           </Typography>
         </Box>
       </Box>

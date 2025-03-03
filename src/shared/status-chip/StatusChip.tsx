@@ -25,12 +25,12 @@ const StatusChip: React.FC<StatusChipProps> = ({ status }) => {
     <Box
       sx={{
         ...currentStyle,
-        borderRadius: '5px', // Rounded edges
-        padding: '4px 14px', // Padding for better appearance
-        display: 'inline-block', // To fit the content
-        fontWeight: 'bold', // Optional: make text bold
+        borderRadius: '5px',
+        padding: '4px 14px',
+        display: 'inline-block',
+        fontWeight: 'bold',
         marginRight: '5px',
-        marginTop: '5px',
+        fontSize: '12px,',
       }}
     >
       {status.charAt(0).toUpperCase() + status.slice(1)}{' '}
