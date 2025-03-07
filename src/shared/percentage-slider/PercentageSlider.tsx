@@ -23,6 +23,7 @@ const PercentageSlider: React.FC<PercentageSliderProps> = ({ value, onPercentage
           min={0}
           max={100}
           valueLabelDisplay="off"
+          color={value > 60 ? 'error' : 'primary'}
         />
         <Typography variant="h6" sx={{ marginLeft: 2 }}>{value}%</Typography>
       </Box>

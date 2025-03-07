@@ -50,7 +50,7 @@ const GoldValuation = () => {
       roi: "",
       loanAmount: "",
       loanDuration: "",
-      loanPercentage: 0,
+      loanPercentage: 60, // 60% default
     },
     validationSchema: Yup.object({
       grossWeight: Yup.number()
