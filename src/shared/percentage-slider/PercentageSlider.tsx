@@ -20,6 +20,7 @@ const PercentageSlider: React.FC<PercentageSliderProps> = ({ value, onPercentage
           value={value}
           onChange={handleSliderChange}
           aria-labelledby="percentage-slider"
+          step={5}
           min={0}
           max={100}
           valueLabelDisplay="off"
