@@ -14,6 +14,7 @@ interface TableRow {
   duration: number;
   interest: number;
   principal: number;
+  principleAndInterest: number;
   total: number;
   unit: string;
   roi: number;
@@ -95,7 +96,7 @@ const CompoundInterestTable: React.FC<CompoundInterestTableProps> = ({ data }) =
               </StyledTableCell>
               <StyledTableCell>
                 <div style={{ color: 'rgba(0, 0, 0, 0.6)' }}>
-                  {formatCurrency(row.principal)} + {formatCurrency(row.interest)}
+                  {formatCurrency(row.principleAndInterest || row.principal)} + {formatCurrency(row.interest)}
                 </div>
                 <div style={{ fontWeight: 500, marginTop: 4 }}>
                   = {formatCurrency(row.total)}
