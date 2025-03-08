@@ -9,11 +9,13 @@ import {
   Paper,
   styled
 } from '@mui/material';
+import { formatCurrency } from '../../utils/CurrencyUtil';
 
 interface TableRow {
   duration: number;
   interest: number;
   principal: number;
+  principleAndInterest: number;
   total: number;
   unit: string;
   roi: number;
@@ -49,14 +51,6 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 }));
 
 const CompoundInterestTable: React.FC<CompoundInterestTableProps> = ({ data }) => {
-  const formatCurrency = (amount: number) => {
-    return new Intl.NumberFormat('en-IN', {
-      style: 'currency',
-      currency: 'INR',
-      maximumFractionDigits: 0
-    }).format(amount);
-  };
-
   const formatRoi = (roi: number) => {
     return `${roi}%`;
   };
@@ -95,7 +89,7 @@ const CompoundInterestTable: React.FC<CompoundInterestTableProps> = ({ data }) =
               </StyledTableCell>
               <StyledTableCell>
                 <div style={{ color: 'rgba(0, 0, 0, 0.6)' }}>
-                  {formatCurrency(row.principal)} + {formatCurrency(row.interest)}
+                  {formatCurrency(row.principleAndInterest || row.principal)} + {formatCurrency(row.interest)}
                 </div>
                 <div style={{ fontWeight: 500, marginTop: 4 }}>
                   = {formatCurrency(row.total)}
