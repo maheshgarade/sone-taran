@@ -1,3 +1,17 @@
+export const calculateAnnualInterest = (
+    principal: number,
+    annualRate: number,
+    totalMonths: number,
+    totalDays: number,
+    isCompoundInterest: boolean
+  ) => {
+    if (isCompoundInterest) {
+      return calculateAnnualCompoundInterest(principal, annualRate, totalMonths, totalDays);
+    } else {
+      return calculateAnnualSimpleInterest(principal, annualRate, totalMonths, totalDays);
+    }
+  };
+
 export const calculateAnnualCompoundInterest = (principal: number, annualRate: number, totalMonths: number, totalDays: number) => {
     const years = Math.floor(totalMonths / 12); // Extract full years
     const months = totalMonths % 12; // Extract remaining months
@@ -28,6 +42,42 @@ export const calculateAnnualCompoundInterest = (principal: number, annualRate: n
     return Math.round(amount);
 }
 
+export const calculateAnnualSimpleInterest = (
+  principal: number,
+  annualRate: number,
+  totalMonths: number,
+  totalDays: number
+) => {
+  const years = Math.floor(totalMonths / 12); // Extract full years
+  const months = totalMonths % 12; // Extract remaining months
+  const rate = annualRate / 100;
+
+  let amount = principal;
+  let totalInterest = 0;
+
+  // Calculate compound interest for each full year
+  for (let i = 0; i < years; i++) {
+    const interest = amount * rate; // Interest for the year
+    totalInterest += interest;
+  }
+
+  // Calculate simple interest for the remaining months
+  if (months > 0) {
+    const monthlyRate = rate / 12; // Monthly rate
+    const interestForMonths = amount * monthlyRate * months; // Simple interest for remaining months
+    totalInterest += interestForMonths;
+  }
+
+  // Calculate simple interest for the remaining days
+  if (totalDays > 0) {
+    const dailyRate = rate / 365; // Daily rate
+    const interestForDays = amount * dailyRate * totalDays; // Simple interest for remaining days
+    totalInterest += interestForDays;
+  }
+
+  return Math.round(amount + totalInterest);
+};
+
 // // Example usage
 // let customerLoan = 5000;  // Principal
 // let annualROI = 36;       // Annual ROI in % (compounded annually)
@@ -37,8 +87,21 @@ export const calculateAnnualCompoundInterest = (principal: number, annualRate: n
 // let customerDue = calculateAnnualCompoundInterest(customerLoan, annualROI, totalMonths, totalDays);
 // console.log("Customer Due:", customerDue);
 
+export const interestBreakdown = (
+    principal: number, 
+    annualRate: number, 
+    totalMonths: number, 
+    totalDays: number, 
+    isCompoundInterest: boolean) => {
+        if (isCompoundInterest) {
+            return compoundInterestBreakdown(principal, annualRate, totalMonths, totalDays);
+        } else {
+            return simpleInterestBreakdown(principal, annualRate, totalMonths, totalDays);
+        }
 
-export const interestBreakdown = (principal: number, annualRate: number, totalMonths: number, totalDays: number) => {
+}
+
+export const compoundInterestBreakdown = (principal: number, annualRate: number, totalMonths: number, totalDays: number) => {
     const years = Math.floor(totalMonths / 12); // Extract full years
     const months = totalMonths % 12; // Extract remaining months
     const rate = annualRate / 100;
@@ -114,3 +177,71 @@ export const interestBreakdown = (principal: number, annualRate: number, totalMo
 
 // let breakdown = interestBreakdown(customerLoan, annualROI, totalMonths, totalDays);
 // console.log(breakdown);
+
+export const simpleInterestBreakdown = (principal: number, annualRate: number, totalMonths: number, totalDays: number) => {
+    const years = Math.floor(totalMonths / 12); // Extract full years
+    const months = totalMonths % 12; // Extract remaining months
+    const rate = annualRate / 100;
+    const monthlyInterest = annualRate / 12; // Monthly ROI
+
+    let amount = principal;
+    const breakdown = [];
+
+    // Calculate compound interest for each full year
+    for (let i = 1; i <= years; i++) {
+        const interest = amount * rate; // Interest for the year
+        const total = amount + interest; // New principal for next year
+        
+        breakdown.push({
+            duration: i,
+            unit: "year",
+            principal: Math.round(amount),
+            interest: Math.round(interest),
+            total: Math.round(total),
+            roi: monthlyInterest,
+            rate: rate,
+        });
+
+        amount = total; // Update principal for next year
+    }
+
+    // Calculate simple interest for the remaining months
+    if (months > 0) {
+        const monthlyRate = rate / 12; // Monthly rate
+        const interestForMonths = amount * monthlyRate * months; // Simple interest for remaining months
+        const total = amount + interestForMonths;
+
+        breakdown.push({
+            duration: months,
+            unit: "month",
+            principal: Math.round(amount),
+            interest: Math.round(interestForMonths),
+            total: Math.round(total),
+            roi: monthlyInterest,
+            rate: rate,
+        });
+
+        amount = total; // Update principal for remaining days
+    }
+
+    // Calculate simple interest for the remaining days
+    if (totalDays > 0) {
+        const dailyRate = rate / 365; // Daily rate
+        const interestForDays = amount * dailyRate * totalDays; // Simple interest for remaining days
+        const total = amount + interestForDays;
+
+        breakdown.push({
+            duration: totalDays,
+            unit: "days",
+            principal: Math.round(amount),
+            interest: Math.round(interestForDays),
+            total: Math.round(total),
+            roi: totalDays >= 15 ? (Number(monthlyInterest) / 2) : monthlyInterest,
+            rate: rate,
+        });
+
+        amount = total; // Final amount
+    }
+
+    return breakdown;
+}
