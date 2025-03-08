@@ -21,6 +21,7 @@ import CompoundInterestTable from "../../../shared/compound-interest-table/Compo
 import { calculateRoundedMonthsAndDays, calculateMonthsAndDays } from "../../../utils/CountDaysUtil";
 import { calculateAnnualInterest, interestBreakdown } from "../../../utils/InterestCalculatorUtil";
 import { InterestType } from "../../../enums/interestType";
+import { formatCurrency } from "../../../utils/CurrencyUtil";
 
 const InterestCalculator = () => {
   const [totalInterest, setTotalInterest] = useState<number | null>(null);
@@ -213,7 +214,7 @@ const InterestCalculator = () => {
                 backgroundColor: "#f9f9f9",
               }}
             >
-              <Typography variant="h6">Total Loan + Interest: {totalInterest}</Typography>
+              <Typography variant="h6">Total Loan + Interest: {formatCurrency(totalInterest)}</Typography>
             </Box>
           )}
           {totalInterestBreakdown?.length > 0 && (
@@ -226,7 +227,7 @@ const InterestCalculator = () => {
                 backgroundColor: "#f9f9f9",
               }}
             >
-              <Typography variant="h6">Breakdown: {totalInterest}</Typography>
+              <Typography variant="h6">Breakdown: {formatCurrency(totalInterest)}</Typography>
               <CompoundInterestTable data={totalInterestBreakdown} />
             </Box>
           )}

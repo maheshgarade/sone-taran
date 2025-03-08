@@ -9,6 +9,7 @@ import {
   Paper,
   styled
 } from '@mui/material';
+import { formatCurrency } from '../../utils/CurrencyUtil';
 
 interface TableRow {
   duration: number;
@@ -50,14 +51,6 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 }));
 
 const CompoundInterestTable: React.FC<CompoundInterestTableProps> = ({ data }) => {
-  const formatCurrency = (amount: number) => {
-    return new Intl.NumberFormat('en-IN', {
-      style: 'currency',
-      currency: 'INR',
-      maximumFractionDigits: 0
-    }).format(amount);
-  };
-
   const formatRoi = (roi: number) => {
     return `${roi}%`;
   };
