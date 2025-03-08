@@ -9,6 +9,9 @@ import {
   Container,
   Checkbox,
   FormControlLabel,
+  Radio,
+  RadioGroup,
+  FormControl,
 } from "@mui/material";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
@@ -16,7 +19,8 @@ import { useState } from "react";
 import { InterestBreakdown } from "../../../models/InterestBreakdown";
 import CompoundInterestTable from "../../../shared/compound-interest-table/CompoundInterestTable";
 import { calculateRoundedMonthsAndDays, calculateMonthsAndDays } from "../../../utils/CountDaysUtil";
-import { calculateAnnualCompoundInterest, interestBreakdown } from "../../../utils/InterestCalculatorUtil";
+import { calculateAnnualInterest, interestBreakdown } from "../../../utils/InterestCalculatorUtil";
+import { InterestType } from "../../../enums/interestType";
 
 const InterestCalculator = () => {
   const [totalInterest, setTotalInterest] = useState<number | null>(null);
@@ -31,6 +35,7 @@ const InterestCalculator = () => {
       roi: "",
       waiveOneDayInterest: false,
       roundOffLoanDuration: true,
+      interestType: InterestType.Compound,
     },
     validationSchema: Yup.object({
       startDate: Yup.date().required("Start Date is required"),
@@ -52,10 +57,10 @@ const InterestCalculator = () => {
         .positive("ROI must be positive"),
     }),
     onSubmit: (values) => {
-      const { startDate, endDate, loanAmount, roi, waiveOneDayInterest, roundOffLoanDuration } = values;
+      const { startDate, endDate, loanAmount, roi, waiveOneDayInterest, roundOffLoanDuration, interestType } = values;
       const duration = roundOffLoanDuration ? calculateRoundedMonthsAndDays(startDate, endDate, waiveOneDayInterest) : calculateMonthsAndDays(startDate, endDate);
-      const compoundInterest = calculateAnnualCompoundInterest(Number(loanAmount), Number(roi) * 12, duration.totalMonths, duration.days)
-      const compoundInterestBreakdown = interestBreakdown(Number(loanAmount), Number(roi) * 12, duration.totalMonths, duration.days)
+      const compoundInterest = calculateAnnualInterest(Number(loanAmount), Number(roi) * 12, duration.totalMonths, duration.days, interestType === InterestType.Compound)
+      const compoundInterestBreakdown = interestBreakdown(Number(loanAmount), Number(roi) * 12, duration.totalMonths, duration.days, interestType === InterestType.Compound)
       console.log('duration ', duration);
       console.log('compoundInterest ', compoundInterest);
       console.log('compoundInterestBreakdown ', compoundInterestBreakdown);
@@ -162,6 +167,21 @@ const InterestCalculator = () => {
                 }
                 label="Round off Loan Duration"
               />
+              <FormControl>
+                <RadioGroup
+                  row
+                  name="interestType"
+                  value={formik.values.interestType}
+                  onChange={formik.handleChange}>
+                  <FormControlLabel control={<Radio />} 
+                    value={InterestType.Compound} 
+                    label={InterestType.Compound + ' Interest'} />
+
+                  <FormControlLabel control={<Radio />} 
+                    value={InterestType.Simple} 
+                    label={InterestType.Simple + ' Interest'} />
+                </RadioGroup>
+              </FormControl>
             </Box>
             <Box sx={{ display: "flex", justifyContent: "space-between", gap: 2 }}>
               <Button
@@ -193,7 +213,7 @@ const InterestCalculator = () => {
                 backgroundColor: "#f9f9f9",
               }}
             >
-              <Typography variant="h6">Total Interest: {totalInterest}</Typography>
+              <Typography variant="h6">Total Loan + Interest: {totalInterest}</Typography>
             </Box>
           )}
           {totalInterestBreakdown?.length > 0 && (
@@ -206,7 +226,7 @@ const InterestCalculator = () => {
                 backgroundColor: "#f9f9f9",
               }}
             >
-              <Typography variant="h6">Interest Breakdown: {totalInterest}</Typography>
+              <Typography variant="h6">Breakdown: {totalInterest}</Typography>
               <CompoundInterestTable data={totalInterestBreakdown} />
             </Box>
           )}
