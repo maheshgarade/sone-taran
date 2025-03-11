@@ -26,11 +26,12 @@ const StatusChip: React.FC<StatusChipProps> = ({ status }) => {
       sx={{
         ...currentStyle,
         borderRadius: '5px',
-        padding: '4px 14px',
+        padding: '3px 9px',
         display: 'inline-block',
         fontWeight: 'bold',
-        marginRight: '5px',
-        fontSize: '12px,',
+        marginRight: '8px',
+        marginTop: '8px',
+        fontSize: '9px',
       }}
     >
       {status.charAt(0).toUpperCase() + status.slice(1)}{' '}

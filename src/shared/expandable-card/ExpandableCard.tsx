@@ -43,33 +43,45 @@ const ExpandableCard: React.FC = () => {
         sx={{
           display: 'flex',
           flexDirection: 'row',
-          alignItems: 'center',
+          alignItems: 'flex-start',
           justifyContent: 'space-between',
-          marginBottom: '5px',
+          marginBottom: '2px',
         }}
       >
-        <Avatar sx={{ bgcolor: purple[500], height: 36 }} variant="square">
+        <Avatar
+          sx={{
+            bgcolor: purple[500],
+            height: 33,
+            fontSize: '13px',
+            fontWeight: 800,
+          }}
+          variant="square"
+        >
           123
         </Avatar>
         <Box
           sx={{
             display: 'flex',
-            flexDirection: 'row',
+            flexDirection: 'column',
             alignItems: 'center',
-            gap: 1,
           }}
         >
           <Box>
-            <Typography variant="h6">Raghu Sathe</Typography>
+            <Typography sx={{ fontSize: '12px', fontWeight: '700' }}>
+              Raghu Sathe
+            </Typography>
           </Box>
-          <Box sx={{ marginTop: '8px' }}>
-            <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+          <Box>
+            <Typography sx={{ fontSize: '10px', color: 'text.secondary' }}>
               Ganthan
               <IconButton
                 onClick={handleOpenModal}
-                sx={{ marginLeft: 1, padding: 0 }}
+                sx={{ marginLeft: '2px', padding: 0 }}
               >
-                <InfoIcon fontSize="small" color="primary" />
+                <InfoIcon
+                  color="primary"
+                  sx={{ width: '13px', height: '13px' }}
+                />
               </IconButton>
             </Typography>
           </Box>
