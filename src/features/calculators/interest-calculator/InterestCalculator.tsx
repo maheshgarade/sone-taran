@@ -1,5 +1,5 @@
-import { useFormik } from "formik";
-import * as Yup from "yup";
+import { useFormik } from 'formik';
+import * as Yup from 'yup';
 import {
   Button,
   Box,
@@ -12,60 +12,87 @@ import {
   Radio,
   RadioGroup,
   FormControl,
-} from "@mui/material";
-import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
-import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
-import { useState } from "react";
-import { InterestBreakdown } from "../../../models/InterestBreakdown";
-import CompoundInterestTable from "../../../shared/compound-interest-table/CompoundInterestTable";
-import { calculateRoundedMonthsAndDays, calculateMonthsAndDays } from "../../../utils/CountDaysUtil";
-import { calculateAnnualInterest, interestBreakdown } from "../../../utils/InterestCalculatorUtil";
-import { InterestType } from "../../../enums/interestType";
-import { formatCurrency } from "../../../utils/CurrencyUtil";
+} from '@mui/material';
+import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import { useState } from 'react';
+import { InterestBreakdown } from '../../../models/InterestBreakdown';
+import CompoundInterestTable from '../../../shared/compound-interest-table/CompoundInterestTable';
+import {
+  calculateRoundedMonthsAndDays,
+  calculateMonthsAndDays,
+} from '../../../utils/CountDaysUtil';
+import {
+  calculateAnnualInterest,
+  interestBreakdown,
+} from '../../../utils/InterestCalculatorUtil';
+import { InterestType } from '../../../enums/interestType';
+import { formatCurrency } from '../../../utils/CurrencyUtil';
 
 const InterestCalculator = () => {
   const [totalInterest, setTotalInterest] = useState<number | null>(null);
-  const [totalInterestBreakdown, setTotalInterestBreakdown] = useState<InterestBreakdown[]>([]);
+  const [totalInterestBreakdown, setTotalInterestBreakdown] = useState<
+    InterestBreakdown[]
+  >([]);
 
   // Formik configuration
   const formik = useFormik({
     initialValues: {
       startDate: null as Date | null,
       endDate: null as Date | null,
-      loanAmount: "",
-      roi: "",
+      loanAmount: '',
+      roi: '',
       waiveOneDayInterest: false,
       roundOffLoanDuration: true,
       interestType: InterestType.Compound,
     },
     validationSchema: Yup.object({
-      startDate: Yup.date().required("Start Date is required"),
+      startDate: Yup.date().required('Start Date is required'),
       endDate: Yup.date()
-        .required("End Date is required")
+        .required('End Date is required')
         .test(
-          "is-greater",
-          "End Date must be greater than Start Date",
+          'is-greater',
+          'End Date must be greater than Start Date',
           function (value) {
             const { startDate } = this.parent;
             return value && startDate && new Date(value) > new Date(startDate);
           }
         ),
       loanAmount: Yup.number()
-        .required("Loan Amount is required")
-        .positive("Loan Amount must be positive"),
+        .required('Loan Amount is required')
+        .positive('Loan Amount must be positive'),
       roi: Yup.number()
-        .required("ROI is required")
-        .positive("ROI must be positive"),
+        .required('ROI is required')
+        .positive('ROI must be positive'),
     }),
     onSubmit: (values) => {
-      const { startDate, endDate, loanAmount, roi, waiveOneDayInterest, roundOffLoanDuration, interestType } = values;
-      const duration = roundOffLoanDuration ? calculateRoundedMonthsAndDays(startDate, endDate, waiveOneDayInterest) : calculateMonthsAndDays(startDate, endDate);
-      const compoundInterest = calculateAnnualInterest(Number(loanAmount), Number(roi) * 12, duration.totalMonths, duration.days, interestType === InterestType.Compound)
-      const compoundInterestBreakdown = interestBreakdown(Number(loanAmount), Number(roi) * 12, duration.totalMonths, duration.days, interestType === InterestType.Compound)
-      console.log('duration ', duration);
-      console.log('compoundInterest ', compoundInterest);
-      console.log('compoundInterestBreakdown ', compoundInterestBreakdown);
-      setTotalInterest(compoundInterest)
+      const {
+        startDate,
+        endDate,
+        loanAmount,
+        roi,
+        waiveOneDayInterest,
+        roundOffLoanDuration,
+        interestType,
+      } = values;
+      const duration = roundOffLoanDuration
+        ? calculateRoundedMonthsAndDays(startDate, endDate, waiveOneDayInterest)
+        : calculateMonthsAndDays(startDate, endDate);
+      const compoundInterest = calculateAnnualInterest(
+        Number(loanAmount),
+        Number(roi) * 12,
+        duration.totalMonths,
+        duration.days,
+        interestType === InterestType.Compound
+      );
+      const compoundInterestBreakdown = interestBreakdown(
+        Number(loanAmount),
+        Number(roi) * 12,
+        duration.totalMonths,
+        duration.days,
+        interestType === InterestType.Compound
+      );
+      setTotalInterest(compoundInterest);
       setTotalInterestBreakdown(compoundInterestBreakdown);
     },
   });
@@ -73,7 +100,7 @@ const InterestCalculator = () => {
   const handleReset = () => {
     formik.resetForm();
     setTotalInterest(null);
-    setTotalInterestBreakdown([])
+    setTotalInterestBreakdown([]);
   };
 
   return (
@@ -86,13 +113,15 @@ const InterestCalculator = () => {
           <Box
             component="form"
             onSubmit={formik.handleSubmit}
-            sx={{ display: "flex", flexDirection: "column", gap: 3 }}
+            sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}
           >
-            <Box sx={{ display: "flex", flexDirection: "row", gap: 3 }}>
+            <Box sx={{ display: 'flex', flexDirection: 'row', gap: 3 }}>
               <DatePicker
                 label="Start Date"
                 value={formik.values.startDate}
-                onChange={(newValue) => formik.setFieldValue("startDate", newValue)}
+                onChange={(newValue) =>
+                  formik.setFieldValue('startDate', newValue)
+                }
                 slotProps={{
                   textField: {
                     fullWidth: true,
@@ -107,7 +136,9 @@ const InterestCalculator = () => {
               <DatePicker
                 label="End Date"
                 value={formik.values.endDate}
-                onChange={(newValue) => formik.setFieldValue("endDate", newValue)}
+                onChange={(newValue) =>
+                  formik.setFieldValue('endDate', newValue)
+                }
                 slotProps={{
                   textField: {
                     fullWidth: true,
@@ -119,33 +150,35 @@ const InterestCalculator = () => {
                 }}
               />
             </Box>
-            <Box sx={{ display: "flex", flexDirection: "row", gap: 3 }}>
-            <TextField
-              fullWidth
-              type="number"
-              id="loanAmount"
-              name="loanAmount"
-              label="Loan Amount"
-              value={formik.values.loanAmount}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              error={
-                formik.touched.loanAmount && Boolean(formik.errors.loanAmount)
-              }
-              helperText={formik.touched.loanAmount && formik.errors.loanAmount}
-            />
-            <TextField
-              fullWidth
-              type="number"
-              id="roi"
-              name="roi"
-              label="Rate of Interest (ROI)"
-              value={formik.values.roi}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              error={formik.touched.roi && Boolean(formik.errors.roi)}
-              helperText={formik.touched.roi && formik.errors.roi}
-            />
+            <Box sx={{ display: 'flex', flexDirection: 'row', gap: 3 }}>
+              <TextField
+                fullWidth
+                type="number"
+                id="loanAmount"
+                name="loanAmount"
+                label="Loan Amount"
+                value={formik.values.loanAmount}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                error={
+                  formik.touched.loanAmount && Boolean(formik.errors.loanAmount)
+                }
+                helperText={
+                  formik.touched.loanAmount && formik.errors.loanAmount
+                }
+              />
+              <TextField
+                fullWidth
+                type="number"
+                id="roi"
+                name="roi"
+                label="Rate of Interest (ROI)"
+                value={formik.values.roi}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                error={formik.touched.roi && Boolean(formik.errors.roi)}
+                helperText={formik.touched.roi && formik.errors.roi}
+              />
             </Box>
             <Box>
               <FormControlLabel
@@ -173,18 +206,25 @@ const InterestCalculator = () => {
                   row
                   name="interestType"
                   value={formik.values.interestType}
-                  onChange={formik.handleChange}>
-                  <FormControlLabel control={<Radio />} 
-                    value={InterestType.Compound} 
-                    label={InterestType.Compound + ' Interest'} />
+                  onChange={formik.handleChange}
+                >
+                  <FormControlLabel
+                    control={<Radio />}
+                    value={InterestType.Compound}
+                    label={InterestType.Compound + ' Interest'}
+                  />
 
-                  <FormControlLabel control={<Radio />} 
-                    value={InterestType.Simple} 
-                    label={InterestType.Simple + ' Interest'} />
+                  <FormControlLabel
+                    control={<Radio />}
+                    value={InterestType.Simple}
+                    label={InterestType.Simple + ' Interest'}
+                  />
                 </RadioGroup>
               </FormControl>
             </Box>
-            <Box sx={{ display: "flex", justifyContent: "space-between", gap: 2 }}>
+            <Box
+              sx={{ display: 'flex', justifyContent: 'space-between', gap: 2 }}
+            >
               <Button
                 fullWidth
                 type="submit"
@@ -209,12 +249,14 @@ const InterestCalculator = () => {
               sx={{
                 mt: 3,
                 p: 2,
-                border: "1px solid #ccc",
-                borderRadius: "4px",
-                backgroundColor: "#f9f9f9",
+                border: '1px solid #ccc',
+                borderRadius: '4px',
+                backgroundColor: '#f9f9f9',
               }}
             >
-              <Typography variant="h6">Total Loan + Interest: {formatCurrency(totalInterest)}</Typography>
+              <Typography variant="h6">
+                Total Loan + Interest: {formatCurrency(totalInterest)}
+              </Typography>
             </Box>
           )}
           {totalInterestBreakdown?.length > 0 && (
@@ -222,13 +264,15 @@ const InterestCalculator = () => {
               sx={{
                 mt: 3,
                 p: 2,
-                border: "1px solid #ccc",
-                borderRadius: "4px",
-                backgroundColor: "#f9f9f9",
+                border: '1px solid #ccc',
+                borderRadius: '4px',
+                backgroundColor: '#f9f9f9',
               }}
             >
-              <Typography variant="h6">Breakdown: {formatCurrency(totalInterest)}</Typography>
-              <CompoundInterestTable data={totalInterestBreakdown} />
+              <Typography variant="h6">
+                Breakdown: {formatCurrency(totalInterest)}
+              </Typography>
+              <CompoundInterestTable data={totalInterestBreakdown as any} />
             </Box>
           )}
         </Paper>

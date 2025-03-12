@@ -1,6 +1,6 @@
 import { createContext, useState, useCallback, ReactNode } from 'react';
 import apiService from '../services/apiService';
-import { Kalam } from '../kalams/models/Kalam';
+import { Kalam } from '../features/kalams/models/Kalam';
 
 interface KalamsDataContextProps {
   data: Kalam[];
@@ -10,7 +10,9 @@ interface KalamsDataContextProps {
   invalidateCache: () => void;
 }
 
-const KalamsDataContext = createContext<KalamsDataContextProps | undefined>(undefined);
+const KalamsDataContext = createContext<KalamsDataContextProps | undefined>(
+  undefined
+);
 
 export const KalamsDataProvider = ({ children }: { children: ReactNode }) => {
   const [data, setData] = useState<Kalam[]>([]);
@@ -27,7 +29,7 @@ export const KalamsDataProvider = ({ children }: { children: ReactNode }) => {
       if (error instanceof Error) {
         setError(error);
       } else {
-        setError(new Error("An unknown error occurred"));
+        setError(new Error('An unknown error occurred'));
       }
       setLoading(false);
     }
@@ -38,7 +40,9 @@ export const KalamsDataProvider = ({ children }: { children: ReactNode }) => {
   }, [fetchData]);
 
   return (
-    <KalamsDataContext.Provider value={{ data, loading, error, fetchData, invalidateCache }}>
+    <KalamsDataContext.Provider
+      value={{ data, loading, error, fetchData, invalidateCache }}
+    >
       {children}
     </KalamsDataContext.Provider>
   );
