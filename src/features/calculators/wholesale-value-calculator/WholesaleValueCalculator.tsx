@@ -19,6 +19,7 @@ interface CalculatedValues {
   netPureGold99_9: number;
   netPureGold99_5: number;
   cashEquivalent99_5: number;
+  goldRate99_5: number;
 }
 
 const WholesaleValueCalculator: React.FC = () => {
@@ -80,6 +81,7 @@ const WholesaleValueCalculator: React.FC = () => {
         netPureGold99_9: parseFloat(netPureGold99_9.toFixed(3)),
         netPureGold99_5: parseFloat(netPureGold99_5.toFixed(3)),
         cashEquivalent99_5: parseFloat(cashEquivalent99_5.toFixed(2)),
+        goldRate99_5: goldRate99_5,
       });
       setCalculated(true);
     },
@@ -220,7 +222,11 @@ const WholesaleValueCalculator: React.FC = () => {
                 netPureGold99_5={calculatedValues.netPureGold99_5}
                 cashEquivalent99_5={calculatedValues.cashEquivalent99_5}
               />
-              <WastageDetailsCard />
+              <WastageDetailsCard
+                wastageWeight={calculatedValues.wastageWeight}
+                goldRate99_5={calculatedValues.goldRate99_5}
+                itemWeight={calculatedValues.itemWeight}
+              />
               <ItemDetailsCard />
             </Box>
           </Box>

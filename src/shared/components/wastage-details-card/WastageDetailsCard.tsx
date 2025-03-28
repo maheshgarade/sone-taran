@@ -7,7 +7,18 @@ import {
   LinearProgress,
 } from '@mui/material';
 
-const WastageDetailsCard = () => {
+interface WastageDetailsCardProps {
+  wastageWeight: number;
+  goldRate99_5: number;
+  itemWeight: number;
+}
+
+const WastageDetailsCard: React.FC<WastageDetailsCardProps> = ({
+  wastageWeight,
+  goldRate99_5,
+  itemWeight,
+}) => {
+  console.log('goldRate99_5', goldRate99_5);
   return (
     <Card
       sx={{
@@ -36,7 +47,7 @@ const WastageDetailsCard = () => {
         <Box display="flex" flexDirection="column" gap={3}>
           <Box>
             <Typography fontWeight={500} color="gray.700">
-              Gold 99.5
+              Gold 99.5 %
             </Typography>
             <Box
               sx={{
@@ -50,7 +61,7 @@ const WastageDetailsCard = () => {
               }}
             >
               <Typography fontWeight={600} color="#6B21A8">
-                1.61 gms
+                {wastageWeight} gms
               </Typography>
               <Box
                 sx={{
@@ -94,7 +105,7 @@ const WastageDetailsCard = () => {
                 fontWeight={600}
                 color="#6B21A8"
               >
-                8.5%
+                {((wastageWeight / itemWeight) * 100).toFixed(2)}%
               </Typography>
             </Box>
           </Box>
@@ -105,7 +116,7 @@ const WastageDetailsCard = () => {
             </Typography>
             <Box mt={1} p={2} bgcolor="#F5F3FF" borderRadius={2}>
               <Typography fontWeight={600} color="#6B21A8">
-                &#8377; 4,250.00
+                &#8377; {(goldRate99_5 * wastageWeight).toFixed(2)}
               </Typography>
             </Box>
           </Box>
