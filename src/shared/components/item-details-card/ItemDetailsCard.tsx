@@ -1,5 +1,12 @@
-import { Card, CardContent, CardHeader } from '@mui/material';
-import { Box, Typography, Divider, Paper } from '@mui/material';
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  Typography,
+  Box,
+  Divider,
+  Chip,
+} from '@mui/material';
 
 const ItemDetailsCard = () => {
   return (
@@ -7,111 +14,112 @@ const ItemDetailsCard = () => {
       sx={{
         overflow: 'hidden',
         boxShadow: 3,
-        border: 2,
-        borderColor: 'teal.200',
-        transition: '0.3s',
-        '&:hover': { boxShadow: 6 },
+        border: '2px solid',
+        borderColor: 'rgb(153 246 228 / 1)',
+        borderRadius: '0.5rem',
+        transition: 'all 0.3s',
+        '&:hover': {
+          boxShadow: 6,
+          transform: 'translateY(-5px)',
+        },
       }}
     >
+      {/* Header */}
       <CardHeader
         sx={{
-          background: 'linear-gradient(to right, #14B8A6, #10B981)',
-          pb: 2,
+          background: 'linear-gradient(135deg, #18A558, #35D07F)',
+          paddingBottom: 2,
+          textAlign: 'center',
         }}
-      >
-        <CardHeader>
-          <Typography variant="h6" align="center" color="white">
+        title={
+          <Typography variant="h6" color="white">
             Item Details
           </Typography>
-        </CardHeader>
-      </CardHeader>
-      <CardContent sx={{ p: 3, bgcolor: 'white' }}>
-        <Box sx={{ textAlign: 'center', mb: 3 }}>
-          <Typography variant="caption" color="gray">
-            Item Type
+        }
+      />
+
+      <CardContent sx={{ textAlign: 'center', padding: 3 }}>
+        {/* Item Type */}
+        <Typography variant="body2" color="textSecondary">
+          Item Type
+        </Typography>
+        <Typography variant="h6" fontWeight="bold">
+          Gold Necklace
+        </Typography>
+
+        {/* Weight & Purity Section */}
+        <Box
+          sx={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            mt: 2,
+            backgroundColor: 'rgb(240 253 250 / 1)',
+            borderRadius: 2,
+            padding: 2,
+          }}
+        >
+          <Box>
+            <Typography variant="body2" color="textSecondary">
+              Weight
+            </Typography>
+            <Typography variant="h6" fontWeight="bold">
+              35.670 <span style={{ fontSize: '0.8rem' }}>gms</span>
+            </Typography>
+          </Box>
+          <Divider orientation="vertical" flexItem sx={{ mx: 2 }} />
+          <Box>
+            <Typography variant="body2" color="textSecondary">
+              Purity
+            </Typography>
+            <Typography variant="h6" fontWeight="bold">
+              91.6 <span style={{ fontSize: '0.8rem' }}>%</span>
+            </Typography>
+          </Box>
+        </Box>
+
+        {/* Making Charges */}
+        <Box
+          sx={{
+            mt: 2,
+            backgroundColor: 'rgb(240 253 250 / 1)',
+            borderRadius: 2,
+            padding: 2,
+            textAlign: 'center',
+          }}
+        >
+          <Typography variant="body2" color="textSecondary">
+            Making Charges
           </Typography>
-          <Typography variant="h6" fontWeight="bold" color="gray.800">
-            Gold Necklace
+          <Typography variant="h6" fontWeight="bold">
+            ₹ 3,500.00
           </Typography>
         </Box>
 
-        <Paper sx={{ p: 2, bgcolor: 'teal.50', borderRadius: 2, mb: 3 }}>
-          <Box
-            display="flex"
-            alignItems="center"
-            justifyContent="space-between"
-          >
-            <Box textAlign="center" flex={1}>
-              <Typography variant="caption" color="teal.700">
-                Weight
-              </Typography>
-              <Typography variant="h5" fontWeight="bold" color="teal.900">
-                35.670
-              </Typography>
-              <Typography variant="caption" color="teal.700">
-                gms
-              </Typography>
-            </Box>
-            <Divider
-              orientation="vertical"
-              flexItem
-              sx={{ mx: 2, bgcolor: 'teal.200' }}
-            />
-            <Box textAlign="center" flex={1}>
-              <Typography variant="caption" color="teal.700">
-                Purity
-              </Typography>
-              <Typography variant="h5" fontWeight="bold" color="teal.900">
-                91.6
-              </Typography>
-              <Typography variant="caption" color="teal.700">
-                %
-              </Typography>
-            </Box>
-          </Box>
-        </Paper>
-
-        <Paper sx={{ p: 2, bgcolor: 'teal.50', borderRadius: 2, mb: 3 }}>
-          <Box
-            display="flex"
-            alignItems="center"
-            justifyContent="space-between"
-          >
-            <Typography variant="body2" fontWeight="medium" color="teal.800">
-              Making Charges
-            </Typography>
-            <Typography variant="body2" fontWeight="bold" color="teal.900">
-              ₹ 3,500.00
-            </Typography>
-          </Box>
-        </Paper>
-
-        <Paper
+        {/* Hallmark Section */}
+        <Box
           sx={{
-            p: 2,
+            mt: 2,
+            backgroundColor: '#17A864',
             borderRadius: 2,
-            background: 'linear-gradient(to right, #14B8A6, #10B981)',
-            color: 'white',
+            padding: 2,
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            color: '#fff',
           }}
         >
-          <Box
-            display="flex"
-            alignItems="center"
-            justifyContent="space-between"
-          >
-            <Typography fontWeight="medium">Hallmark</Typography>
-            <Box
-              sx={{
-                bgcolor: 'rgba(255, 255, 255, 0.2)',
-                px: 1,
-                py: 0.5,
-                borderRadius: 1,
-              }}
-            >
-              <Typography fontWeight="semibold">BIS 916</Typography>
-            </Box>
-          </Box>
-        </Paper>
+          <Typography variant="body1" fontWeight="bold">
+            Hallmark
+          </Typography>
+          <Chip
+            label="BIS 916"
+            sx={{
+              backgroundColor: 'rgb(240 253 250 / 1)',
+              color: '#17A864',
+              fontWeight: 'bold',
+            }}
+          />
+        </Box>
       </CardContent>
     </Card>
   );

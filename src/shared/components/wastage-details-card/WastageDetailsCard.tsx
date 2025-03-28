@@ -14,6 +14,7 @@ const WastageDetailsCard = () => {
         overflow: 'hidden',
         boxShadow: 3,
         border: '2px solid',
+        borderRadius: '0.5rem',
         borderColor: '#E9D5FF', // Purple-200 equivalent
         transition: 'all 0.3s',
         '&:hover': { boxShadow: 6 },
