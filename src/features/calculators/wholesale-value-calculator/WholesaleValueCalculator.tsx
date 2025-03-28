@@ -11,6 +11,7 @@ import {
 } from '@mui/material';
 
 interface CalculatedValues {
+  itemWeight: number;
   wastageWeight: number;
   netPureGold99_9: number;
   netPureGold99_5: number;
@@ -58,17 +59,20 @@ const WholesaleValueCalculator: React.FC = () => {
       // Step 2: Calculate total weight (22K 99.9%) with wastage
       const netPureGold99_9 = netPureGold + (weight * wastage) / 100;
 
-      // Step 3: Calculate wastage weight
-      const wastageWeight = weight - netPureGold99_9;
+      const diffBtwn22K = (netPureGold99_9 * 0.5) / 100;
 
       // Step 4: Calculate total weight (22K 99.5%)
-      const netPureGold99_5 = (netPureGold99_9 * 99.5) / 99.9;
+      const netPureGold99_5 = netPureGold99_9 + diffBtwn22K;
+
+      // Step 3: Calculate wastage weight
+      const wastageWeight = weight - netPureGold99_5;
 
       // Step 5: Calculate cash payment (22K 99.5%)
       const cashEquivalent99_5 = netPureGold99_5 * goldRate99_5;
 
       // Save calculated values
       setCalculatedValues({
+        itemWeight: weight,
         wastageWeight: parseFloat(wastageWeight.toFixed(3)), // Preserve precision
         netPureGold99_9: parseFloat(netPureGold99_9.toFixed(3)),
         netPureGold99_5: parseFloat(netPureGold99_5.toFixed(3)),
@@ -203,18 +207,21 @@ const WholesaleValueCalculator: React.FC = () => {
           >
             <Typography variant="h6">Results:</Typography>
             <Typography>
-              Wastage Weight: {calculatedValues.wastageWeight.toFixed(2)} gms
+              Item wt: {calculatedValues.itemWeight.toFixed(3)} gms
+            </Typography>
+            <Typography>Total Payment in Gold:</Typography>
+            <Typography>
+              99.9%: {calculatedValues.netPureGold99_9.toFixed(3)} gms
             </Typography>
             <Typography>
-              Total Payment in 22K (99.9%):{' '}
-              {calculatedValues.netPureGold99_9.toFixed(3)} gms
+              99.5%: {calculatedValues.netPureGold99_5.toFixed(3)} gms
             </Typography>
             <Typography>
-              Total Payment in 22K (99.5%):{' '}
-              {calculatedValues.netPureGold99_5.toFixed(3)} gms
+              Wastage Weight (99.5%):{' '}
+              {calculatedValues.wastageWeight.toFixed(2)} gms
             </Typography>
             <Typography>
-              Cash Payment for 22K (99.5%): ₹
+              Cash Payment for 99.5%: ₹
               {calculatedValues.cashEquivalent99_5.toFixed(2)}
             </Typography>
           </Box>
