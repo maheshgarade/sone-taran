@@ -11,10 +11,10 @@ import {
 } from '@mui/material';
 
 interface CalculatedValues {
-  netPureGold: number;
   wastageWeight: number;
-  totalGoldWeight: number;
-  moneyEquivalent: number;
+  netPureGold99_9: number;
+  netPureGold99_5: number;
+  cashEquivalent99_5: number;
 }
 
 const WholesaleValueCalculator: React.FC = () => {
@@ -28,7 +28,7 @@ const WholesaleValueCalculator: React.FC = () => {
       weight: '',
       purity: '',
       wastage: '',
-      goldRate: '',
+      goldRate99_5: '',
     },
     validationSchema: Yup.object({
       weight: Yup.number()
@@ -42,27 +42,37 @@ const WholesaleValueCalculator: React.FC = () => {
         .required('Wastage is required')
         .min(0, 'Wastage must be greater than or equal to 0')
         .max(100, 'Wastage cannot exceed 100'),
-      goldRate: Yup.number()
-        .required('Gold rate is required')
+      goldRate99_5: Yup.number()
+        .required('Gold rate (99.5%) is required')
         .positive('Gold rate must be positive'),
     }),
     onSubmit: (values) => {
       const weight = Number(values.weight);
       const purity = Number(values.purity);
       const wastage = Number(values.wastage);
-      const goldRate = Number(values.goldRate);
+      const goldRate99_5 = Number(values.goldRate99_5);
 
-      // Ensure arithmetic operations are on numbers
+      // Step 1: Calculate net pure gold based on purity
       const netPureGold = (weight * purity) / 100;
-      const wastageWeight = (weight * wastage) / 100;
-      const totalGoldWeight = netPureGold + wastageWeight;
-      const moneyEquivalent = totalGoldWeight * goldRate;
 
+      // Step 2: Calculate total weight (22K 99.9%) with wastage
+      const netPureGold99_9 = netPureGold + (weight * wastage) / 100;
+
+      // Step 3: Calculate wastage weight
+      const wastageWeight = weight - netPureGold99_9;
+
+      // Step 4: Calculate total weight (22K 99.5%)
+      const netPureGold99_5 = (netPureGold99_9 * 99.5) / 99.9;
+
+      // Step 5: Calculate cash payment (22K 99.5%)
+      const cashEquivalent99_5 = netPureGold99_5 * goldRate99_5;
+
+      // Save calculated values
       setCalculatedValues({
-        netPureGold,
-        wastageWeight,
-        totalGoldWeight,
-        moneyEquivalent,
+        wastageWeight: parseFloat(wastageWeight.toFixed(3)), // Preserve precision
+        netPureGold99_9: parseFloat(netPureGold99_9.toFixed(3)),
+        netPureGold99_5: parseFloat(netPureGold99_5.toFixed(3)),
+        cashEquivalent99_5: parseFloat(cashEquivalent99_5.toFixed(2)),
       });
       setCalculated(true);
     },
@@ -79,7 +89,7 @@ const WholesaleValueCalculator: React.FC = () => {
     <Container maxWidth="md" sx={{ pl: 0, pr: 0 }}>
       <Paper elevation={3} sx={{ padding: 4, marginTop: 1.8 }}>
         <Typography variant="h4" align="center" sx={{ mb: 4 }}>
-          Wholesale Value Calculator
+          Wholesale Value
         </Typography>
         <Box
           component="form"
@@ -88,31 +98,47 @@ const WholesaleValueCalculator: React.FC = () => {
         >
           {/* Input Fields */}
           <Box sx={{ display: 'flex', flexDirection: 'row', gap: 3 }}>
-            <TextField
-              fullWidth
-              type="number"
-              id="weight"
-              name="weight"
-              label="Weight (grams)"
-              value={formik.values.weight}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              error={formik.touched.weight && Boolean(formik.errors.weight)}
-              helperText={formik.touched.weight && formik.errors.weight}
-            />
-            <TextField
-              fullWidth
-              type="number"
-              id="purity"
-              name="purity"
-              label="Purity (%)"
-              value={formik.values.purity}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              error={formik.touched.purity && Boolean(formik.errors.purity)}
-              helperText={formik.touched.purity && formik.errors.purity}
-            />
+            <Box sx={{ flexGrow: 1 }}>
+              <TextField
+                fullWidth
+                type="number"
+                id="weight"
+                name="weight"
+                label="Weight (grams)"
+                value={formik.values.weight}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                error={formik.touched.weight && Boolean(formik.errors.weight)}
+                helperText={formik.touched.weight && formik.errors.weight}
+              />
+            </Box>
+            <Box sx={{ flexGrow: 1 }}>
+              <TextField
+                fullWidth
+                type="number"
+                id="purity"
+                name="purity"
+                label="Purity (%)"
+                value={formik.values.purity}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                error={formik.touched.purity && Boolean(formik.errors.purity)}
+                helperText={formik.touched.purity && formik.errors.purity}
+              />
+              {formik.values.purity && (
+                <Typography
+                  sx={{ mt: 1 }}
+                  variant="body2"
+                  color="text.secondary"
+                >
+                  {`${(parseFloat(formik.values.purity) - 0.4).toFixed(
+                    1
+                  )}% + 0.4% = ${formik.values.purity}%`}
+                </Typography>
+              )}
+            </Box>
           </Box>
+
           <Box sx={{ display: 'flex', flexDirection: 'row', gap: 3 }}>
             <TextField
               fullWidth
@@ -129,14 +155,19 @@ const WholesaleValueCalculator: React.FC = () => {
             <TextField
               fullWidth
               type="number"
-              id="goldRate"
-              name="goldRate"
-              label="Gold Rate (₹/gram)"
-              value={formik.values.goldRate}
+              id="goldRate99_5"
+              name="goldRate99_5"
+              label="Gold Rate (₹/gram for 99.5%)"
+              value={formik.values.goldRate99_5}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
-              error={formik.touched.goldRate && Boolean(formik.errors.goldRate)}
-              helperText={formik.touched.goldRate && formik.errors.goldRate}
+              error={
+                formik.touched.goldRate99_5 &&
+                Boolean(formik.errors.goldRate99_5)
+              }
+              helperText={
+                formik.touched.goldRate99_5 && formik.errors.goldRate99_5
+              }
             />
           </Box>
 
@@ -172,16 +203,19 @@ const WholesaleValueCalculator: React.FC = () => {
           >
             <Typography variant="h6">Results:</Typography>
             <Typography>
-              Net Pure Gold: {calculatedValues.netPureGold.toFixed(2)} g
+              Wastage Weight: {calculatedValues.wastageWeight.toFixed(2)} gms
             </Typography>
             <Typography>
-              Wastage Weight: {calculatedValues.wastageWeight.toFixed(2)} g
+              Total Payment in 22K (99.9%):{' '}
+              {calculatedValues.netPureGold99_9.toFixed(3)} gms
             </Typography>
             <Typography>
-              Total Gold (22K): {calculatedValues.totalGoldWeight.toFixed(2)} g
+              Total Payment in 22K (99.5%):{' '}
+              {calculatedValues.netPureGold99_5.toFixed(3)} gms
             </Typography>
             <Typography>
-              Money Equivalent: ₹{calculatedValues.moneyEquivalent.toFixed(2)}
+              Cash Payment for 22K (99.5%): ₹
+              {calculatedValues.cashEquivalent99_5.toFixed(2)}
             </Typography>
           </Box>
         )}
