@@ -19,7 +19,7 @@ const WastageDetailsCard: React.FC<WastageDetailsCardProps> = ({
   goldRate99_5,
   itemWeight,
 }) => {
-  const [cashRate, setCashRate] = useState<number>(
+  const [cashRate, _setCashRate] = useState<number>(
     Number((wastageWeight * goldRate99_5).toFixed(0))
   );
   return (
