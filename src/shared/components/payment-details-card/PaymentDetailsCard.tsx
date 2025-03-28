@@ -1,4 +1,11 @@
-import { Card, CardContent, CardHeader, Typography, Box } from '@mui/material';
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  Typography,
+  Box,
+  Divider,
+} from '@mui/material';
 
 const PaymentDetailsCard = () => {
   return (
@@ -27,35 +34,72 @@ const PaymentDetailsCard = () => {
       />
       <CardContent sx={{ padding: 3, backgroundColor: 'white' }}>
         <Box display="flex" flexDirection="column" gap={2}>
-          {[
-            { label: 'Gold 99.9', amount: '6,500.00' },
-            { label: 'Gold 99.5', amount: '6,200.00' },
-            { label: 'Cash', amount: '15,840.00' },
-          ].map((item, index) => (
+          <Box
+            display="flex"
+            justifyContent="space-between"
+            alignItems="center"
+          >
+            <Typography fontWeight={500} color="gray.700">
+              Gold 99.9 %
+            </Typography>
             <Box
-              key={index}
-              display="flex"
-              justifyContent="space-between"
-              alignItems="center"
+              sx={{
+                backgroundColor: '#FEF3C7', // Amber-100 equivalent
+                px: 2,
+                py: 0.5,
+                borderRadius: '999px',
+                color: '#B45309', // Amber-800 equivalent
+                fontWeight: 600,
+              }}
             >
-              <Typography fontWeight={500} color="gray.700">
-                {item.label}
-              </Typography>
-              <Box
-                sx={{
-                  backgroundColor: '#FEF3C7', // Amber-100 equivalent
-                  px: 2,
-                  py: 0.5,
-                  borderRadius: '999px',
-                  color: '#B45309', // Amber-800 equivalent
-                  fontWeight: 600,
-                }}
-              >
-                &#8377; {item.amount}
-              </Box>
+              33.25 gms
             </Box>
-          ))}
-          <Box pt={3} mt={3} borderTop={1} borderColor="gray.200">
+          </Box>
+
+          <Box
+            display="flex"
+            justifyContent="space-between"
+            alignItems="center"
+          >
+            <Typography fontWeight={500} color="gray.700">
+              Gold 99.5 %
+            </Typography>
+            <Box
+              sx={{
+                backgroundColor: '#FEF3C7', // Amber-100 equivalent
+                px: 2,
+                py: 0.5,
+                borderRadius: '999px',
+                color: '#B45309', // Amber-800 equivalent
+                fontWeight: 600,
+              }}
+            >
+              33.42 gms
+            </Box>
+          </Box>
+          <Box
+            display="flex"
+            justifyContent="space-between"
+            alignItems="center"
+          >
+            <Typography fontWeight={500} color="gray.700">
+              Cash
+            </Typography>
+            <Box
+              sx={{
+                backgroundColor: '#FEF3C7', // Amber-100 equivalent
+                px: 2,
+                py: 0.5,
+                borderRadius: '999px',
+                color: '#B45309', // Amber-800 equivalent
+                fontWeight: 600,
+              }}
+            >
+              &#8377; 300,156.5
+            </Box>
+          </Box>
+          <Divider orientation="horizontal" flexItem />
+          <Box>
             <Box
               display="flex"
               justifyContent="space-between"
@@ -74,7 +118,7 @@ const PaymentDetailsCard = () => {
                   fontWeight: 700,
                 }}
               >
-                &#8377; 28,540.00
+                33.42 gms | &#8377; 28,540.00
               </Box>
             </Box>
           </Box>
