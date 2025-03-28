@@ -10,6 +10,8 @@ import {
   Container,
 } from '@mui/material';
 import PaymentDetailsCard from '../../../shared/components/payment-details-card/PaymentDetailsCard';
+import WastageDetailsCard from '../../../shared/components/wastage-details-card/WastageDetailsCard';
+import ItemDetailsCard from '../../../shared/components/item-details-card/ItemDetailsCard';
 
 interface CalculatedValues {
   itemWeight: number;
@@ -197,35 +199,48 @@ const WholesaleValueCalculator: React.FC = () => {
 
         {/* Results Section */}
         {calculated && calculatedValues && (
-          <Box
-            sx={{
-              mt: 3,
-              p: 2,
-              border: '1px solid #ccc',
-              borderRadius: '4px',
-              backgroundColor: '#f9f9f9',
-            }}
-          >
-            <PaymentDetailsCard />
-            <Typography variant="h6">Results:</Typography>
-            <Typography>
-              Item wt: {calculatedValues.itemWeight.toFixed(3)} gms
-            </Typography>
-            <Typography>Total Payment in Gold:</Typography>
-            <Typography>
-              99.9%: {calculatedValues.netPureGold99_9.toFixed(3)} gms
-            </Typography>
-            <Typography>
-              99.5%: {calculatedValues.netPureGold99_5.toFixed(3)} gms
-            </Typography>
-            <Typography>
-              Wastage Weight (99.5%):{' '}
-              {calculatedValues.wastageWeight.toFixed(2)} gms
-            </Typography>
-            <Typography>
-              Cash Payment for 99.5%: ₹
-              {calculatedValues.cashEquivalent99_5.toFixed(2)}
-            </Typography>
+          <Box sx={{ marginTop: '1rem' }}>
+            <Box
+              sx={{
+                display: 'grid',
+                gridTemplateColumns: { xs: '1fr', md: 'repeat(3, 1fr)' },
+                gap: { xs: 2, md: 3 },
+              }}
+            >
+              <PaymentDetailsCard />
+              <WastageDetailsCard />
+              <ItemDetailsCard />
+            </Box>
+
+            <Box
+              sx={{
+                mt: 3,
+                p: 2,
+                border: '1px solid #ccc',
+                borderRadius: '4px',
+                backgroundColor: '#f9f9f9',
+              }}
+            >
+              <Typography variant="h6">Results:</Typography>
+              <Typography>
+                Item wt: {calculatedValues.itemWeight.toFixed(3)} gms
+              </Typography>
+              <Typography>Total Payment in Gold:</Typography>
+              <Typography>
+                99.9%: {calculatedValues.netPureGold99_9.toFixed(3)} gms
+              </Typography>
+              <Typography>
+                99.5%: {calculatedValues.netPureGold99_5.toFixed(3)} gms
+              </Typography>
+              <Typography>
+                Wastage Weight (99.5%):{' '}
+                {calculatedValues.wastageWeight.toFixed(2)} gms
+              </Typography>
+              <Typography>
+                Cash Payment for 99.5%: ₹
+                {calculatedValues.cashEquivalent99_5.toFixed(2)}
+              </Typography>
+            </Box>
           </Box>
         )}
       </Paper>
