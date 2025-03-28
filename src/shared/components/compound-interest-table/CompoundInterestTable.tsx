@@ -7,9 +7,9 @@ import {
   TableHead,
   TableRow,
   Paper,
-  styled
+  styled,
 } from '@mui/material';
-import { formatCurrency } from '../../utils/CurrencyUtil';
+import { formatCurrency } from '../../../utils/CurrencyUtil';
 
 interface TableRow {
   duration: number;
@@ -50,7 +50,9 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
 }));
 
-const CompoundInterestTable: React.FC<CompoundInterestTableProps> = ({ data }) => {
+const CompoundInterestTable: React.FC<CompoundInterestTableProps> = ({
+  data,
+}) => {
   const formatRoi = (roi: number) => {
     return `${roi}%`;
   };
@@ -73,12 +75,8 @@ const CompoundInterestTable: React.FC<CompoundInterestTableProps> = ({ data }) =
               <StyledTableCell>
                 {row.duration} {row.unit}
               </StyledTableCell>
-              <StyledTableCell>
-                {formatCurrency(row.principal)}
-              </StyledTableCell>
-              <StyledTableCell>
-                {formatRoi(row.roi)}
-              </StyledTableCell>
+              <StyledTableCell>{formatCurrency(row.principal)}</StyledTableCell>
+              <StyledTableCell>{formatRoi(row.roi)}</StyledTableCell>
               <StyledTableCell>
                 <div style={{ color: 'rgba(0, 0, 0, 0.6)' }}>
                   {formatCurrency(row.principal)} × {formatRoi(row.rate)}
@@ -89,7 +87,8 @@ const CompoundInterestTable: React.FC<CompoundInterestTableProps> = ({ data }) =
               </StyledTableCell>
               <StyledTableCell>
                 <div style={{ color: 'rgba(0, 0, 0, 0.6)' }}>
-                  {formatCurrency(row.principleAndInterest || row.principal)} + {formatCurrency(row.interest)}
+                  {formatCurrency(row.principleAndInterest || row.principal)} +{' '}
+                  {formatCurrency(row.interest)}
                 </div>
                 <div style={{ fontWeight: 500, marginTop: 4 }}>
                   = {formatCurrency(row.total)}

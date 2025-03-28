@@ -17,7 +17,7 @@ import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { useState } from 'react';
 import { InterestBreakdown } from '../../../models/InterestBreakdown';
-import CompoundInterestTable from '../../../shared/compound-interest-table/CompoundInterestTable';
+import CompoundInterestTable from '../../../shared/components/compound-interest-table/CompoundInterestTable';
 import {
   calculateRoundedMonthsAndDays,
   calculateMonthsAndDays,

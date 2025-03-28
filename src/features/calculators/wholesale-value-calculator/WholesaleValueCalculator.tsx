@@ -9,6 +9,7 @@ import {
   Paper,
   Container,
 } from '@mui/material';
+import PaymentDetailsCard from '../../../shared/components/payment-details-card/PaymentDetailsCard';
 
 interface CalculatedValues {
   itemWeight: number;
@@ -205,6 +206,7 @@ const WholesaleValueCalculator: React.FC = () => {
               backgroundColor: '#f9f9f9',
             }}
           >
+            <PaymentDetailsCard />
             <Typography variant="h6">Results:</Typography>
             <Typography>
               Item wt: {calculatedValues.itemWeight.toFixed(3)} gms
