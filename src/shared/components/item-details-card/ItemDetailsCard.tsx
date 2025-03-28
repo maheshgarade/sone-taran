@@ -8,7 +8,19 @@ import {
   Chip,
 } from '@mui/material';
 
-const ItemDetailsCard = () => {
+interface ItemDetailsCardProps {
+  itemWeight: number;
+  purity: number;
+  netPureGold99_5: number;
+  cashEquivalent99_5: number;
+}
+
+const ItemDetailsCard: React.FC<ItemDetailsCardProps> = ({
+  itemWeight,
+  purity,
+  netPureGold99_5,
+  cashEquivalent99_5,
+}) => {
   return (
     <Card
       sx={{
@@ -44,7 +56,7 @@ const ItemDetailsCard = () => {
           Item Type
         </Typography>
         <Typography variant="h6" fontWeight="bold">
-          Gold Necklace
+          Gold Ornament
         </Typography>
 
         {/* Weight & Purity Section */}
@@ -60,10 +72,10 @@ const ItemDetailsCard = () => {
         >
           <Box>
             <Typography variant="body2" color="textSecondary">
-              Weight
+              Total Weight
             </Typography>
             <Typography variant="h6" fontWeight="bold">
-              35.670 <span style={{ fontSize: '0.8rem' }}>gms</span>
+              {itemWeight} <span style={{ fontSize: '0.8rem' }}>gms</span>
             </Typography>
           </Box>
           <Divider orientation="vertical" flexItem sx={{ mx: 2 }} />
@@ -72,7 +84,7 @@ const ItemDetailsCard = () => {
               Purity
             </Typography>
             <Typography variant="h6" fontWeight="bold">
-              91.6 <span style={{ fontSize: '0.8rem' }}>%</span>
+              {purity} <span style={{ fontSize: '0.8rem' }}>%</span>
             </Typography>
           </Box>
         </Box>
@@ -91,7 +103,8 @@ const ItemDetailsCard = () => {
             Making Charges
           </Typography>
           <Typography variant="h6" fontWeight="bold">
-            ₹ 3,500.00
+            {netPureGold99_5} gms | &#8377;{' '}
+            {new Intl.NumberFormat('en-IN').format(cashEquivalent99_5)}
           </Typography>
         </Box>
 
@@ -112,7 +125,7 @@ const ItemDetailsCard = () => {
             Hallmark
           </Typography>
           <Chip
-            label="BIS 916"
+            label={`BIS ${(purity * 10).toFixed(0)}`}
             sx={{
               backgroundColor: 'rgb(240 253 250 / 1)',
               color: '#17A864',

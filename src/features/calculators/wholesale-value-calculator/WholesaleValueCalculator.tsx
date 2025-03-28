@@ -20,6 +20,7 @@ interface CalculatedValues {
   netPureGold99_5: number;
   cashEquivalent99_5: number;
   goldRate99_5: number;
+  purity: number;
 }
 
 const WholesaleValueCalculator: React.FC = () => {
@@ -53,12 +54,13 @@ const WholesaleValueCalculator: React.FC = () => {
     }),
     onSubmit: (values) => {
       const weight = Number(values.weight);
-      const purity = Number(values.purity);
+      const totalPurity = Number(values.purity);
+      const purity = Number(values.purity) - 0.4;
       const wastage = Number(values.wastage);
       const goldRate99_5 = Number(values.goldRate99_5);
 
       // Step 1: Calculate net pure gold based on purity
-      const netPureGold = (weight * purity) / 100;
+      const netPureGold = (weight * totalPurity) / 100;
 
       // Step 2: Calculate total weight (22K 99.9%) with wastage
       const netPureGold99_9 = netPureGold + (weight * wastage) / 100;
@@ -82,6 +84,7 @@ const WholesaleValueCalculator: React.FC = () => {
         netPureGold99_5: parseFloat(netPureGold99_5.toFixed(3)),
         cashEquivalent99_5: parseFloat(cashEquivalent99_5.toFixed(2)),
         goldRate99_5: goldRate99_5,
+        purity: purity,
       });
       setCalculated(true);
     },
@@ -220,14 +223,23 @@ const WholesaleValueCalculator: React.FC = () => {
               <PaymentDetailsCard
                 netPureGold99_9={calculatedValues.netPureGold99_9}
                 netPureGold99_5={calculatedValues.netPureGold99_5}
-                cashEquivalent99_5={calculatedValues.cashEquivalent99_5}
+                cashEquivalent99_5={Number(
+                  calculatedValues.cashEquivalent99_5.toFixed(0)
+                )}
               />
               <WastageDetailsCard
                 wastageWeight={calculatedValues.wastageWeight}
                 goldRate99_5={calculatedValues.goldRate99_5}
                 itemWeight={calculatedValues.itemWeight}
               />
-              <ItemDetailsCard />
+              <ItemDetailsCard
+                itemWeight={calculatedValues.itemWeight}
+                purity={calculatedValues.purity}
+                netPureGold99_5={calculatedValues.netPureGold99_5}
+                cashEquivalent99_5={Number(
+                  calculatedValues.cashEquivalent99_5.toFixed(0)
+                )}
+              />
             </Box>
           </Box>
         )}

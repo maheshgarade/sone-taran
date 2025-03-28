@@ -105,7 +105,8 @@ const PaymentDetailsCard: React.FC<PaymentDetailsCardProps> = ({
                 fontWeight: 600,
               }}
             >
-              &#8377; {cashEquivalent99_5}
+              &#8377;{' '}
+              {new Intl.NumberFormat('en-IN').format(cashEquivalent99_5)}
             </Box>
           </Box>
           <Divider orientation="horizontal" flexItem />
@@ -128,7 +129,8 @@ const PaymentDetailsCard: React.FC<PaymentDetailsCardProps> = ({
                   fontWeight: 700,
                 }}
               >
-                {netPureGold99_5} gms | &#8377; {cashEquivalent99_5}
+                {netPureGold99_5} gms | &#8377;{' '}
+                {new Intl.NumberFormat('en-IN').format(cashEquivalent99_5)}
               </Box>
             </Box>
           </Box>

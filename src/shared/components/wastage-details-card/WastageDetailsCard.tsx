@@ -6,6 +6,7 @@ import {
   Box,
   LinearProgress,
 } from '@mui/material';
+import { useState } from 'react';
 
 interface WastageDetailsCardProps {
   wastageWeight: number;
@@ -18,7 +19,9 @@ const WastageDetailsCard: React.FC<WastageDetailsCardProps> = ({
   goldRate99_5,
   itemWeight,
 }) => {
-  console.log('goldRate99_5', goldRate99_5);
+  const [cashRate, setCashRate] = useState<number>(
+    Number((wastageWeight * goldRate99_5).toFixed(0))
+  );
   return (
     <Card
       sx={{
@@ -116,7 +119,8 @@ const WastageDetailsCard: React.FC<WastageDetailsCardProps> = ({
             </Typography>
             <Box mt={1} p={2} bgcolor="#F5F3FF" borderRadius={2}>
               <Typography fontWeight={600} color="#6B21A8">
-                &#8377; {(goldRate99_5 * wastageWeight).toFixed(2)}
+                &#8377;
+                {new Intl.NumberFormat('en-IN').format(cashRate)}
               </Typography>
             </Box>
           </Box>
