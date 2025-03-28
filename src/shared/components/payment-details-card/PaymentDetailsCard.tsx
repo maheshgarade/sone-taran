@@ -7,7 +7,17 @@ import {
   Divider,
 } from '@mui/material';
 
-const PaymentDetailsCard = () => {
+interface PaymentDetailsCardProps {
+  netPureGold99_9: number;
+  netPureGold99_5: number;
+  cashEquivalent99_5: number;
+}
+
+const PaymentDetailsCard: React.FC<PaymentDetailsCardProps> = ({
+  netPureGold99_9,
+  netPureGold99_5,
+  cashEquivalent99_5,
+}) => {
   return (
     <Card
       sx={{
@@ -52,7 +62,7 @@ const PaymentDetailsCard = () => {
                 fontWeight: 600,
               }}
             >
-              33.25 gms
+              {netPureGold99_9} gms
             </Box>
           </Box>
 
@@ -74,7 +84,7 @@ const PaymentDetailsCard = () => {
                 fontWeight: 600,
               }}
             >
-              33.42 gms
+              {netPureGold99_5} gms
             </Box>
           </Box>
           <Box
@@ -83,7 +93,7 @@ const PaymentDetailsCard = () => {
             alignItems="center"
           >
             <Typography fontWeight={500} color="gray.700">
-              Cash
+              Cash (99.5 %)
             </Typography>
             <Box
               sx={{
@@ -95,7 +105,7 @@ const PaymentDetailsCard = () => {
                 fontWeight: 600,
               }}
             >
-              &#8377; 300,156.5
+              &#8377; {cashEquivalent99_5}
             </Box>
           </Box>
           <Divider orientation="horizontal" flexItem />
@@ -118,7 +128,7 @@ const PaymentDetailsCard = () => {
                   fontWeight: 700,
                 }}
               >
-                33.42 gms | &#8377; 28,540.00
+                {netPureGold99_5} gms | &#8377; {cashEquivalent99_5}
               </Box>
             </Box>
           </Box>

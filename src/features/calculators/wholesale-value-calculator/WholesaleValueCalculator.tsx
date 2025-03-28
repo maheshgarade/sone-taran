@@ -215,7 +215,11 @@ const WholesaleValueCalculator: React.FC = () => {
                 gap: { xs: 2, md: 3 },
               }}
             >
-              <PaymentDetailsCard />
+              <PaymentDetailsCard
+                netPureGold99_9={calculatedValues.netPureGold99_9}
+                netPureGold99_5={calculatedValues.netPureGold99_5}
+                cashEquivalent99_5={calculatedValues.cashEquivalent99_5}
+              />
               <WastageDetailsCard />
               <ItemDetailsCard />
             </Box>
