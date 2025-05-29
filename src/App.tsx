@@ -1,5 +1,5 @@
-import { useState, Suspense, lazy } from "react";
-import { Routes, Route, Link, useLocation } from "react-router-dom";
+import { useState, Suspense, lazy } from 'react';
+import { Routes, Route, Link, useLocation } from 'react-router-dom';
 import {
   Drawer,
   List,
@@ -13,41 +13,49 @@ import {
   Typography,
   Box,
   Breadcrumbs,
-} from "@mui/material";
-import MenuIcon from "@mui/icons-material/Menu";
-import { useTheme } from "@mui/material/styles";
-import useMediaQuery from "@mui/material/useMediaQuery";
-import { Dashboard, Settings, Logout } from "@mui/icons-material";
-import Calculators from "./features/calculators/Calculators";
-import Customers from "./features/customers/Customers";
-import KalamDetails from "./features/kalams/kalam-details/KalamDetails";
+} from '@mui/material';
+import MenuIcon from '@mui/icons-material/Menu';
+import { useTheme } from '@mui/material/styles';
+import useMediaQuery from '@mui/material/useMediaQuery';
+import { Dashboard, Settings, Logout } from '@mui/icons-material';
+import Calculators from './features/calculators/Calculators';
+import Customers from './features/customers/Customers';
+import KalamDetails from './features/kalams/kalam-details/KalamDetails';
+import LogIn from './features/auth/components/login/Login';
 
 // Lazy load Kalams
-const Kalams = lazy(() => import("./features/kalams/Kalams"));
+const Kalams = lazy(() => import('./features/kalams/Kalams'));
 
 // Menu Items
 const menuItems = [
-  { text: "Dashboard", path: "/" },
-  { text: "Kalams", path: "/kalams" },
-  { text: "Customers", path: "/customers" },
-  { text: "Settings", path: "/settings" },
-  { text: "Calculators", path: "/calculators" },
-  { text: "Log Out", path: "/logout" },
+  { text: 'Login', path: '/' },
+  { text: 'Dashboard', path: '/dashboard' },
+  { text: 'Kalams', path: '/kalams' },
+  { text: 'Customers', path: '/customers' },
+  { text: 'Settings', path: '/settings' },
+  { text: 'Calculators', path: '/calculators' },
+  { text: 'Log Out', path: '/logout' },
 ];
 
 const drawerWidth = 170;
 
 const BreadcrumbsComponent = () => {
   const location = useLocation();
-  const pathnames = location.pathname.split("/").filter((x) => x);
+  const pathnames = location.pathname.split('/').filter((x) => x);
 
   return (
     <Breadcrumbs aria-label="breadcrumb" sx={{ mb: 2 }}>
-      <Link to="/" style={{ textDecoration: "none", color: "inherit" }}>Home</Link>
+      <Link to="/" style={{ textDecoration: 'none', color: 'inherit' }}>
+        Home
+      </Link>
       {pathnames.map((value, index) => {
-        const routeTo = `/${pathnames.slice(0, index + 1).join("/")}`;
+        const routeTo = `/${pathnames.slice(0, index + 1).join('/')}`;
         return (
-          <Link key={routeTo} to={routeTo} style={{ textDecoration: "none", color: "inherit" }}>
+          <Link
+            key={routeTo}
+            to={routeTo}
+            style={{ textDecoration: 'none', color: 'inherit' }}
+          >
             {value.charAt(0).toUpperCase() + value.slice(1)}
           </Link>
         );
@@ -58,7 +66,7 @@ const BreadcrumbsComponent = () => {
 
 const App = () => {
   const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const [mobileOpen, setMobileOpen] = useState(false);
   const location = useLocation();
 
@@ -75,8 +83,9 @@ const App = () => {
             to={path}
             onClick={() => isMobile && toggleDrawer()}
             sx={{
-              backgroundColor: location.pathname === path ? "#eeeeee" : "transparent",
-              "&:hover": { backgroundColor: "#f5f5f5" },
+              backgroundColor:
+                location.pathname === path ? '#eeeeee' : 'transparent',
+              '&:hover': { backgroundColor: '#f5f5f5' },
             }}
           >
             <ListItemText primary={text} />
@@ -87,7 +96,7 @@ const App = () => {
   );
 
   return (
-    <Box sx={{ display: "flex" }}>
+    <Box sx={{ display: 'flex' }}>
       <CssBaseline />
 
       {/* AppBar */}
@@ -106,16 +115,16 @@ const App = () => {
 
       {/* Sidebar Drawer */}
       <Drawer
-        variant={isMobile ? "temporary" : "permanent"}
+        variant={isMobile ? 'temporary' : 'permanent'}
         open={isMobile ? mobileOpen : true}
         onClose={toggleDrawer}
         sx={{
           width: drawerWidth,
           flexShrink: 0,
-          "& .MuiDrawer-paper": { width: drawerWidth, boxSizing: "border-box" },
+          '& .MuiDrawer-paper': { width: drawerWidth, boxSizing: 'border-box' },
         }}
       >
-        <Box sx={{marginTop: '4rem'}}>{drawerContent}</Box>
+        <Box sx={{ marginTop: '4rem' }}>{drawerContent}</Box>
       </Drawer>
 
       {/* Main Content Area */}
@@ -123,7 +132,8 @@ const App = () => {
         <BreadcrumbsComponent />
         <Suspense fallback={<div>Loading...</div>}>
           <Routes>
-            <Route path="/" element={<Dashboard />} />
+            <Route path="/" element={<LogIn />} />
+            <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/kalams" element={<Kalams />} />
             <Route path="/kalams/:id" element={<KalamDetails />} />
             <Route path="/customers" element={<Customers />} />
