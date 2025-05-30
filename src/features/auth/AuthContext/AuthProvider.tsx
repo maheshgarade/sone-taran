@@ -5,22 +5,23 @@ import { requestOtpApi, verifyOtpApi } from '../services/authService';
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
-  const [phoneNumber, setPhoneNumber] = useState<any | null>(null);
+  const [phoneNumber, setPhoneNumber] = useState<string | null>(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [fullhash, setfullhash] = useState<string | null>(null);
 
-  console.log(isAuthenticated);
-  
-  const requestOtp = async (phone: any) => {
-    await requestOtpApi(phone);
+
+  const requestOtp = async (phone: string) => {
+    const response = await requestOtpApi(phone);
+    setfullhash(response.fullhash);
     setPhoneNumber(phone);
   };
-  
-  const verifyOtp = async (otp: string, fullhash: string) => {
-    const success = await verifyOtpApi(phoneNumber!, otp, fullhash);
+
+  const verifyOtp = async (otp: string) => {
+    if (!fullhash || !otp) return false;
+    const success = await verifyOtpApi(otp, fullhash);
     if (success) setIsAuthenticated(true);
     return success;
   };
-
   const logout = () => {
     setPhoneNumber(null);
     setIsAuthenticated(false);
@@ -28,7 +29,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
 
   return (
     <AuthContext.Provider
-      value={{ phoneNumber, requestOtp, verifyOtp, logout }}
+      value={{ phoneNumber, requestOtp, verifyOtp, logout, isAuthenticated }}
     >
       {children}
     </AuthContext.Provider>

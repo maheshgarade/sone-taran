@@ -1,16 +1,23 @@
 import axios from "axios";
 
-export const requestOtpApi = async (phone: number): Promise<void> => {
-  await axios.post("https://sone-taran-backend.onrender.com/api/user/sendOtp", { phone })
-  console.log(`OTP requested for ${phone}`);
+interface RequestOtpResponse {
+  fullhash: string;
+}
+
+
+export const requestOtpApi = async (phone: string | { phoneNo: number }): Promise<RequestOtpResponse> => {
+  const phoneNumber = typeof phone === "object" ? phone.phoneNo : phone;
+
+  const response = await axios.post("https://sone-taran-backend.onrender.com/api/user/sendOtp", { phone: phoneNumber })
+  console.log(`OTP requested for ${phoneNumber}`);
+
+  return response.data as RequestOtpResponse;
 };
 
-export const verifyOtpApi = async (phone: number, otp: string, fullhash: string): Promise<boolean> => {
-  await axios.post("https://sone-taran-backend.onrender.com/api/user/verifyOtp", {
-    phone,
+export const verifyOtpApi = async (otp: string, fullhash: string): Promise<boolean> => {
+  const response = await axios.post("https://sone-taran-backend.onrender.com/api/user/verifyOtp", {
     otp,
     fullhash
   })
-  console.log(`Verifying OTP ${otp} for ${phone}`);
-  return otp === "123456";
+  return response.data.success;
 };
