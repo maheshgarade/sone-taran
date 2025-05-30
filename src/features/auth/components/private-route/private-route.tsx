@@ -7,7 +7,6 @@ const PrivateRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => 
 
   if (!authContext || !authContext.isAuthenticated) {
     return <Navigate to="/login" replace />;
-    alert("Please login first")
   }
   return <>{children}</>;
 };

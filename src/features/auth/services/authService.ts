@@ -14,10 +14,13 @@ export const requestOtpApi = async (phone: string | { phoneNo: number }): Promis
   return response.data as RequestOtpResponse;
 };
 
-export const verifyOtpApi = async (otp: string, fullhash: string): Promise<boolean> => {
+export const verifyOtpApi = async (phone: string, otp: string, fullhash: string): Promise<boolean> => {
+  const phoneNumber = typeof phone === "object" ? phone['phoneNo'] : phone;
   const response = await axios.post("https://sone-taran-backend.onrender.com/api/user/verifyOtp", {
+    phone: phoneNumber,
     otp,
     fullhash
   })
-  return response.data.success;
+  return response.data.msg === "user confirmed";
+
 };

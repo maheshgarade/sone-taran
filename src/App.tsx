@@ -27,7 +27,7 @@ import Customers from './features/customers/Customers';
 import KalamDetails from './features/kalams/kalam-details/KalamDetails';
 import LogIn from './features/auth/components/login/Login';
 import OtpVerify from './features/auth/components/otp-verify/otp-verify';
-import Profile from './features/auth/components/profile/Profile';
+// import Profile from './features/auth/components/profile/Profile';
 import PrivateRoute from './features/auth/components/private-route/private-route';
 
 // Lazy load Kalams

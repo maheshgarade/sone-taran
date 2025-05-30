@@ -11,31 +11,33 @@ import { useState } from 'react';
 import * as Yup from 'yup';
 import { useAuth } from '../../hooks/useAuth';
 
-interface OTP {
-  OTP: number;
-}
-
-const LogIn: React.FC = () => {
-  const [OTP, setOTP] = useState<OTP | null>(null);
+const OtpVerify: React.FC = () => {
+  const { verifyOtp } = useAuth();
+  const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState<string | null>(null);
 
   const formik = useFormik({
     initialValues: {
-      OTP: '  ',
+      OTP: '',
     },
     validationSchema: Yup.object({
       OTP: Yup.string()
-        .required('Phone number is required')
+        .required('OTP is required')
         .matches(/^\d{6}$/, 'Invalid OTP'),
     }),
-    onSubmit: (values) => {
-      const OTP = Number(values.OTP);
-      setOTP({ OTP: OTP });
+    onSubmit: async (values) => {
+      setError(null);
+      setSuccess(null);
 
+      const success = await verifyOtp(values.OTP);
+      console.log(success);
+      if (!success) {
+        setError('Invalid OTP. Please try again.');
+      } else {
+        setSuccess('OTP verified successfully!');
+      }
     },
   });
-
-  const sendPhoneNo = async () => {
-  };
 
   return (
     <Container maxWidth="sm" sx={{ pl: 0, pr: 0 }}>
@@ -48,42 +50,45 @@ const LogIn: React.FC = () => {
           onSubmit={formik.handleSubmit}
           sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}
         >
-          {/* Input Fields */}
-          <Box sx={{ display: 'flex', flexDirection: 'row', gap: 3 }}>
-            <Box sx={{ flexGrow: 1 }}>
-              <TextField
-                fullWidth
-                type="text"
-                id="OTP"
-                name="OTP"
-                label="OTP"
-                value={formik.values.OTP}
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                error={formik.touched.OTP && Boolean(formik.errors.OTP)}
-                helperText={formik.touched.OTP && formik.errors.OTP}
-              />
-            </Box>
-          </Box>
+          {/* OTP Input Field */}
+          <TextField
+            fullWidth
+            type="text"
+            id="OTP"
+            name="OTP"
+            label="OTP"
+            value={formik.values.OTP}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            error={formik.touched.OTP && Boolean(formik.errors.OTP)}
+            helperText={formik.touched.OTP && formik.errors.OTP}
+          />
 
-          {/* Buttons */}
-          <Box sx={{ display: 'flex', justifyContent: 'center', gap: 2 }}>
-            <Button
-              sx={{ width: '70%' }}
-              type="submit"
-              variant="contained"
-              color="primary"
-            // onClick={() => {
-            //   sendPhoneNo();
-            // }}
-            >
-              Verify
-            </Button>
-          </Box>
+          {/* Submit Button */}
+          <Button
+            type="submit"
+            variant="contained"
+            color="primary"
+            sx={{ width: '70%', alignSelf: 'center' }}
+          >
+            Verify
+          </Button>
+
+          {/* Success/Error Messages */}
+          {error && (
+            <Typography variant="body2" color="error" align="center">
+              {error}
+            </Typography>
+          )}
+          {success && (
+            <Typography variant="body2" color="primary" align="center">
+              {success}
+            </Typography>
+          )}
         </Box>
       </Paper>
     </Container>
   );
 };
 
-export default LogIn;
+export default OtpVerify;

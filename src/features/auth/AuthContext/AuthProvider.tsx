@@ -17,11 +17,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   };
 
   const verifyOtp = async (otp: string) => {
-    if (!fullhash || !otp) return false;
-    const success = await verifyOtpApi(otp, fullhash);
+    if (!fullhash || !phoneNumber) return false;
+    const success = await verifyOtpApi(phoneNumber, otp, fullhash);
     if (success) setIsAuthenticated(true);
+    console.log(success);
     return success;
   };
+
   const logout = () => {
     setPhoneNumber(null);
     setIsAuthenticated(false);
