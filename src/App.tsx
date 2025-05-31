@@ -1,5 +1,5 @@
 import { useState, Suspense, lazy } from 'react';
-import { Routes, Route, Link, useLocation } from 'react-router-dom';
+import { Routes, Route, Link, useLocation, Navigate } from 'react-router-dom';
 import {
   Drawer,
   List,
@@ -17,18 +17,23 @@ import {
 import MenuIcon from '@mui/icons-material/Menu';
 import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
+
+// Import icons
 import { Dashboard, Settings, Logout } from '@mui/icons-material';
+
+// Import components
 import Calculators from './features/calculators/Calculators';
 import Customers from './features/customers/Customers';
 import KalamDetails from './features/kalams/kalam-details/KalamDetails';
 import LogIn from './features/auth/components/login/Login';
+import OtpVerify from './features/auth/components/otp-verify/otp-verify';
+// import Profile from './features/auth/components/profile/Profile';
+import PrivateRoute from './features/auth/components/private-route/private-route';
 
 // Lazy load Kalams
 const Kalams = lazy(() => import('./features/kalams/Kalams'));
-
-// Menu Items
+// Sidebar menu items
 const menuItems = [
-  { text: 'Login', path: '/' },
   { text: 'Dashboard', path: '/dashboard' },
   { text: 'Kalams', path: '/kalams' },
   { text: 'Customers', path: '/customers' },
@@ -39,6 +44,7 @@ const menuItems = [
 
 const drawerWidth = 170;
 
+// Breadcrumbs component
 const BreadcrumbsComponent = () => {
   const location = useLocation();
   const pathnames = location.pathname.split('/').filter((x) => x);
@@ -74,6 +80,7 @@ const App = () => {
     setMobileOpen(!mobileOpen);
   };
 
+  // Sidebar drawer content
   const drawerContent = (
     <List>
       {menuItems.map(({ text, path }) => (
@@ -130,16 +137,68 @@ const App = () => {
       {/* Main Content Area */}
       <Box component="main" sx={{ flexGrow: 1, p: 1, mt: 8 }}>
         <BreadcrumbsComponent />
+
         <Suspense fallback={<div>Loading...</div>}>
           <Routes>
-            <Route path="/" element={<LogIn />} />
-            <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="/kalams" element={<Kalams />} />
-            <Route path="/kalams/:id" element={<KalamDetails />} />
-            <Route path="/customers" element={<Customers />} />
-            <Route path="/settings" element={<Settings />} />
-            <Route path="/calculators" element={<Calculators />} />
-            <Route path="/logout" element={<Logout />} />
+            <Route path="/" element={<Navigate to="/login" />} />
+            <Route path="/login" element={<LogIn />} />
+            <Route path="/otp-verify" element={<OtpVerify />} />
+            <Route
+              path="/dashboard"
+              element={
+                <PrivateRoute>
+                  <Dashboard />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/kalams"
+              element={
+                <PrivateRoute>
+                  <Kalams />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/kalams/:id"
+              element={
+                <PrivateRoute>
+                  <KalamDetails />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/customers"
+              element={
+                <PrivateRoute>
+                  <Customers />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/settings"
+              element={
+                <PrivateRoute>
+                  <Settings />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/calculators"
+              element={
+                <PrivateRoute>
+                  <Calculators />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/logout"
+              element={
+                <PrivateRoute>
+                  <Logout />
+                </PrivateRoute>
+              }
+            />
           </Routes>
         </Suspense>
       </Box>
