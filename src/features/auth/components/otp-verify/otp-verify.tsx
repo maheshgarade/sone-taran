@@ -10,11 +10,13 @@ import { useFormik } from 'formik';
 import { useState } from 'react';
 import * as Yup from 'yup';
 import { useAuth } from '../../hooks/useAuth';
+import { useNavigate } from 'react-router-dom';
 
 const OtpVerify: React.FC = () => {
   const { verifyOtp } = useAuth();
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
+  const navigate = useNavigate();
 
   const formik = useFormik({
     initialValues: {
@@ -35,6 +37,7 @@ const OtpVerify: React.FC = () => {
         setError('Invalid OTP. Please try again.');
       } else {
         setSuccess('OTP verified successfully!');
+        navigate("/dashboard")
       }
     },
   });

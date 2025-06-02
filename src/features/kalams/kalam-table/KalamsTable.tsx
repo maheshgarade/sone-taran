@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, IconButton, Dialog, DialogTitle, DialogContent, List, ListItem, ListItemText } from "@mui/material";
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, IconButton, Dialog, DialogTitle, DialogContent, List, ListItem, ListItemText, Button } from "@mui/material";
 import InfoIcon from "@mui/icons-material/Info";
 import { Visibility } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
@@ -7,7 +7,7 @@ import { KalamProps } from "../models/KalamProps";
 import { CustomerDetails, KalamDetails } from "../models/Kalam";
 import { calculateMonthsAndDays } from "../../../utils/CountDaysUtil";
 import { calculateAnnualCompoundInterest } from "../../../utils/InterestCalculatorUtil";
-
+import AlarmIcon from '@mui/icons-material/Alarm';
 
 const KalamsTable: React.FC<KalamProps> = (props) => {
   const { data } = props;
@@ -33,58 +33,63 @@ const KalamsTable: React.FC<KalamProps> = (props) => {
               <TableCell>Amt Due</TableCell>
               <TableCell>Customer ROI</TableCell>
               <TableCell>Merchant</TableCell>
-              
+
               <TableCell>Today's Value</TableCell>
               <TableCell>Validity</TableCell>
               <TableCell>View Profile</TableCell>
             </TableRow>
           </TableHead>
-          <TableBody>
-  {data.map((kalam, index) => {
-    const loanStartDate = new Date(kalam.kalam.loanDetails.loanStartDate);
-    const { totalMonths, days } = calculateMonthsAndDays(loanStartDate);
-    return (
-      <TableRow key={kalam._id}>
-        <TableCell>{index + 1}</TableCell>
-        <TableCell>{kalam.kalam.loanId}</TableCell>
+          <TableBody>s
+            {data.map((kalam, index) => {
+              const loanStartDate = new Date(kalam.kalam.loanDetails.loanStartDate);
+              const { totalMonths, days } = calculateMonthsAndDays(loanStartDate);
+              return (
+                <TableRow key={kalam._id}>
+                  <TableCell>{index + 1}</TableCell>
+                  <TableCell>{kalam.kalam.loanId}</TableCell>
 
-        {/* Customer Name + Info Icon */}
-        <TableCell>
-          {kalam.customerDetails.name}
-          <IconButton onClick={() => setSelectedCustomer(kalam.customerDetails)}>
-            <InfoIcon fontSize="small" color="primary" />
-          </IconButton>
-        </TableCell>
+                  {/* Customer Name + Info Icon */}
+                  <TableCell>
+                    {kalam.customerDetails.name}
+                    <IconButton onClick={() => setSelectedCustomer(kalam.customerDetails)}>
+                      <InfoIcon fontSize="small" color="primary" />
+                    </IconButton>
+                  </TableCell>
 
-        {/* Kalam Name + Info Icon */}
-        <TableCell>
-          {kalam.kalam.details.name}
-          <IconButton onClick={() => setSelectedKalam(kalam.kalam)}>
-            <InfoIcon fontSize="small" color="primary" />
-          </IconButton>
-        </TableCell>
+                  {/* Kalam Name + Info Icon */}
+                  <TableCell>
+                    {kalam.kalam.details.name}
+                    <IconButton onClick={() => setSelectedKalam(kalam.kalam)}>
+                      <InfoIcon fontSize="small" color="primary" />
+                    </IconButton>
+                  </TableCell>
 
-        <TableCell>{kalam.kalam.loanDetails.loanStartDate}</TableCell>
-        <TableCell>₹{kalam.kalam.loanDetails.customerAmt}</TableCell>
-        <TableCell>
-          ₹{calculateAnnualCompoundInterest(kalam.kalam.loanDetails.customerAmt, kalam.kalam.loanDetails.customerROI * 12, totalMonths, days)}
-        </TableCell>
-        <TableCell>{kalam.kalam.loanDetails.customerROI}%</TableCell>
-        <TableCell>{kalam.merchantDetails.shopName}</TableCell>
-        <TableCell>{calculateTodaysValue()}</TableCell>
-        <TableCell>-</TableCell>
-        <TableCell>
-          <IconButton onClick={() => navigate(`/kalams/${index + 1001}`)}>
-            <Visibility fontSize="small" color="primary" />
-          </IconButton>
-        </TableCell>
-      </TableRow>
-    );
-  })}
-</TableBody>
-
+                  <TableCell>{kalam.kalam.loanDetails.loanStartDate}</TableCell>
+                  <TableCell>₹{kalam.kalam.loanDetails.customerAmt}</TableCell>
+                  <TableCell>
+                    ₹{calculateAnnualCompoundInterest(kalam.kalam.loanDetails.customerAmt, kalam.kalam.loanDetails.customerROI * 12, totalMonths, days)}
+                  </TableCell>
+                  <TableCell>{kalam.kalam.loanDetails.customerROI}%</TableCell>
+                  <TableCell>{kalam.merchantDetails.name}</TableCell>
+                  <TableCell>{calculateTodaysValue()}</TableCell>
+                  <TableCell>-</TableCell>
+                  <TableCell>
+                    <IconButton onClick={() => navigate(`/kalams/${index + 1001}`)}>
+                      <Visibility fontSize="small" color="primary" />
+                    </IconButton>
+                  </TableCell>
+                </TableRow>
+              );
+            })}
+          </TableBody>
         </Table>
       </TableContainer>
+
+      <IconButton color="primary" aria-label="add to shopping cart">
+        <AlarmIcon />
+      </IconButton><Button>
+
+      </Button>
 
       {/* Customer Info Dialog */}
       <Dialog open={!!selectedCustomer} onClose={() => setSelectedCustomer(null)}>
