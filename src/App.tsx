@@ -81,6 +81,12 @@ const App = () => {
     setMobileOpen(!mobileOpen);
   };
 
+  // For login page
+  const authRoutes = ['/login', '/otp-verify'];
+
+  const isAuthRoute = authRoutes.includes(location.pathname);
+
+  console.log(location.pathname);
   // Sidebar drawer content
   const drawerContent = (
     <List>
@@ -102,6 +108,18 @@ const App = () => {
       ))}
     </List>
   );
+
+  if (isAuthRoute) {
+    return (
+      <Box sx={{ p: 3 }}>
+        <Routes>
+          <Route path="/login" element={<LogIn />} />
+          <Route path="/otp-verify" element={<OtpVerify />} />
+          <Route path="*" element={<Navigate to="/login" />} />
+        </Routes>
+      </Box>
+    );
+  }
 
   return (
     <Box sx={{ display: 'flex' }}>
@@ -142,8 +160,6 @@ const App = () => {
         <Suspense fallback={<div>Loading...</div>}>
           <Routes>
             <Route path="/" element={<Navigate to="/login" />} />
-            <Route path="/login" element={<LogIn />} />
-            <Route path="/otp-verify" element={<OtpVerify />} />
             <Route
               path="/dashboard"
               element={

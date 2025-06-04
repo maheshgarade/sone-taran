@@ -1,11 +1,4 @@
-import {
-  Container,
-  Paper,
-  Typography,
-  Box,
-  TextField,
-  Button,
-} from '@mui/material';
+import { CssBaseline, Typography, Box, TextField, Button } from '@mui/material';
 import { useFormik } from 'formik';
 import { useState } from 'react';
 import * as Yup from 'yup';
@@ -33,64 +26,105 @@ const OtpVerify: React.FC = () => {
 
       const success = await verifyOtp(values.OTP);
       console.log(success);
+
       if (!success) {
         setError('Invalid OTP. Please try again.');
       } else {
         setSuccess('OTP verified successfully!');
-        navigate("/dashboard")
+        navigate('/dashboard');
       }
     },
   });
 
   return (
-    <Container maxWidth="sm" sx={{ pl: 0, pr: 0 }}>
-      <Paper elevation={3} sx={{ padding: 4, marginTop: 1.8 }}>
-        <Typography variant="h4" align="center" sx={{ mb: 4 }}>
-          Verify OTP
-        </Typography>
+    <>
+      <CssBaseline />
+      <Box
+        sx={{
+          minHeight: '95vh',
+          width: '100%',
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          px: 2,
+        }}
+      >
         <Box
+          sx={{
+            width: { xl: '25%', lg: '30%', md: '50%', sm: '50%', xs: '100%' },
+            height: '90vh',
+            border: '1px solid #e1e1e1',
+            backgroundColor: '#f7f8f9',
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'flex-end',
+            p: 3,
+            borderRadius: 2,
+            boxShadow: 1,
+          }}
           component="form"
           onSubmit={formik.handleSubmit}
-          sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}
         >
-          {/* OTP Input Field */}
-          <TextField
-            fullWidth
-            type="text"
-            id="OTP"
-            name="OTP"
-            label="OTP"
-            value={formik.values.OTP}
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-            error={formik.touched.OTP && Boolean(formik.errors.OTP)}
-            helperText={formik.touched.OTP && formik.errors.OTP}
-          />
-
-          {/* Submit Button */}
-          <Button
-            type="submit"
-            variant="contained"
-            color="primary"
-            sx={{ width: '70%', alignSelf: 'center' }}
-          >
-            Verify
-          </Button>
-
-          {/* Success/Error Messages */}
-          {error && (
-            <Typography variant="body2" color="error" align="center">
-              {error}
+          <Box>
+            <Typography
+              variant="h5"
+              sx={{
+                fontWeight: 'Bold',
+                marginTop: {
+                  xl: '-25%',
+                  lg: '-28%',
+                  md: '-25%',
+                  sm: '-30%',
+                  xs: '-35%',
+                },
+              }}
+            >
+              Sign in
             </Typography>
-          )}
-          {success && (
-            <Typography variant="body2" color="primary" align="center">
-              {success}
-            </Typography>
-          )}
+          </Box>
+
+          {/* Input Box */}
+          <Box>
+            <TextField
+              fullWidth
+              type="text"
+              id="OTP"
+              name="OTP"
+              label="OTP"
+              value={formik.values.OTP}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              error={formik.touched.OTP && Boolean(formik.errors.OTP)}
+              helperText={formik.touched.OTP && formik.errors.OTP}
+            />
+            {error && (
+              <Typography
+                variant="body2"
+                color="error"
+                align="center"
+                sx={{ marginTop: '-1%' }}
+              >
+                {error}
+              </Typography>
+            )}
+
+            {success && (
+              <Typography variant="body2" color="primary" align="center">
+                {success}
+              </Typography>
+            )}
+            <Button
+              sx={{ width: '100%', alignSelf: 'center', mt: 1 }}
+              type="submit"
+              variant="contained"
+              color="primary"
+            >
+              Verify
+            </Button>
+          </Box>
         </Box>
-      </Paper>
-    </Container>
+      </Box>
+    </>
   );
 };
 

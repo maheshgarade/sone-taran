@@ -1,26 +1,44 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { AuthContext } from './AuthContext';
-import { requestOtpApi, verifyOtpApi } from '../services/authService';
+import { requestPhoneOtpApi, verifyPhoneOtpApi } from '../services/authService';
 
-export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
+  children,
+}) => {
   const [phoneNumber, setPhoneNumber] = useState<string | null>(null);
-  const [fullhash, setfullhash] = useState<string | null>(null);
+  const [fullhash, setFullhash] = useState<string | null>(null);
+  const [otpToken, setOtpToken] = useState<string | null>(null);
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(
-    () => localStorage.getItem("isAuthenticated") === "true"
+    () => localStorage.getItem('isAuthenticated') === 'true'
   );
 
+  // Restore token if page reloads
+  useEffect(() => {
+    const storedToken = localStorage.getItem('otpToken');
+    if (storedToken) {
+      setOtpToken(storedToken);
+    }
+  }, []);
+
   const requestOtp = async (phone: string) => {
-    const response = await requestOtpApi(phone);
-    setfullhash(response.fullhash);
+    const response = await requestPhoneOtpApi(phone);
+    setFullhash(response.fullhash);
+    setOtpToken(response.otpToken);
+    localStorage.setItem('otpToken', response.otpToken);
     setPhoneNumber(phone);
   };
 
   const verifyOtp = async (otp: string) => {
-    if (!fullhash || !phoneNumber) return false;
-    const success = await verifyOtpApi(phoneNumber, otp, fullhash);
+    if (!fullhash || !phoneNumber || !otpToken) return false;
+    const success = await verifyPhoneOtpApi(
+      phoneNumber,
+      otp,
+      fullhash,
+      otpToken
+    );
     if (success) {
       setIsAuthenticated(true);
-      localStorage.setItem("isAuthenticated", "true");
+      localStorage.setItem('isAuthenticated', 'true');
     }
     return success;
   };
@@ -28,11 +46,15 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const logout = () => {
     setPhoneNumber(null);
     setIsAuthenticated(false);
-    localStorage.removeItem("isAuthenticated");
+    setOtpToken(null);
+    localStorage.removeItem('isAuthenticated');
+    localStorage.removeItem('otpToken');
   };
 
   return (
-    <AuthContext.Provider value={{ phoneNumber, requestOtp, verifyOtp, logout, isAuthenticated }}>
+    <AuthContext.Provider
+      value={{ phoneNumber, requestOtp, verifyOtp, logout, isAuthenticated }}
+    >
       {children}
     </AuthContext.Provider>
   );
