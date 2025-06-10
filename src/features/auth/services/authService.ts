@@ -10,7 +10,7 @@ interface RequestEmailOtpResponse {
 }
 
 const apiClient = axios.create({
-  baseURL: "http://localhost:5000/api",
+  baseURL: "https://sone-taran-backend.onrender.com/api",
   headers: {
     "Content-Type": "application/json",
   },
@@ -30,6 +30,7 @@ export const requestPhoneOtpApi = async (phone: string | { phoneNo: string }): P
   const response = await apiClient.post("/user/sendPhoneOtp", { phone: phoneNumber });
   console.log(`OTP requested for phone: ${phoneNumber}`);
 
+  console.log(response.data.otp)
   return response.data as RequestOtpResponse;
 
 };
@@ -57,21 +58,24 @@ export const verifyPhoneOtpApi = async (phone: string | { phoneNo: string }, otp
 export const requestEmailOtpApi = async (email: string | { email: string }): Promise<RequestEmailOtpResponse> => {
 
   const enteredEmail = typeof email === "object" ? email.email : email;
+
   const response = await apiClient.post("/user/sendEmailOtp", { email: enteredEmail });
 
   console.log(`OTP requested for email: ${enteredEmail}`);
 
   return response.data as RequestEmailOtpResponse;
-
 };
 
 export const verifyEmailOtpApi = async (otp: string, token: string): Promise<boolean> => {
-
-  const response = await apiClient.post(
-    "/user/verifyEmailOtp",
-    { otp },
-    getAuthHeaders(token)
-  );
-  return response.data.msg === "OTP verified successfully!";
-
+  try {
+    const response = await apiClient.post(
+      "/user/verifyEmailOtp",
+      { otp },
+      getAuthHeaders(token)
+    );
+    return response.data.Success;
+  } catch (error) {
+    console.error("Email OTP verification failed:", error);
+    return false;
+  }
 };

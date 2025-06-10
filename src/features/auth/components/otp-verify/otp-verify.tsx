@@ -3,20 +3,23 @@ import { useFormik } from 'formik';
 import { useState } from 'react';
 import * as Yup from 'yup';
 import { useAuth } from '../../hooks/useAuth';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 const OtpVerify: React.FC = () => {
-  const { verifyOtp } = useAuth();
+  const { verifyOtp, verifyEmailOtp } = useAuth();
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
   const navigate = useNavigate();
+  const location = useLocation();
 
-  const formik = useFormik({
+  const otpfield = location.state;
+
+  const formikPhoneOtp = useFormik({
     initialValues: {
-      OTP: '',
+      PhoneOtp: '',
     },
     validationSchema: Yup.object({
-      OTP: Yup.string()
+      PhoneOtp: Yup.string()
         .required('OTP is required')
         .matches(/^\d{6}$/, 'Invalid OTP'),
     }),
@@ -24,7 +27,32 @@ const OtpVerify: React.FC = () => {
       setError(null);
       setSuccess(null);
 
-      const success = await verifyOtp(values.OTP);
+      const success = await verifyOtp(values.PhoneOtp);
+      console.log(success);
+
+      if (!success) {
+        setError('Invalid OTP. Please try again.');
+      } else {
+        setSuccess('OTP verified successfully!');
+        navigate('/dashboard');
+      }
+    },
+  });
+
+  const formikEmailOtp = useFormik({
+    initialValues: {
+      EmailOtp: '',
+    },
+    validationSchema: Yup.object({
+      EmailOtp: Yup.string()
+        .required('OTP is required')
+        .matches(/^\d{6}$/, 'Invalid OTP'),
+    }),
+    onSubmit: async (values) => {
+      setError(null);
+      setSuccess(null);
+
+      const success = await verifyEmailOtp(values.EmailOtp);
       console.log(success);
 
       if (!success) {
@@ -63,7 +91,11 @@ const OtpVerify: React.FC = () => {
             boxShadow: 1,
           }}
           component="form"
-          onSubmit={formik.handleSubmit}
+          onSubmit={
+            otpfield === true
+              ? formikEmailOtp.handleSubmit
+              : formikPhoneOtp.handleSubmit
+          }
         >
           <Box>
             <Typography
@@ -71,11 +103,11 @@ const OtpVerify: React.FC = () => {
               sx={{
                 fontWeight: 'Bold',
                 marginTop: {
-                  xl: '-25%',
-                  lg: '-28%',
-                  md: '-25%',
-                  sm: '-30%',
-                  xs: '-35%',
+                  xl: '-10%',
+                  lg: '-12%',
+                  md: '-10%',
+                  sm: '-14%',
+                  xs: '-16%',
                 },
               }}
             >
@@ -89,13 +121,37 @@ const OtpVerify: React.FC = () => {
               fullWidth
               type="text"
               id="OTP"
-              name="OTP"
+              name={otpfield === true ? 'EmailOtp' : 'PhoneOtp'}
               label="OTP"
-              value={formik.values.OTP}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              error={formik.touched.OTP && Boolean(formik.errors.OTP)}
-              helperText={formik.touched.OTP && formik.errors.OTP}
+              value={
+                otpfield === true
+                  ? formikEmailOtp.values.EmailOtp
+                  : formikPhoneOtp.values.PhoneOtp
+              }
+              onChange={
+                otpfield === true
+                  ? formikEmailOtp.handleChange
+                  : formikPhoneOtp.handleChange
+              }
+              onBlur={
+                otpfield === true
+                  ? formikEmailOtp.handleBlur
+                  : formikPhoneOtp.handleBlur
+              }
+              error={
+                otpfield === true
+                  ? formikEmailOtp.touched.EmailOtp &&
+                    Boolean(formikEmailOtp.errors.EmailOtp)
+                  : formikPhoneOtp.touched.PhoneOtp &&
+                    Boolean(formikPhoneOtp.errors.PhoneOtp)
+              }
+              helperText={
+                otpfield === true
+                  ? formikEmailOtp.touched.EmailOtp &&
+                    formikEmailOtp.errors.EmailOtp
+                  : formikPhoneOtp.touched.PhoneOtp &&
+                    formikPhoneOtp.errors.PhoneOtp
+              }
             />
             {error && (
               <Typography
