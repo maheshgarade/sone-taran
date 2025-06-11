@@ -31,37 +31,37 @@ const fetchCustomerData = async () => {
   }
 };
 
-const AddKalamsData = async (
-  customerId: string,
-  loanId: string,
-  number: number,
-  name: string,
-  materialType: string,
-  netWeight: number,
-  grossWeight: number,
-  purity: number,
-  goldRateAtLoan: number,
-  totalAmt: number,
-  customerAmt: number,
-  dukandarAmt: number,
-  customerROI: number,
-  merchantROI: number,
-  loanStartDate: string,
-  validity: string,
-  merchantId: string,
-) => {
+// const AddKalamsData = async (
+//   customerId: string,
+//   loanId: string,
+//   number: number,
+//   name: string,
+//   materialType: string,
+//   netWeight: number,
+//   grossWeight: number,
+//   purity: number,
+//   goldRateAtLoan: number,
+//   totalAmt: number,
+//   customerAmt: number,
+//   dukandarAmt: number,
+//   customerROI: number,
+//   merchantROI: number,
+//   loanStartDate: string,
+//   validity: string,
+//   merchantId: string,
+// ) => {
 
-  try {
-    const response = await apiClient.post("/loan/addLoan", {
+//   try {
+//     const response = await apiClient.post("/loan/addLoan", {
 
-    });
-    return response.data;
-  } catch (error) {
-    console.error("Error fetching Kalams data:", error);
-    throw error;
-  }
+//     });
+//     return response.data;
+//   } catch (error) {
+//     console.error("Error fetching Kalams data:", error);
+//     throw error;
+//   }
 
-};
+// };
 // Export the API methods
 export default {
   fetchKalamsData,
