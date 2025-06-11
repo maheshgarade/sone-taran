@@ -1,4 +1,3 @@
-import { Customer } from './../models/Customer';
 import axios from "axios";
 
 // Create a reusable axios instance with a base URL
@@ -15,6 +14,16 @@ const apiClient = axios.create({
 const fetchKalamsData = async () => {
   try {
     const response = await apiClient.get("/loan/getLoans");
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching Kalams data:", error);
+    throw error;
+  }
+};
+
+const fetchCustomerData = async () => {
+  try {
+    const response = await apiClient.get("/customer/getCustomers");
     return response.data;
   } catch (error) {
     console.error("Error fetching Kalams data:", error);
@@ -43,8 +52,8 @@ const AddKalamsData = async (
 ) => {
 
   try {
-    const response = await apiClient.post("/loan/addLoan",{
-      
+    const response = await apiClient.post("/loan/addLoan", {
+
     });
     return response.data;
   } catch (error) {
@@ -56,6 +65,7 @@ const AddKalamsData = async (
 // Export the API methods
 export default {
   fetchKalamsData,
+  fetchCustomerData
 };
 
 apiClient.interceptors.response.use(
