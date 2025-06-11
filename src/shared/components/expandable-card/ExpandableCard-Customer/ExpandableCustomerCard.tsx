@@ -14,7 +14,7 @@ import {
   DialogTitle,
 } from '@mui/material';
 import { purple } from '@mui/material/colors';
-import StatusChip from '../status-chip/StatusChip';
+import StatusChip from '../../status-chip/StatusChip';
 import InfoIcon from '@mui/icons-material/Info';
 import Divider from '@mui/material/Divider';
 

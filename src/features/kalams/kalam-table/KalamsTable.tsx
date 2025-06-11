@@ -1,18 +1,36 @@
-import React, { useState } from "react";
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, IconButton, Dialog, DialogTitle, DialogContent, List, ListItem, ListItemText, Button } from "@mui/material";
-import InfoIcon from "@mui/icons-material/Info";
-import { Visibility } from "@mui/icons-material";
-import { useNavigate } from "react-router-dom";
-import { KalamProps } from "../models/KalamProps";
-import { CustomerDetails, KalamDetails } from "../models/Kalam";
-import { calculateMonthsAndDays } from "../../../utils/CountDaysUtil";
-import { calculateAnnualCompoundInterest } from "../../../utils/InterestCalculatorUtil";
-import AlarmIcon from '@mui/icons-material/Alarm';
+import React, { useState } from 'react';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+  IconButton,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  List,
+  ListItem,
+  ListItemText,
+  BottomNavigation,
+  BottomNavigationAction,
+} from '@mui/material';
+import InfoIcon from '@mui/icons-material/Info';
+import { Visibility } from '@mui/icons-material';
+import { useNavigate } from 'react-router-dom';
+import { KalamProps } from '../models/KalamProps';
+import { CustomerDetails, KalamDetails } from '../models/Kalam';
+import { calculateMonthsAndDays } from '../../../utils/CountDaysUtil';
+import { calculateAnnualCompoundInterest } from '../../../utils/InterestCalculatorUtil';
+import AddIcon from '@mui/icons-material/Add';
 
 const KalamsTable: React.FC<KalamProps> = (props) => {
   const { data } = props;
   console.log(data);
-  const [selectedCustomer, setSelectedCustomer] = useState<CustomerDetails | null>(null);
+  const [selectedCustomer, setSelectedCustomer] =
+    useState<CustomerDetails | null>(null);
   const [selectedKalam, setSelectedKalam] = useState<KalamDetails | null>(null);
   const navigate = useNavigate();
 
@@ -20,7 +38,7 @@ const KalamsTable: React.FC<KalamProps> = (props) => {
 
   return (
     <>
-      <TableContainer component={Paper} sx={{ width: "100%", mt: 2 }}>
+      <TableContainer component={Paper} sx={{ width: '100%', mt: 2 }}>
         <Table>
           <TableHead>
             <TableRow>
@@ -39,10 +57,13 @@ const KalamsTable: React.FC<KalamProps> = (props) => {
               <TableCell>View Profile</TableCell>
             </TableRow>
           </TableHead>
-          <TableBody>s
+          <TableBody>
             {data.map((kalam, index) => {
-              const loanStartDate = new Date(kalam.kalam.loanDetails.loanStartDate);
-              const { totalMonths, days } = calculateMonthsAndDays(loanStartDate);
+              const loanStartDate = new Date(
+                kalam.kalam.loanDetails.loanStartDate
+              );
+              const { totalMonths, days } =
+                calculateMonthsAndDays(loanStartDate);
               return (
                 <TableRow key={kalam._id}>
                   <TableCell>{index + 1}</TableCell>
@@ -51,7 +72,16 @@ const KalamsTable: React.FC<KalamProps> = (props) => {
                   {/* Customer Name + Info Icon */}
                   <TableCell>
                     {kalam.customerDetails.name}
-                    <IconButton onClick={() => setSelectedCustomer(kalam.customerDetails)}>
+                    <IconButton
+                      disableRipple
+                      onClick={() => setSelectedCustomer(kalam.customerDetails)}
+                      sx={{
+                        outline: 'none',
+                        '&:focus': {
+                          outline: 'none',
+                        },
+                      }}
+                    >
                       <InfoIcon fontSize="small" color="primary" />
                     </IconButton>
                   </TableCell>
@@ -59,7 +89,15 @@ const KalamsTable: React.FC<KalamProps> = (props) => {
                   {/* Kalam Name + Info Icon */}
                   <TableCell>
                     {kalam.kalam.details.name}
-                    <IconButton onClick={() => setSelectedKalam(kalam.kalam)}>
+                    <IconButton
+                      onClick={() => setSelectedKalam(kalam.kalam)}
+                      sx={{
+                        outline: 'none',
+                        '&:focus': {
+                          outline: 'none',
+                        },
+                      }}
+                    >
                       <InfoIcon fontSize="small" color="primary" />
                     </IconButton>
                   </TableCell>
@@ -67,14 +105,33 @@ const KalamsTable: React.FC<KalamProps> = (props) => {
                   <TableCell>{kalam.kalam.loanDetails.loanStartDate}</TableCell>
                   <TableCell>₹{kalam.kalam.loanDetails.customerAmt}</TableCell>
                   <TableCell>
-                    ₹{calculateAnnualCompoundInterest(kalam.kalam.loanDetails.customerAmt, kalam.kalam.loanDetails.customerROI * 12, totalMonths, days)}
+                    ₹
+                    {calculateAnnualCompoundInterest(
+                      kalam.kalam.loanDetails.customerAmt,
+                      kalam.kalam.loanDetails.customerROI * 12,
+                      totalMonths,
+                      days
+                    )}
                   </TableCell>
                   <TableCell>{kalam.kalam.loanDetails.customerROI}%</TableCell>
                   <TableCell>{kalam.merchantDetails.name}</TableCell>
                   <TableCell>{calculateTodaysValue()}</TableCell>
                   <TableCell>-</TableCell>
+
                   <TableCell>
-                    <IconButton onClick={() => navigate(`/kalams/${index + 1001}`)}>
+                    <IconButton
+                      sx={{
+                        outline: 'none',
+                        '&:focus': {
+                          outline: 'none',
+                        },
+                      }}
+                      onClick={() =>
+                        navigate(`/kalams/${kalam.kalam.loanId}`, {
+                          state: kalam,
+                        })
+                      }
+                    >
                       <Visibility fontSize="small" color="primary" />
                     </IconButton>
                   </TableCell>
@@ -85,20 +142,61 @@ const KalamsTable: React.FC<KalamProps> = (props) => {
         </Table>
       </TableContainer>
 
-      <IconButton color="primary" aria-label="add to shopping cart">
-        <AlarmIcon />
-      </IconButton><Button>
+      <Paper
+        sx={{
+          position: 'fixed',
+          bottom: 0,
+          left: 0,
+          right: 0,
+          background: 'none',
+          boxShadow: 'none',
 
-      </Button>
-
+          display: 'flex',
+          justifyContent: 'flex-end',
+          pr: 4,
+          mb: 2,
+        }}
+        elevation={3}
+      >
+        <BottomNavigation>
+          <BottomNavigationAction
+            label="Archive"
+            icon={
+              <IconButton
+                color="primary"
+                sx={{
+                  backgroundColor: '#1976d2',
+                  color: 'white',
+                  outline: 'none',
+                  '&:focus': {
+                    outline: 'none',
+                  },
+                  '&:hover': {
+                    backgroundColor: '#1976d2',
+                  },
+                }}
+                aria-label="add to shopping cart"
+              >
+                <AddIcon />
+              </IconButton>
+            }
+          />
+        </BottomNavigation>
+      </Paper>
       {/* Customer Info Dialog */}
-      <Dialog open={!!selectedCustomer} onClose={() => setSelectedCustomer(null)}>
+      <Dialog
+        open={!!selectedCustomer}
+        onClose={() => setSelectedCustomer(null)}
+      >
         <DialogTitle>Customer Info</DialogTitle>
         <DialogContent>
           {selectedCustomer && (
             <List>
               <ListItem>
-                <ListItemText primary="Address" secondary={`${selectedCustomer.address.street}, ${selectedCustomer.address.city} - ${selectedCustomer.address.zip}`} />
+                <ListItemText
+                  primary="Address"
+                  secondary={`${selectedCustomer.address.street}, ${selectedCustomer.address.city} - ${selectedCustomer.address.zip}`}
+                />
               </ListItem>
               {selectedCustomer.contact.map((phone, index) => (
                 <ListItem key={index} component="a" href={`tel:${phone}`}>
@@ -117,19 +215,34 @@ const KalamsTable: React.FC<KalamProps> = (props) => {
           {selectedKalam && (
             <List>
               <ListItem>
-                <ListItemText primary="Type" secondary={selectedKalam.details.materialType} />
+                <ListItemText
+                  primary="Type"
+                  secondary={selectedKalam.details.materialType}
+                />
               </ListItem>
               <ListItem>
-                <ListItemText primary="Net Weight" secondary={`${selectedKalam.details.netWeight}g`} />
+                <ListItemText
+                  primary="Net Weight"
+                  secondary={`${selectedKalam.details.netWeight}g`}
+                />
               </ListItem>
               <ListItem>
-                <ListItemText primary="Gross Weight" secondary={`${selectedKalam.details.grossWeight}g`} />
+                <ListItemText
+                  primary="Gross Weight"
+                  secondary={`${selectedKalam.details.grossWeight}g`}
+                />
               </ListItem>
               <ListItem>
-                <ListItemText primary="Purity" secondary={`${selectedKalam.details.purity}%`} />
+                <ListItemText
+                  primary="Purity"
+                  secondary={`${selectedKalam.details.purity}%`}
+                />
               </ListItem>
               <ListItem>
-                <ListItemText primary="Gold Rate at Loan" secondary={`₹${selectedKalam.details.goldRateAtLoan}`} />
+                <ListItemText
+                  primary="Gold Rate at Loan"
+                  secondary={`₹${selectedKalam.details.goldRateAtLoan}`}
+                />
               </ListItem>
             </List>
           )}
