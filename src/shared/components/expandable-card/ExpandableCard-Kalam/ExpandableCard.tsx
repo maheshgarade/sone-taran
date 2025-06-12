@@ -12,9 +12,13 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
+  BottomNavigation,
+  Paper,
+  BottomNavigationAction,
 } from '@mui/material';
 import { purple } from '@mui/material/colors';
 import StatusChip from '../../status-chip/StatusChip';
+import AddIcon from '@mui/icons-material/Add';
 import InfoIcon from '@mui/icons-material/Info';
 import Divider from '@mui/material/Divider';
 import { Kalam } from '../../../../features/kalams/models/Kalam';
@@ -185,7 +189,46 @@ const ExpandableCard: React.FC<ExpandableCardProps> = ({ kalam }) => {
           </Button>
         </CardContent>
       </Collapse>
+      <Paper
+        sx={{
+          position: 'fixed',
+          bottom: 0,
+          left: 0,
+          right: 0,
+          background: 'none',
+          boxShadow: 'none',
 
+          display: 'flex',
+          justifyContent: 'flex-end',
+          mb: 2,
+        }}
+        elevation={3}
+      >
+        <BottomNavigation>
+          <BottomNavigationAction
+            label="Archive"
+            icon={
+              <IconButton
+                color="primary"
+                sx={{
+                  backgroundColor: '#1976d2',
+                  color: 'white',
+                  outline: 'none',
+                  '&:focus': {
+                    outline: 'none',
+                  },
+                  '&:hover': {
+                    backgroundColor: '#1976d2',
+                  },
+                }}
+                aria-label="add to shopping cart"
+              >
+                <AddIcon />
+              </IconButton>
+            }
+          />
+        </BottomNavigation>
+      </Paper>
       {/* Modal for Info */}
       <Dialog open={modalOpen} onClose={handleCloseModal}>
         <DialogTitle>Information</DialogTitle>

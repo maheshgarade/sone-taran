@@ -1,6 +1,7 @@
 import { createContext, useState, useCallback, ReactNode } from 'react';
 import apiService from '../services/apiService';
 import { customer } from '../features/customers/models/Customers';
+import { AddCustomer } from '../services/apiService';
 
 interface CustomerDataContextProps {
   data: customer[];
@@ -8,6 +9,7 @@ interface CustomerDataContextProps {
   error: Error | null;
   fetchData: () => void;
   invalidateCache: () => void;
+  addData: (newCustomer: AddCustomer) => void;
 }
 
 const CustomerDataContext = createContext<CustomerDataContextProps | undefined>(
@@ -39,9 +41,27 @@ export const CustomerDataProvider = ({ children }: { children: ReactNode }) => {
     fetchData();
   }, [fetchData]);
 
+  const addData = useCallback(
+    async (newCustomer: AddCustomer) => {
+      try {
+        setLoading(true);
+        setError(null);
+        await apiService.AddCustomerData(newCustomer);
+        await fetchData();
+      } catch (err) {
+        setError(
+          err instanceof Error ? err : new Error('Failed to add customer')
+        );
+      } finally {
+        setLoading(false);
+      }
+    },
+    [fetchData]
+  );
+
   return (
     <CustomerDataContext.Provider
-      value={{ data, loading, error, fetchData, invalidateCache }}
+      value={{ data, loading, error, fetchData, invalidateCache, addData }}
     >
       {children}
     </CustomerDataContext.Provider>
