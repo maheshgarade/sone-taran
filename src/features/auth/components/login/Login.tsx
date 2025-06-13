@@ -32,7 +32,7 @@ const LogIn: React.FC = () => {
       setError(null);
 
       try {
-        await requestOtp({ phoneNo: Number(values.phone) });
+        await requestOtp(Number(values.phone));
         navigate('/otp-verify');
       } catch (err) {
         console.error(err);

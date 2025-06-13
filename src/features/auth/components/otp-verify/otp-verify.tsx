@@ -6,7 +6,8 @@ import { useAuth } from '../../hooks/useAuth';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 const OtpVerify: React.FC = () => {
-  const { verifyOtp, verifyEmailOtp } = useAuth();
+  const { verifyOtp, verifyEmailOtp, requestOtp, phoneNumber, otpSent } =
+    useAuth();
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
   const navigate = useNavigate();
@@ -52,7 +53,7 @@ const OtpVerify: React.FC = () => {
       setError(null);
       setSuccess(null);
 
-      const success = await verifyEmailOtp(values.EmailOtp);
+      const success = await verifyEmailOtp(Number(values.EmailOtp));
       console.log(success);
 
       if (!success) {
@@ -63,6 +64,15 @@ const OtpVerify: React.FC = () => {
       }
     },
   });
+
+  const resendOtp = async () => {
+    try {
+      await requestOtp(phoneNumber);
+    } catch (err) {
+      console.error(err);
+      setError('Failed to send OTP. Please try again.');
+    }
+  };
 
   return (
     <>
@@ -177,6 +187,31 @@ const OtpVerify: React.FC = () => {
             >
               Verify
             </Button>
+
+            <Box
+              sx={{
+                textAlign: 'right',
+              }}
+            >
+              <Button
+                color="primary"
+                sx={{
+                  border: 'none',
+                  outline: 'none',
+                  '&:focus': {
+                    outline: 'none',
+                  },
+                }}
+                onClick={() => {
+                  resendOtp();
+                }}
+              >
+                Resend Otp ?
+              </Button>
+            </Box>
+            <Box sx={{ mt: 2, textAlign: 'center', fontSize: 'larger' }}>
+              OTP :- {otpSent}
+            </Box>
           </Box>
         </Box>
       </Box>

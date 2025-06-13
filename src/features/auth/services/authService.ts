@@ -1,13 +1,16 @@
 import axios from "axios";
+import { useState } from "react";
 
-interface RequestOtpResponse {
+export interface RequestOtpResponse {
   fullhash: string;
   otpToken: string;
+  otp?: number
 }
 
 interface RequestEmailOtpResponse {
   token: string;
 }
+
 
 const apiClient = axios.create({
   baseURL: "https://sone-taran-backend.onrender.com/api",
@@ -22,7 +25,7 @@ const getAuthHeaders = (token: string) => ({
   },
 });
 
-
+// fro phone 
 export const requestPhoneOtpApi = async (phone: string | { phoneNo: string }): Promise<RequestOtpResponse> => {
 
   const phoneNumber = typeof phone === "object" ? phone.phoneNo : phone;
@@ -31,27 +34,35 @@ export const requestPhoneOtpApi = async (phone: string | { phoneNo: string }): P
   console.log(`OTP requested for phone: ${phoneNumber}`);
 
   console.log(response.data.otp)
+
   return response.data as RequestOtpResponse;
 
 };
 
-export const verifyPhoneOtpApi = async (phone: string | { phoneNo: string }, otp: string, fullhash: string, otpToken: string): Promise<boolean> => {
+// for verifing the phone otp
+export const verifyPhoneOtpApi = async (
+  phone: string,
+  otp: string,
+  fullhash: string,
+  otpToken: string
+): Promise<{ token: string } | null> => {
+  try {
+    const response = await apiClient.post(
+      '/user/verifyPhoneOtp',
+      { phone, otp, fullhash },
+      getAuthHeaders(otpToken)
+    );
 
-  const phoneNumber = typeof phone === "object" ? phone.phoneNo : phone;
+    if (response.status === 200 && response.data.token) {
+      return { token: response.data.token };
+    }
 
-  const response = await apiClient.post(
-
-    "/user/verifyPhoneOtp",
-    { phone: phoneNumber, otp, fullhash, otpToken },
-    getAuthHeaders(otpToken)
-
-  );
-
-  console.log(response.data)
-  return response.data;
-
+    return null;
+  } catch (error) {
+    console.error('Error verifying phone OTP:', error);
+    return null;
+  }
 };
-
 
 // For Email
 
@@ -66,16 +77,26 @@ export const requestEmailOtpApi = async (email: string | { email: string }): Pro
   return response.data as RequestEmailOtpResponse;
 };
 
-export const verifyEmailOtpApi = async (otp: string, token: string): Promise<boolean> => {
+
+// Verifing the email OTP
+export const verifyEmailOtpApi = async (
+  otp: number,
+  token: string
+): Promise<{ token: string } | null> => {
   try {
     const response = await apiClient.post(
-      "/user/verifyEmailOtp",
+      '/user/verifyEmailOtp', // adjust route if needed
       { otp },
       getAuthHeaders(token)
     );
-    return response.data.Success;
+
+    if (response.status === 200 && response.data.token) {
+      return { token: response.data.token }; // This is the new session token
+    }
+
+    return null;
   } catch (error) {
-    console.error("Email OTP verification failed:", error);
-    return false;
+    console.error('Error verifying email OTP:', error);
+    return null;
   }
 };
