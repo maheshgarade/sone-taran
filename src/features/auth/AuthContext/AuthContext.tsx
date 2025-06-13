@@ -6,8 +6,9 @@ export interface AuthContextType {
   requestEmailOtp: (email: string) => Promise<void>;
   requestOtp: (phone: any) => Promise<void>;
   verifyOtp: (otp: string) => Promise<boolean>;
-  verifyEmailOtp: (otp: string) => Promise<boolean>;
+  verifyEmailOtp: (otp: number) => Promise<boolean>;
   logout: () => void;
+  otpSent: number | null | undefined;
   isAuthenticated: boolean;
 }
 
