@@ -209,7 +209,20 @@ const OtpVerify: React.FC = () => {
                 Resend Otp ?
               </Button>
             </Box>
-            <Box sx={{ mt: 2, textAlign: 'center', fontSize: 'larger' }}>
+            <Box
+              sx={{
+                mt: 2,
+                textAlign: 'center',
+                fontSize: 'larger',
+                display: {
+                  xl: 'none',
+                  lg: 'none',
+                  md: 'none',
+                  sm: 'none',
+                  xs: 'block',
+                },
+              }}
+            >
               OTP :- {otpSent}
             </Box>
           </Box>
