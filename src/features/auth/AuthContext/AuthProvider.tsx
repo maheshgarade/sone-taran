@@ -6,6 +6,13 @@ import {
   verifyPhoneOtpApi,
   verifyEmailOtpApi,
 } from '../services/authService';
+import { jwtDecode } from 'jwt-decode';
+
+interface JwtPayload {
+  exp: number;
+  iat: number;
+  // Add more fields if your token has them
+}
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
@@ -15,60 +22,83 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   const [fullhash, setFullhash] = useState<string | null>(null);
   const [otpToken, setOtpToken] = useState<string | null>(null);
   const [emailToken, setEmailToken] = useState<string | null>(null);
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(
-    () => localStorage.getItem('isAuthenticated') === 'true'
-  );
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
+  const [otpSent, setOtpSent] = useState<number | undefined | null>(null);
 
-  // Restore token if page reloads
-  useEffect(() => {
-    const storedToken = localStorage.getItem('otpToken');
-    const storedEmailToken = localStorage.getItem('emailToken');
-    if (storedToken) {
-      setOtpToken(storedToken);
+  const isTokenValid = (token: string): boolean => {
+    try {
+      const decoded = jwtDecode<JwtPayload>(token);
+      const currentTime = Math.floor(Date.now() / 1000);
+      return decoded.exp > currentTime;
+    } catch (error) {
+      return false;
     }
-    if (storedEmailToken) {
+  };
+
+  useEffect(() => {
+    const storedOtpToken = localStorage.getItem('otpToken');
+    const storedEmailToken = localStorage.getItem('emailToken');
+
+    if (storedOtpToken && isTokenValid(storedOtpToken)) {
+      setOtpToken(storedOtpToken);
+      setIsAuthenticated(true);
+    } else if (storedEmailToken && isTokenValid(storedEmailToken)) {
       setEmailToken(storedEmailToken);
+      setIsAuthenticated(true);
+    } else {
+      logout();
     }
   }, []);
 
   const requestOtp = async (phone: string) => {
     const response = await requestPhoneOtpApi(phone);
+    console.log(response);
+
     setFullhash(response.fullhash);
     setOtpToken(response.otpToken);
-    localStorage.setItem('otpToken', response.otpToken);
     setPhoneNumber(phone);
+    setOtpSent(response.otp);
   };
 
   const requestEmailOtp = async (email: string) => {
     const response = await requestEmailOtpApi(email);
     setEmailToken(response.token);
-    localStorage.setItem('emailToken', response.token);
     setEmail(email);
   };
 
   const verifyOtp = async (otp: string) => {
     if (!fullhash || !phoneNumber || !otpToken) return false;
-    const success = await verifyPhoneOtpApi(
-      phoneNumber,
+
+    const response = await verifyPhoneOtpApi(
+      String(phoneNumber),
       otp,
       fullhash,
       otpToken
     );
-    if (success) {
+
+    if (response && response.token) {
+      localStorage.setItem('token', response.token);
+      localStorage.setItem('otpToken', otpToken);
       setIsAuthenticated(true);
-      localStorage.setItem('isAuthenticated', 'true');
+      return true;
     }
-    return success;
+
+    return false;
   };
 
-  const verifyEmailOtp = async (otp: string) => {
+  const verifyEmailOtp = async (otp: number) => {
     if (!emailToken) return false;
-    const success = await verifyEmailOtpApi(otp, emailToken);
-    if (success) {
+
+    const response = await verifyEmailOtpApi(otp, emailToken);
+
+    if (response?.token) {
+      localStorage.setItem('token', response.token);
+      localStorage.setItem('emailToken', emailToken);
       setIsAuthenticated(true);
-      localStorage.setItem('isAuthenticated', 'true');
+      return true;
     }
-    return success;
+
+    return false;
   };
 
   const logout = () => {
@@ -77,9 +107,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     setIsAuthenticated(false);
     setOtpToken(null);
     setEmailToken(null);
-    localStorage.removeItem('isAuthenticated');
     localStorage.removeItem('otpToken');
     localStorage.removeItem('emailToken');
+    localStorage.removeItem('token');
+    localStorage.removeItem('PhoneToken');
   };
 
   return (
@@ -89,9 +120,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
         email,
         requestOtp,
         requestEmailOtp,
-        verifyEmailOtp,
         verifyOtp,
+        verifyEmailOtp,
         logout,
+        otpSent,
         isAuthenticated,
       }}
     >
