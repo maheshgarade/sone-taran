@@ -73,7 +73,6 @@ const OtpVerify: React.FC = () => {
       setError('Failed to send OTP. Please try again.');
     }
   };
-
   return (
     <>
       <CssBaseline />
@@ -231,5 +230,4 @@ const OtpVerify: React.FC = () => {
     </>
   );
 };
-
 export default OtpVerify;
