@@ -15,6 +15,7 @@ import * as Yup from 'yup';
 import { useAuth } from '../../hooks/useAuth';
 import { useNavigate } from 'react-router-dom';
 import { TailSpin } from 'react-loader-spinner';
+import { useTranslation } from 'react-i18next';
 
 const LogIn: React.FC = () => {
   const { requestOtp, requestEmailOtp } = useAuth();
@@ -22,6 +23,7 @@ const LogIn: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [emailLogin, setEmail] = useState<boolean | null>(false);
   const [loading, setLoading] = useState<boolean>(false);
+  const { t } = useTranslation();
 
   const formikPhone = useFormik({
     initialValues: {
@@ -118,7 +120,7 @@ const LogIn: React.FC = () => {
                   sx={{
                     fontWeight: 'Bold',
                     marginTop: {
-                      xl: '-25%',
+                      xl: '-27%',
                       lg: '-28%',
                       md: '-25%',
                       sm: '-30%',
@@ -126,7 +128,8 @@ const LogIn: React.FC = () => {
                     },
                   }}
                 >
-                  Sign in
+                  {t('loginPage.loginText')}
+
                 </Typography>
               </Box>
 
@@ -134,10 +137,10 @@ const LogIn: React.FC = () => {
               <Box>
                 <TextField
                   type="text"
-                  label="Phone Number"
+                  label={t('loginPage.phoneNumber')}
                   name="phone"
                   id="phone"
-                  placeholder="Phone Numbers"
+                  placeholder={t('loginPage.phoneNumber')}
                   focused
                   fullWidth
                   value={formikPhone.values.phone}
@@ -167,9 +170,9 @@ const LogIn: React.FC = () => {
                   type="submit"
                   variant="contained"
                   color="primary"
-                  onClick={() => {}}
+                  onClick={() => { }}
                 >
-                  Send OTP
+                  {t('loginPage.sendOtp')}
                 </Button>
                 {/* For horizontal line and text over it  */}
                 <Box
@@ -206,7 +209,7 @@ const LogIn: React.FC = () => {
                       fontSize: 18,
                     }}
                   >
-                    or
+                    {t('loginPage.or')}
                   </Typography>
                 </Box>
 
@@ -224,7 +227,7 @@ const LogIn: React.FC = () => {
                     }}
                     startIcon={<EmailIcon />}
                   >
-                    Sign in with email
+                    {t('loginPage.SignInEmail')}
                   </Button>
                 </Box>
               </Box>

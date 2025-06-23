@@ -4,6 +4,7 @@ import { useState } from 'react';
 import * as Yup from 'yup';
 import { useAuth } from '../../hooks/useAuth';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 const OtpVerify: React.FC = () => {
   const {
@@ -19,8 +20,9 @@ const OtpVerify: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
+  const { t } = useTranslation();
+
   const otpfield = location.state;
-  console.log(otpfield.emaillogin);
 
   const formikPhoneOtp = useFormik({
     initialValues: {
@@ -117,7 +119,7 @@ const OtpVerify: React.FC = () => {
           }}
           component="form"
           onSubmit={
-            otpfield.emaillogin === true
+            otpfield?.emaillogin === true
               ? formikEmailOtp.handleSubmit
               : formikPhoneOtp.handleSubmit
           }
@@ -136,7 +138,7 @@ const OtpVerify: React.FC = () => {
                 },
               }}
             >
-              Sign in
+              {t('OtpPage.OtpText')}
             </Typography>
           </Box>
 
@@ -146,36 +148,36 @@ const OtpVerify: React.FC = () => {
               fullWidth
               type="text"
               id="OTP"
-              name={otpfield.emaillogin === true ? 'EmailOtp' : 'PhoneOtp'}
+              name={otpfield?.emaillogin === true ? 'EmailOtp' : 'PhoneOtp'}
               label="OTP"
               value={
-                otpfield.emaillogin === true
+                otpfield?.emaillogin === true
                   ? formikEmailOtp.values.EmailOtp
                   : formikPhoneOtp.values.PhoneOtp
               }
               onChange={
-                otpfield.emaillogin === true
+                otpfield?.emaillogin === true
                   ? formikEmailOtp.handleChange
                   : formikPhoneOtp.handleChange
               }
               onBlur={
-                otpfield.emaillogin === true
+                otpfield?.emaillogin === true
                   ? formikEmailOtp.handleBlur
                   : formikPhoneOtp.handleBlur
               }
               error={
-                otpfield.emaillogin === true
+                otpfield?.emaillogin === true
                   ? formikEmailOtp.touched.EmailOtp &&
-                    Boolean(formikEmailOtp.errors.EmailOtp)
+                  Boolean(formikEmailOtp.errors.EmailOtp)
                   : formikPhoneOtp.touched.PhoneOtp &&
-                    Boolean(formikPhoneOtp.errors.PhoneOtp)
+                  Boolean(formikPhoneOtp.errors.PhoneOtp)
               }
               helperText={
-                otpfield.emaillogin === true
+                otpfield?.emaillogin === true
                   ? formikEmailOtp.touched.EmailOtp &&
-                    formikEmailOtp.errors.EmailOtp
+                  formikEmailOtp.errors.EmailOtp
                   : formikPhoneOtp.touched.PhoneOtp &&
-                    formikPhoneOtp.errors.PhoneOtp
+                  formikPhoneOtp.errors.PhoneOtp
               }
             />
             {error && (
@@ -218,13 +220,13 @@ const OtpVerify: React.FC = () => {
                   },
                 }}
                 onClick={() => {
-                  otpfield.emaillogin === true ? resendEmailOtp() : resendOtp();
+                  otpfield?.emaillogin === true ? resendEmailOtp() : resendOtp();
                 }}
               >
                 Resend Otp ?
               </Button>
             </Box>
-            {otpfield.emaillogin === true ? (
+            {otpfield?.emaillogin === true ? (
               ' '
             ) : (
               <Box

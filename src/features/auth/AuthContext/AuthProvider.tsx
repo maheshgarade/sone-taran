@@ -52,7 +52,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
 
   const requestOtp = async (phone: string) => {
     const response = await requestPhoneOtpApi(phone);
-    console.log(response);
 
     setFullhash(response.fullhash);
     setOtpToken(response.otpToken);
