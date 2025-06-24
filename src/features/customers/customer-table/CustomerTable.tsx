@@ -34,8 +34,10 @@ import * as Yup from 'yup';
 import SearchIcon from '@mui/icons-material/Search';
 import useCustomerData from '../../../hooks/useCustomersData';
 import { TailSpin } from 'react-loader-spinner';
+import { useTranslation } from 'react-i18next';
 
 const CustomerTable: React.FC<CustomerProps> = (props) => {
+  const { t } = useTranslation();
   const { data } = props;
   const navigate = useNavigate();
   const [selectedCustomer, setSelectedCustomer] =
@@ -212,7 +214,7 @@ const CustomerTable: React.FC<CustomerProps> = (props) => {
     setFilteredData(filtered);
     console.log(filtered);
   };
-  
+
   // Searching Using Debouncing
   const debouncingSearch = (func: Function, delay: number) => {
     let timer: any;
@@ -269,13 +271,13 @@ const CustomerTable: React.FC<CustomerProps> = (props) => {
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell>Sr.</TableCell>
-              <TableCell>ID</TableCell>
-              <TableCell>Name </TableCell>
-              <TableCell>Contact</TableCell>
-              <TableCell>Address</TableCell>
-              <TableCell>Validity</TableCell>
-              <TableCell>View Profile</TableCell>
+              <TableCell>{t('customerPage.sr')}</TableCell>
+              <TableCell>{t('customerPage.id')}</TableCell>
+              <TableCell>{t('customerPage.name')}</TableCell>
+              <TableCell>{t('customerPage.contact')}</TableCell>
+              <TableCell>{t('customerPage.address')}</TableCell>
+              <TableCell>{t('customerPage.validity')}</TableCell>
+              <TableCell>{t('customerPage.viewProfile')}</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>

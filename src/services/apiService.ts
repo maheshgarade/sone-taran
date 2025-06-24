@@ -4,9 +4,9 @@ import axios from "axios";
 //import.meta.env.BASE_URL
 const apiClient = axios.create({
   baseURL: "https://sone-taran-backend.onrender.com/api",
-  headers: {
-    "Content-Type": "application/json",
-  },
+    headers: {
+      "Content-Type": "application/json",
+    },
 });
 
 

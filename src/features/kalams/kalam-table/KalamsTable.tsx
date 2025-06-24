@@ -41,9 +41,12 @@ import useCustomerData from '../../../hooks/useCustomersData';
 import SearchIcon from '@mui/icons-material/Search';
 import { TailSpin } from 'react-loader-spinner';
 import TuneIcon from '@mui/icons-material/Tune';
+import { useTranslation } from 'react-i18next';
 
 const KalamsTable: React.FC<KalamProps> = (props) => {
   const { data } = props;
+
+  const { t } = useTranslation();
 
   // For geeting the data of customer and merchant
   const [selectedCustomer, setSelectedCustomer] =
@@ -715,19 +718,18 @@ const KalamsTable: React.FC<KalamProps> = (props) => {
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell>Sr.</TableCell>
-              <TableCell>ID</TableCell>
-              <TableCell>Customer</TableCell>
-              <TableCell>Kalam</TableCell>
-              <TableCell>Start Date</TableCell>
-              <TableCell>Loan Amt</TableCell>
-              <TableCell>Amt Due</TableCell>
-              <TableCell>Customer ROI</TableCell>
-              <TableCell>Merchant</TableCell>
-
-              <TableCell>Today's Value</TableCell>
-              <TableCell>Validity</TableCell>
-              <TableCell>View Profile</TableCell>
+              <TableCell>{t('kalamPage.sr')}</TableCell>
+              <TableCell>{t('kalamPage.id')}</TableCell>
+              <TableCell>{t('kalamPage.customer')}</TableCell>
+              <TableCell>{t('kalamPage.kalam')}</TableCell>
+              <TableCell>{t('kalamPage.startDate')}</TableCell>
+              <TableCell>{t('kalamPage.loanAmt')}</TableCell>
+              <TableCell>{t('kalamPage.amtDue')}</TableCell>
+              <TableCell>{t('kalamPage.customerROI')}</TableCell>
+              <TableCell>{t('kalamPage.merchant')}</TableCell>
+              <TableCell>{t('kalamPage.todayValue')}</TableCell>
+              <TableCell>{t('kalamPage.validity')}</TableCell>
+              <TableCell>{t('kalamPage.viewProfile')}</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>

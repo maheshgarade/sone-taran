@@ -30,8 +30,8 @@ const OtpVerify: React.FC = () => {
     },
     validationSchema: Yup.object({
       PhoneOtp: Yup.string()
-        .required('OTP is required')
-        .matches(/^\d{6}$/, 'Invalid OTP'),
+        .required(t('OtpPage.error.otpRequired'))
+        .matches(/^\d{6}$/, t('OtpPage.error.otpLength')),
     }),
     onSubmit: async (values) => {
       setError(null);
@@ -55,8 +55,8 @@ const OtpVerify: React.FC = () => {
     },
     validationSchema: Yup.object({
       EmailOtp: Yup.string()
-        .required('OTP is required')
-        .matches(/^\d{6}$/, 'Invalid OTP'),
+        .required(t('OtpPage.error.otpRequired'))
+        .matches(/^\d{6}$/, t('OtpPage.error.otpLength')),
     }),
     onSubmit: async (values) => {
       setError(null);
@@ -168,16 +168,16 @@ const OtpVerify: React.FC = () => {
               error={
                 otpfield?.emaillogin === true
                   ? formikEmailOtp.touched.EmailOtp &&
-                  Boolean(formikEmailOtp.errors.EmailOtp)
+                    Boolean(formikEmailOtp.errors.EmailOtp)
                   : formikPhoneOtp.touched.PhoneOtp &&
-                  Boolean(formikPhoneOtp.errors.PhoneOtp)
+                    Boolean(formikPhoneOtp.errors.PhoneOtp)
               }
               helperText={
                 otpfield?.emaillogin === true
                   ? formikEmailOtp.touched.EmailOtp &&
-                  formikEmailOtp.errors.EmailOtp
+                    formikEmailOtp.errors.EmailOtp
                   : formikPhoneOtp.touched.PhoneOtp &&
-                  formikPhoneOtp.errors.PhoneOtp
+                    formikPhoneOtp.errors.PhoneOtp
               }
             />
             {error && (
@@ -202,7 +202,7 @@ const OtpVerify: React.FC = () => {
               variant="contained"
               color="primary"
             >
-              Verify
+              {t('OtpPage.verifyOtp')}
             </Button>
 
             <Box
@@ -220,10 +220,12 @@ const OtpVerify: React.FC = () => {
                   },
                 }}
                 onClick={() => {
-                  otpfield?.emaillogin === true ? resendEmailOtp() : resendOtp();
+                  otpfield?.emaillogin === true
+                    ? resendEmailOtp()
+                    : resendOtp();
                 }}
               >
-                Resend Otp ?
+                {t('OtpPage.resendOtp')}
               </Button>
             </Box>
             {otpfield?.emaillogin === true ? (

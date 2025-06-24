@@ -99,6 +99,12 @@ const WholesaleValueCalculator: React.FC = () => {
                 onBlur={formik.handleBlur}
                 error={formik.touched.weight && Boolean(formik.errors.weight)}
                 helperText={formik.touched.weight && formik.errors.weight}
+                InputProps={{
+                  sx: {
+                    paddingY: 1.5,
+                    paddingX: 2,
+                  },
+                }}
               />
             </Grid>
 
@@ -114,6 +120,12 @@ const WholesaleValueCalculator: React.FC = () => {
                 onBlur={formik.handleBlur}
                 error={formik.touched.purity && Boolean(formik.errors.purity)}
                 helperText={formik.touched.purity && formik.errors.purity}
+                InputProps={{
+                  sx: {
+                    paddingY: 1.5,
+                    paddingX: 2,
+                  },
+                }}
               />
               {formik.values.purity && (
                 <Typography
@@ -140,6 +152,12 @@ const WholesaleValueCalculator: React.FC = () => {
                 onBlur={formik.handleBlur}
                 error={formik.touched.wastage && Boolean(formik.errors.wastage)}
                 helperText={formik.touched.wastage && formik.errors.wastage}
+                InputProps={{
+                  sx: {
+                    paddingY: 1.5,
+                    paddingX: 2,
+                  },
+                }}
               />
             </Grid>
 
@@ -160,6 +178,12 @@ const WholesaleValueCalculator: React.FC = () => {
                 helperText={
                   formik.touched.goldRate99_5 && formik.errors.goldRate99_5
                 }
+                InputProps={{
+                  sx: {
+                    paddingY: 1.5,
+                    paddingX: 2,
+                  },
+                }}
               />
             </Grid>
 

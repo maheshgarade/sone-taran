@@ -28,25 +28,24 @@ import { useAuth } from './features/auth/hooks/useAuth';
 import { Dashboard, Settings } from '@mui/icons-material';
 
 // Import components
-import Calculators from './features/calculators/Calculators';
-import Customers from './features/customers/Customers';
-import KalamDetails from './features/kalams/kalam-details/KalamDetails';
 import LogIn from './features/auth/components/login/Login';
 import OtpVerify from './features/auth/components/otp-verify/otp-verify';
 import PrivateRoute from './features/auth/components/private-route/private-route';
-import CustomerDetails from './features/customers/customer-details/CustomerDetails';
 import Page404 from './features/404Page/Page404';
+import { useTranslation } from 'react-i18next';
 
 // Lazy load Kalams
 const Kalams = lazy(() => import('./features/kalams/Kalams'));
+const KalamDetails = lazy(
+  () => import('./features/kalams/kalam-details/KalamDetails')
+);
+const Customers = lazy(() => import('./features/customers/Customers'));
+const CustomerDetails = lazy(
+  () => import('./features/customers/customer-details/CustomerDetails')
+);
+const Calculators = lazy(() => import('./features/calculators/Calculators'));
+
 // Sidebar menu items
-const menuItems = [
-  { text: 'Dashboard', path: '/dashboard' },
-  { text: 'Kalams', path: '/kalams' },
-  { text: 'Customers', path: '/customers' },
-  { text: 'Settings', path: '/settings' },
-  { text: 'Calculators', path: '/calculators' },
-];
 
 const drawerWidth = 170;
 
@@ -56,7 +55,7 @@ const BreadcrumbsComponent = () => {
   const pathnames = location.pathname.split('/').filter((x) => x);
 
   return (
-    <Breadcrumbs aria-label="breadcrumb" sx={{ mb: 2,p:1 }}>
+    <Breadcrumbs aria-label="breadcrumb" sx={{ mb: 2, p: 1 }}>
       <Link to="/" style={{ textDecoration: 'none', color: 'inherit' }}>
         Home
       </Link>
@@ -81,6 +80,15 @@ const App = () => {
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const [mobileOpen, setMobileOpen] = useState(false);
   const location = useLocation();
+
+  const { t } = useTranslation();
+  const menuItems = [
+    { text: t('menuItems.dashboard'), path: '/dashboard' },
+    { text: t('menuItems.kalam'), path: '/kalams' },
+    { text: t('menuItems.customer'), path: '/customers' },
+    { text: t('menuItems.settings'), path: '/settings' },
+    { text: t('menuItems.calculator'), path: '/calculators' },
+  ];
 
   const toggleDrawer = () => {
     setMobileOpen(!mobileOpen);
@@ -127,7 +135,7 @@ const App = () => {
         <Routes>
           <Route path="/login" element={<LogIn />} />
           <Route path="/otp-verify" element={<OtpVerify />} />
-          <Route path="*" element={<Navigate to="/login" />} />
+          <Route path="*" element={<Page404 />} />
         </Routes>
       </Box>
     );

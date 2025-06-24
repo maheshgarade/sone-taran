@@ -31,8 +31,8 @@ const LogIn: React.FC = () => {
     },
     validationSchema: Yup.object({
       phone: Yup.string()
-        .required('Phone number is required')
-        .matches(/^\d{10}$/, 'Phone number must be exactly 10 digits'),
+        .required(t('loginPage.error.phoneRequired'))
+        .matches(/^\d{10}$/, t('loginPage.error.phoneLength')),
     }),
     onSubmit: async (values) => {
       setError(null);
@@ -55,12 +55,11 @@ const LogIn: React.FC = () => {
     },
     validationSchema: Yup.object({
       email: Yup.string()
-        .required('Email is required')
-        .email('Invalid email format'),
+        .required(t('emailPage.error.emailRequired'))
+        .email(t('emailPage.error.emailValidate')),
     }),
     onSubmit: async (values) => {
       setError(null);
-
       try {
         setLoading(true);
         await requestEmailOtp(values.email);
@@ -129,7 +128,6 @@ const LogIn: React.FC = () => {
                   }}
                 >
                   {t('loginPage.loginText')}
-
                 </Typography>
               </Box>
 
@@ -170,7 +168,7 @@ const LogIn: React.FC = () => {
                   type="submit"
                   variant="contained"
                   color="primary"
-                  onClick={() => { }}
+                  onClick={() => {}}
                 >
                   {t('loginPage.sendOtp')}
                 </Button>
@@ -281,7 +279,7 @@ const LogIn: React.FC = () => {
                     },
                   }}
                 >
-                  Sign in
+                  {t('emailPage.emalLoginText')}
                 </Typography>
               </Box>
 
@@ -289,10 +287,10 @@ const LogIn: React.FC = () => {
               <Box>
                 <TextField
                   type="text"
-                  label="Email"
+                  label={t('emailPage.Email')}
                   name="email"
                   id="email"
-                  placeholder="Email"
+                  placeholder={t('emailPage.Email')}
                   focused
                   fullWidth
                   value={formikEmail.values.email}
@@ -323,7 +321,7 @@ const LogIn: React.FC = () => {
                   variant="contained"
                   color="primary"
                 >
-                  Send OTP
+                  {t('emailPage.emalLoginText')}
                 </Button>
                 {/* For horizontal line and text over it  */}
                 <Box
@@ -360,7 +358,7 @@ const LogIn: React.FC = () => {
                       fontSize: 18,
                     }}
                   >
-                    or
+                    {t('emailPage.or')}
                   </Typography>
                 </Box>
 
@@ -380,7 +378,7 @@ const LogIn: React.FC = () => {
                     }}
                     startIcon={<EmailIcon />}
                   >
-                    Sign in with Phone Number
+                    {t('emailPage.SignInPhone')}
                   </Button>
                 </Box>
               </Box>

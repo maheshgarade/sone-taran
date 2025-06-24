@@ -187,6 +187,12 @@ const InterestCalculator = () => {
                 helperText={
                   formik.touched.loanAmount && formik.errors.loanAmount
                 }
+                InputProps={{
+                  sx: {
+                    paddingY: 1.5,
+                    paddingX: 2,
+                  },
+                }}
               />
               <TextField
                 fullWidth
@@ -199,6 +205,12 @@ const InterestCalculator = () => {
                 onBlur={formik.handleBlur}
                 error={formik.touched.roi && Boolean(formik.errors.roi)}
                 helperText={formik.touched.roi && formik.errors.roi}
+                InputProps={{
+                  sx: {
+                    paddingY: 1.5,
+                    paddingX: 2,
+                  },
+                }}
               />
             </Box>
 

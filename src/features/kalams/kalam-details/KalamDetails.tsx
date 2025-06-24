@@ -17,11 +17,12 @@ import { useFormik } from 'formik';
 import useKalamsData from '../../../hooks/useKalamsData';
 import useMerchantData from '../../../hooks/useMerchantData';
 import useCustomerData from '../../../hooks/useCustomersData';
+import { useTranslation } from 'react-i18next';
 
 const KalamDetails: React.FC = () => {
   const { id } = useParams<{ id: string }>();
 
-  // data for the specification kalam 
+  // data for the specification kalam
   const { state: data } = useLocation() as { state: any };
 
   // For edit Modal
@@ -92,6 +93,7 @@ const KalamDetails: React.FC = () => {
       merchantCity: '',
       merchantZip: '',
       dukandarAmount: '',
+      dueAmount: '',
     },
     enableReinitialize: true, // Important to allow patching
     validationSchema: Yup.object({
@@ -209,6 +211,7 @@ const KalamDetails: React.FC = () => {
               merchantROI: Number(values.merchantROI),
               customerROI: Number(values.customerROI),
               loanStartDate: values.loanStartDate,
+              dueAmount: Number(values.dueAmount),
               validity: 'valid',
             },
           },
@@ -442,6 +445,19 @@ const KalamDetails: React.FC = () => {
             editFormik.touched.customerROI && editFormik.errors.customerROI,
         },
         {
+          label: 'Due Amount',
+          type: 'number',
+          name: 'dueAmount',
+          value: editFormik.values.dueAmount,
+          onChange: editFormik.handleChange,
+          onBlur: editFormik.handleBlur,
+          error:
+            editFormik.touched.dueAmount &&
+            Boolean(editFormik.errors.dueAmount),
+          helperText:
+            editFormik.touched.dueAmount && editFormik.errors.dueAmount,
+        },
+        {
           type: 'date',
           name: 'loanStartDate',
           value: editFormik.values.loanStartDate,
@@ -549,6 +565,8 @@ const KalamDetails: React.FC = () => {
     }
   };
 
+  const { t } = useTranslation();
+
   return (
     <Box sx={{ maxWidth: 800, mx: 'auto', p: { xs: 2, md: 3 } }}>
       <Paper elevation={3} sx={{ p: { xs: 2, md: 4 } }}>
@@ -558,13 +576,34 @@ const KalamDetails: React.FC = () => {
 
         {/* Kalam details */}
         <Section title="Kalam Details">
-          <Row label="Item name:" value={data.kalam.details.name} />
-          <Row label="Material type:" value={data.kalam.details.materialType} />
-          <Row label="Gold rate:" value={data.kalam.details.goldRateAtLoan} />
-          <Row label="Gross weight:" value={data.kalam.details.grossWeight} />
-          <Row label="Net weight:" value={data.kalam.details.netWeight} />
-          <Row label="Purity:" value={data.kalam.details.purity} />
-          <Row label="Quantity:" value={data.kalam.details.number} />
+          <Row
+            label={t('kalamDetailsPage.kalam.itemName')}
+            value={data.kalam.details.name}
+          />
+          <Row
+            label={t('kalamDetailsPage.kalam.materialType')}
+            value={data.kalam.details.materialType}
+          />
+          <Row
+            label={t('kalamDetailsPage.kalam.goldRate')}
+            value={data.kalam.details.goldRateAtLoan}
+          />
+          <Row
+            label={t('kalamDetailsPage.kalam.grossWeight')}
+            value={data.kalam.details.grossWeight}
+          />
+          <Row
+            label={t('kalamDetailsPage.kalam.netWeight')}
+            value={data.kalam.details.netWeight}
+          />
+          <Row
+            label={t('kalamDetailsPage.kalam.purity')}
+            value={data.kalam.details.purity}
+          />
+          <Row
+            label={t('kalamDetailsPage.kalam.quantity')}
+            value={data.kalam.details.number}
+          />
         </Section>
 
         <Divider sx={{ my: 3 }} />
@@ -572,27 +611,33 @@ const KalamDetails: React.FC = () => {
         {/* Loan details */}
         <Section title="Loan Details">
           <Row
-            label="Loan start date:"
+            label={t('kalamDetailsPage.Loan.loanStartDate')}
             value={data.kalam.loanDetails.loanStartDate}
           />
           <Row
-            label="Customer amount:"
+            label={t('kalamDetailsPage.Loan.customerAmt')}
             value={data.kalam.loanDetails.customerAmt}
           />
           <Row
-            label="Customer ROI:"
+            label={t('kalamDetailsPage.Loan.customerROI')}
             value={data.kalam.loanDetails.customerROI}
           />
           <Row
-            label="Dukandar amount:"
+            label={t('kalamDetailsPage.Loan.dukandarAmt')}
             value={data.kalam.loanDetails.dukandarAmt}
           />
           <Row
-            label="Dukandar ROI:"
+            label={t('kalamDetailsPage.Loan.dukandarROI')}
             value={data.kalam.loanDetails.merchantROI}
           />
-          <Row label="Total amount:" value={data.kalam.loanDetails.totalAmt} />
-          <Row label="Validity:" value={data.kalam.loanDetails.validity} />
+          <Row
+            label={t('kalamDetailsPage.Loan.totalAmt')}
+            value={data.kalam.loanDetails.totalAmt}
+          />
+          <Row
+            label={t('kalamDetailsPage.Loan.validity')}
+            value={data.kalam.loanDetails.validity}
+          />
         </Section>
 
         <Divider sx={{ my: 3 }} />
@@ -672,6 +717,7 @@ const KalamDetails: React.FC = () => {
                 merchantStreet: data.merchantDetails.address.street || '',
                 merchantCity: data.merchantDetails.address.city || '',
                 merchantZip: data.merchantDetails.address.zip || '',
+                dueAmount: data.kalam.loandetails.dueAmount || '',
               });
               setEditModal(true);
             }}

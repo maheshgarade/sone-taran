@@ -119,6 +119,12 @@ const GoldValuation = () => {
                 helperText={
                   formik.touched.grossWeight && formik.errors.grossWeight
                 }
+                InputProps={{
+                  sx: {
+                    paddingY: 1.5,
+                    paddingX: 2,
+                  },
+                }}
               />
             </Grid>
             <Grid item xs={12} sm={6}>
@@ -135,6 +141,12 @@ const GoldValuation = () => {
                   formik.touched.netWeight && Boolean(formik.errors.netWeight)
                 }
                 helperText={formik.touched.netWeight && formik.errors.netWeight}
+                InputProps={{
+                  sx: {
+                    paddingY: 1.5,
+                    paddingX: 2,
+                  },
+                }}
               />
             </Grid>
             <Grid item xs={12} sm={6}>
@@ -149,6 +161,12 @@ const GoldValuation = () => {
                 onBlur={formik.handleBlur}
                 error={formik.touched.purity && Boolean(formik.errors.purity)}
                 helperText={formik.touched.purity && formik.errors.purity}
+                InputProps={{
+                  sx: {
+                    paddingY: 1.5,
+                    paddingX: 2,
+                  },
+                }}
               />
             </Grid>
             <Grid item xs={12} sm={6}>
@@ -165,6 +183,12 @@ const GoldValuation = () => {
                   formik.touched.metalRate && Boolean(formik.errors.metalRate)
                 }
                 helperText={formik.touched.metalRate && formik.errors.metalRate}
+                InputProps={{
+                  sx: {
+                    paddingY: 1.5,
+                    paddingX: 2,
+                  },
+                }}
               />
             </Grid>
             <Grid item xs={12} sm={6}>
@@ -179,6 +203,12 @@ const GoldValuation = () => {
                 onBlur={formik.handleBlur}
                 error={formik.touched.roi && Boolean(formik.errors.roi)}
                 helperText={formik.touched.roi && formik.errors.roi}
+                InputProps={{
+                  sx: {
+                    paddingY: 1.5,
+                    paddingX: 2,
+                  },
+                }}
               />
             </Grid>
             <Grid item xs={12} sm={6}>
@@ -197,6 +227,12 @@ const GoldValuation = () => {
                 helperText={
                   formik.touched.loanAmount && formik.errors.loanAmount
                 }
+                InputProps={{
+                  sx: {
+                    paddingY: 1.5,
+                    paddingX: 2,
+                  },
+                }}
               />
             </Grid>
             <Grid item xs={12} sm={6}>
@@ -216,6 +252,12 @@ const GoldValuation = () => {
                 helperText={
                   formik.touched.loanDuration && formik.errors.loanDuration
                 }
+                InputProps={{
+                  sx: {
+                    paddingY: 1.5,
+                    paddingX: 2,
+                  },
+                }}
               />
             </Grid>
             <Grid item xs={12}>
