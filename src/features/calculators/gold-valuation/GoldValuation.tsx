@@ -12,8 +12,11 @@ import {
 } from '@mui/material';
 import { calculateMaxLoanTenure2 } from '../../../utils/MaxLoanTenureUtil';
 import PercentageSlider from '../../../shared/components/percentage-slider/PercentageSlider';
+import { useTranslation } from 'react-i18next';
 
 const GoldValuation = () => {
+  const { t } = useTranslation();
+
   const [metalValue, setMetalValue] = useState<number | null>(null);
   const [maxLoanTenure, setMaxLoanTenure] = useState<number>(0);
   const [calculated, setCalculated] = useState<boolean>(false);
@@ -48,18 +51,28 @@ const GoldValuation = () => {
     },
     validationSchema: Yup.object({
       grossWeight: Yup.number()
-        .required('Gross Weight is required')
-        .positive('Must be positive'),
+        .required(t('calculatorPage.goldRateCalculator.error.grossWeightError'))
+        .positive(
+          t('calculatorPage.goldRateCalculator.error.grossWeightError')
+        ),
       netWeight: Yup.number()
-        .required('Net Weight is required')
-        .positive('Must be positive')
+        .required(t('calculatorPage.goldRateCalculator.error.netWeightError'))
+        .positive(t('calculatorPage.goldRateCalculator.error.netWeightError'))
+
         .test('is-less-than-gross', 'Must be ≤ Gross Weight', function (value) {
           const { grossWeight } = this.parent;
           return value <= grossWeight;
         }),
-      purity: Yup.number().required('Purity is required').min(0).max(100),
-      metalRate: Yup.number().required().positive(),
-      roi: Yup.number().required().positive(),
+      purity: Yup.number()
+        .required(t('calculatorPage.goldRateCalculator.error.purityError'))
+        .min(0)
+        .max(100),
+      metalRate: Yup.number()
+        .required(t('calculatorPage.goldRateCalculator.error.metalRateError'))
+        .positive(),
+      roi: Yup.number()
+        .required(t('calculatorPage.goldRateCalculator.error.ROIError'))
+        .positive(),
     }),
     onSubmit: (values) => {
       const {
@@ -67,8 +80,8 @@ const GoldValuation = () => {
         purity,
         metalRate,
         roi,
-        loanAmount,
-        loanDuration,
+        // loanAmount,
+        // loanDuration,
         loanPercentage,
       } = values;
 
@@ -98,7 +111,7 @@ const GoldValuation = () => {
     <Container maxWidth="md">
       <Paper elevation={3} sx={{ p: { xs: 2, sm: 4 }, mt: 2 }}>
         <Typography variant="h4" align="center" gutterBottom>
-          Gold Valuation
+          {t('calculatorPage.goldRateCalculator.goldValuation')}
         </Typography>
         <Box component="form" onSubmit={formik.handleSubmit} sx={{ mt: 3 }}>
           <Grid container spacing={2}>
@@ -108,7 +121,7 @@ const GoldValuation = () => {
                 type="number"
                 id="grossWeight"
                 name="grossWeight"
-                label="Gross Wt (g)"
+                label={t('calculatorPage.goldRateCalculator.grossWeight')}
                 value={formik.values.grossWeight}
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
@@ -121,8 +134,8 @@ const GoldValuation = () => {
                 }
                 InputProps={{
                   sx: {
-                    paddingY: 1.5,
-                    paddingX: 2,
+                    paddingY: { xs: 1.5 },
+                    paddingX: { xs: 2 },
                   },
                 }}
               />
@@ -133,7 +146,7 @@ const GoldValuation = () => {
                 type="number"
                 id="netWeight"
                 name="netWeight"
-                label="Net Wt (g)"
+                label={t('calculatorPage.goldRateCalculator.netWeight')}
                 value={formik.values.netWeight}
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
@@ -143,8 +156,8 @@ const GoldValuation = () => {
                 helperText={formik.touched.netWeight && formik.errors.netWeight}
                 InputProps={{
                   sx: {
-                    paddingY: 1.5,
-                    paddingX: 2,
+                    paddingY: { xs: 1.5 },
+                    paddingX: { xs: 2 },
                   },
                 }}
               />
@@ -155,7 +168,7 @@ const GoldValuation = () => {
                 type="number"
                 id="purity"
                 name="purity"
-                label="Purity (%)"
+                label={t('calculatorPage.goldRateCalculator.purity')}
                 value={formik.values.purity}
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
@@ -163,8 +176,8 @@ const GoldValuation = () => {
                 helperText={formik.touched.purity && formik.errors.purity}
                 InputProps={{
                   sx: {
-                    paddingY: 1.5,
-                    paddingX: 2,
+                    paddingY: { xs: 1.5 },
+                    paddingX: { xs: 2 },
                   },
                 }}
               />
@@ -175,7 +188,7 @@ const GoldValuation = () => {
                 type="number"
                 id="metalRate"
                 name="metalRate"
-                label="Metal Rate (₹/g)"
+                label={t('calculatorPage.goldRateCalculator.metalRate')}
                 value={formik.values.metalRate}
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
@@ -185,8 +198,8 @@ const GoldValuation = () => {
                 helperText={formik.touched.metalRate && formik.errors.metalRate}
                 InputProps={{
                   sx: {
-                    paddingY: 1.5,
-                    paddingX: 2,
+                    paddingY: { xs: 1.5 },
+                    paddingX: { xs: 2 },
                   },
                 }}
               />
@@ -197,7 +210,7 @@ const GoldValuation = () => {
                 type="number"
                 id="roi"
                 name="roi"
-                label="ROI (%)"
+                label={t('calculatorPage.goldRateCalculator.ROI')}
                 value={formik.values.roi}
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
@@ -205,8 +218,8 @@ const GoldValuation = () => {
                 helperText={formik.touched.roi && formik.errors.roi}
                 InputProps={{
                   sx: {
-                    paddingY: 1.5,
-                    paddingX: 2,
+                    paddingY: { xs: 1.5 },
+                    paddingX: { xs: 2 },
                   },
                 }}
               />
@@ -217,7 +230,7 @@ const GoldValuation = () => {
                 type="number"
                 id="loanAmount"
                 name="loanAmount"
-                label="Loan Amount"
+                label={t('calculatorPage.goldRateCalculator.loanAmt')}
                 value={formik.values.loanAmount}
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
@@ -229,8 +242,8 @@ const GoldValuation = () => {
                 }
                 InputProps={{
                   sx: {
-                    paddingY: 1.5,
-                    paddingX: 2,
+                    paddingY: { xs: 1.5 },
+                    paddingX: { xs: 2 },
                   },
                 }}
               />
@@ -241,7 +254,7 @@ const GoldValuation = () => {
                 type="number"
                 id="loanDuration"
                 name="loanDuration"
-                label="Loan Duration (months)"
+                label={t('calculatorPage.goldRateCalculator.loanDuration')}
                 value={formik.values.loanDuration}
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
@@ -254,8 +267,8 @@ const GoldValuation = () => {
                 }
                 InputProps={{
                   sx: {
-                    paddingY: 1.5,
-                    paddingX: 2,
+                    paddingY: { xs: 1.5 },
+                    paddingX: { xs: 2 },
                   },
                 }}
               />
@@ -273,7 +286,7 @@ const GoldValuation = () => {
                 variant="contained"
                 color="primary"
               >
-                Calculate
+                {t('calculatorPage.button.calculate')}
               </Button>
             </Grid>
             <Grid item xs={12} sm={6}>
@@ -283,7 +296,7 @@ const GoldValuation = () => {
                 variant="outlined"
                 onClick={handleReset}
               >
-                Reset
+                {t('calculatorPage.button.reset')}
               </Button>
             </Grid>
           </Grid>

@@ -1,14 +1,38 @@
 import axios from "axios";
 
 // Create a reusable axios instance with a base URL
-//import.meta.env.BASE_URL
 const apiClient = axios.create({
   baseURL: "https://sone-taran-backend.onrender.com/api",
-    headers: {
-      "Content-Type": "application/json",
-    },
+  headers: {
+    "Content-Type": "application/json",
+  },
+  withCredentials: true,
 });
 
+
+// ✅ Add request interceptor to attach token
+apiClient.interceptors.request.use(
+  (config) => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+  },
+  (error) => Promise.reject(error)
+);
+
+// ✅ (Optional) Handle unauthorized responses globally
+apiClient.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error.response?.status === 401) {
+      console.warn("Unauthorized. Please log in again.");
+      // Optionally: redirect or logout
+    }
+    return Promise.reject(error);
+  }
+);
 
 export interface AddKalam {
   customerId: string,
@@ -262,9 +286,13 @@ export default {
 apiClient.interceptors.response.use(
   (response) => response,
   (error) => {
-    if (error.response.status === 401) {
-      // Redirect to login or refresh token
+    if (error.response?.status === 401) {
+      console.warn("Unauthorized. You may need to log in again.");
+      // Optionally redirect or handle
+    } else if (!error.response) {
+      console.error("Network or CORS error:", error.message || error);
     }
+
     return Promise.reject(error);
   }
 );

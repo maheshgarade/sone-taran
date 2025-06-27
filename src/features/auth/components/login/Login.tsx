@@ -16,6 +16,7 @@ import { useAuth } from '../../hooks/useAuth';
 import { useNavigate } from 'react-router-dom';
 import { TailSpin } from 'react-loader-spinner';
 import { useTranslation } from 'react-i18next';
+import LanguageSelector from '../../../Language/LanguageSelector';
 
 const LogIn: React.FC = () => {
   const { requestOtp, requestEmailOtp } = useAuth();
@@ -86,6 +87,8 @@ const LogIn: React.FC = () => {
               minHeight: '95vh',
               width: '100%',
               display: 'flex',
+              flexDirection: 'column',
+
               justifyContent: 'center',
               alignItems: 'center',
               px: 2,
@@ -109,10 +112,22 @@ const LogIn: React.FC = () => {
                 p: 3,
                 borderRadius: 2,
                 boxShadow: 1,
+                position: 'relative',
               }}
               component="form"
               onSubmit={formikPhone.handleSubmit}
             >
+              <Box
+                sx={{
+                  position: 'absolute',
+                  top: 10,
+                  right: 16,
+                }}
+              >
+                <Typography variant="body1" fontWeight="bold">
+                  <LanguageSelector colorChange={false} />
+                </Typography>
+              </Box>
               <Box>
                 <Typography
                   variant="h5"
@@ -261,10 +276,22 @@ const LogIn: React.FC = () => {
                 p: 3,
                 borderRadius: 2,
                 boxShadow: 1,
+                position: 'relative',
               }}
               component="form"
               onSubmit={formikEmail.handleSubmit}
             >
+              <Box
+                sx={{
+                  position: 'absolute',
+                  top: 10,
+                  right: 16,
+                }}
+              >
+                <Typography variant="body1" fontWeight="bold">
+                  <LanguageSelector colorChange={false} />
+                </Typography>
+              </Box>
               <Box>
                 <Typography
                   variant="h5"

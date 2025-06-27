@@ -32,6 +32,9 @@ import LogIn from './features/auth/components/login/Login';
 import OtpVerify from './features/auth/components/otp-verify/otp-verify';
 import PrivateRoute from './features/auth/components/private-route/private-route';
 import Page404 from './features/404Page/Page404';
+import LanguageSelector from './features/Language/LanguageSelector';
+
+// import translation
 import { useTranslation } from 'react-i18next';
 
 // Lazy load Kalams
@@ -100,7 +103,6 @@ const App = () => {
 
   const isAuthRoute = authRoutes.includes(location.pathname);
 
-  console.log(location.pathname);
   // Sidebar drawer content
   const drawerContent = (
     <List>
@@ -166,6 +168,9 @@ const App = () => {
           <Typography variant="h6" noWrap>
             Sone Taran
           </Typography>
+          <Typography variant="h6" sx={{ marginLeft: 'auto' }} noWrap>
+            <LanguageSelector colorChange={true} />
+          </Typography>
         </Toolbar>
       </AppBar>
 
@@ -202,7 +207,7 @@ const App = () => {
                 padding: 1,
               }}
             >
-              Logout
+              {t('menuItems.logout')}
             </Typography>
           </Button>
         </Box>
@@ -285,7 +290,7 @@ const App = () => {
           {/* Customer Information */}
           <Box sx={{ mt: 2 }}>
             <Typography variant="h6" textAlign={'center'}>
-              Are you sure ? you want to Logout.
+              {t('logoutModal.text')}
             </Typography>
             <Box sx={{ display: 'flex', justifyContent: 'space-around' }}>
               <Button
@@ -303,7 +308,7 @@ const App = () => {
                   onLogout();
                 }}
               >
-                Yes
+                {t('logoutModal.yes')}
               </Button>
 
               <Button
@@ -313,7 +318,7 @@ const App = () => {
                   setLogoutModal(false);
                 }}
               >
-                Cancel
+                {t('logoutModal.cancel')}
               </Button>
             </Box>
           </Box>

@@ -28,12 +28,15 @@ import {
 } from '../../../utils/InterestCalculatorUtil';
 import { InterestType } from '../../../enums/interestType';
 import { formatCurrency } from '../../../utils/CurrencyUtil';
+import { useTranslation } from 'react-i18next';
 
 const InterestCalculator = () => {
   const [totalInterest, setTotalInterest] = useState<number | null>(null);
   const [totalInterestBreakdown, setTotalInterestBreakdown] = useState<
     InterestBreakdown[]
   >([]);
+
+  const { t } = useTranslation();
 
   const formik = useFormik({
     initialValues: {
@@ -46,9 +49,11 @@ const InterestCalculator = () => {
       interestType: InterestType.Compound,
     },
     validationSchema: Yup.object({
-      startDate: Yup.date().required('Start Date is required'),
+      startDate: Yup.date().required(
+        t('calculatorPage.interestCalculator.error.startDateError')
+      ),
       endDate: Yup.date()
-        .required('End Date is required')
+        .required(t('calculatorPage.interestCalculator.error.endDateError'))
         .test(
           'is-greater',
           'End Date must be greater than Start Date',
@@ -58,11 +63,15 @@ const InterestCalculator = () => {
           }
         ),
       loanAmount: Yup.number()
-        .required('Loan Amount is required')
-        .positive('Loan Amount must be positive'),
+        .required(t('calculatorPage.interestCalculator.error.loanAmtError'))
+        .positive(
+          t('calculatorPage.interestCalculator.error.loanAmtPositiveError')
+        ),
       roi: Yup.number()
-        .required('ROI is required')
-        .positive('ROI must be positive'),
+        .required(t('calculatorPage.interestCalculator.error.ROIError'))
+        .positive(
+          t('calculatorPage.interestCalculator.error.ROIPositiveError')
+        ),
     }),
     onSubmit: (values) => {
       const {
@@ -114,7 +123,7 @@ const InterestCalculator = () => {
           sx={{ padding: { xs: 2, sm: 4 }, marginTop: { xs: 2, sm: 3 } }}
         >
           <Typography variant="h6" align="center" sx={{ mb: 4 }}>
-            Compound Interest Calculator
+            {t('calculatorPage.interestCalculator.interestCal')}
           </Typography>
           <Box
             component="form"
@@ -130,7 +139,7 @@ const InterestCalculator = () => {
               }}
             >
               <DatePicker
-                label="Start Date"
+                label={t('calculatorPage.interestCalculator.startDate')}
                 value={formik.values.startDate}
                 onChange={(newValue) =>
                   formik.setFieldValue('startDate', newValue)
@@ -147,7 +156,7 @@ const InterestCalculator = () => {
                 }}
               />
               <DatePicker
-                label="End Date"
+                label={t('calculatorPage.interestCalculator.endDate')}
                 value={formik.values.endDate}
                 onChange={(newValue) =>
                   formik.setFieldValue('endDate', newValue)
@@ -177,7 +186,7 @@ const InterestCalculator = () => {
                 type="number"
                 id="loanAmount"
                 name="loanAmount"
-                label="Loan Amount"
+                label={t('calculatorPage.interestCalculator.loanAmt')}
                 value={formik.values.loanAmount}
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
@@ -189,8 +198,8 @@ const InterestCalculator = () => {
                 }
                 InputProps={{
                   sx: {
-                    paddingY: 1.5,
-                    paddingX: 2,
+                    paddingY: { xs: 1.5 },
+                    paddingX: { xs: 2 },
                   },
                 }}
               />
@@ -199,7 +208,7 @@ const InterestCalculator = () => {
                 type="number"
                 id="roi"
                 name="roi"
-                label="Rate of Interest (ROI)"
+                label={t('calculatorPage.interestCalculator.ROI')}
                 value={formik.values.roi}
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
@@ -207,8 +216,8 @@ const InterestCalculator = () => {
                 helperText={formik.touched.roi && formik.errors.roi}
                 InputProps={{
                   sx: {
-                    paddingY: 1.5,
-                    paddingX: 2,
+                    paddingY: { xs: 1.5 },
+                    paddingX: { xs: 2 },
                   },
                 }}
               />
@@ -224,7 +233,7 @@ const InterestCalculator = () => {
                     name="waiveOneDayInterest"
                   />
                 }
-                label="1 Day Interest Free"
+                label={t('calculatorPage.interestCalculator.interestFree')}
               />
               <FormControlLabel
                 control={
@@ -234,7 +243,7 @@ const InterestCalculator = () => {
                     name="roundOffLoanDuration"
                   />
                 }
-                label="Round off Loan Duration"
+                label={t('calculatorPage.interestCalculator.roundOff')}
               />
               <FormControl>
                 <RadioGroup
@@ -246,12 +255,12 @@ const InterestCalculator = () => {
                   <FormControlLabel
                     control={<Radio />}
                     value={InterestType.Compound}
-                    label={InterestType.Compound + ' Interest'}
+                    label={t('calculatorPage.interestCalculator.simple')}
                   />
                   <FormControlLabel
                     control={<Radio />}
                     value={InterestType.Simple}
-                    label={InterestType.Simple + ' Interest'}
+                    label={t('calculatorPage.interestCalculator.compound')}
                   />
                 </RadioGroup>
               </FormControl>
@@ -272,7 +281,7 @@ const InterestCalculator = () => {
                 variant="contained"
                 color="primary"
               >
-                Calculate
+                {t('calculatorPage.button.calculate')}
               </Button>
               <Button
                 fullWidth
@@ -281,7 +290,7 @@ const InterestCalculator = () => {
                 color="secondary"
                 onClick={handleReset}
               >
-                Reset
+                {t('calculatorPage.button.reset')}
               </Button>
             </Box>
           </Box>

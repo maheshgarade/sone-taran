@@ -35,12 +35,16 @@ import apiService from '../../../../services/apiService';
 import useCustomerData from '../../../../hooks/useCustomersData';
 import useMerchantData from '../../../../hooks/useMerchantData';
 import { TailSpin } from 'react-loader-spinner';
+import { useTranslation } from 'react-i18next';
 
 interface ExpandableCardProps {
   kalam: Kalam;
 }
 
 const ExpandableCard: React.FC<ExpandableCardProps> = ({ kalam }) => {
+  // for translation
+  const { t } = useTranslation();
+
   // Expanding cards
   const [expanded, setExpanded] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
@@ -850,19 +854,6 @@ const ExpandableCard: React.FC<ExpandableCardProps> = ({ kalam }) => {
                   {kalam.kalam.loanDetails.loanStartDate}
                 </Typography>
               </Typography>
-              <Typography
-                sx={{ fontSize: '12px' }}
-                variant="body1"
-                gutterBottom
-              >
-                <Typography
-                  sx={{ fontSize: '12px' }}
-                  component="span"
-                  fontWeight="bold"
-                >
-                  {kalam.kalam.loanDetails.validity}
-                </Typography>
-              </Typography>
             </Box>
             <Divider orientation="vertical" flexItem />
             <Box>
@@ -876,7 +867,7 @@ const ExpandableCard: React.FC<ExpandableCardProps> = ({ kalam }) => {
                   component="span"
                   fontWeight="bold"
                 >
-                  Amt:
+                  {t('kalamCard.amount')} : {'   '}
                 </Typography>
                 {' 12000'}
               </Typography>
@@ -890,7 +881,7 @@ const ExpandableCard: React.FC<ExpandableCardProps> = ({ kalam }) => {
                   component="span"
                   fontWeight="bold"
                 >
-                  ROI:
+                  {t('kalamCard.ROI')} : {'   '}
                 </Typography>
                 {' 3%'}
               </Typography>
@@ -907,9 +898,9 @@ const ExpandableCard: React.FC<ExpandableCardProps> = ({ kalam }) => {
                   fontWeight="bold"
                   sx={{ fontSize: '12px' }}
                 >
-                  Merchant:
+                  {t('kalamCard.merchant')} :{'   '}
                 </Typography>
-                {kalam.merchantDetails.name}
+                {kalam.merchantDetails?.name || "-"}
               </Typography>
               <Typography
                 sx={{ fontSize: '12px' }}
@@ -921,7 +912,7 @@ const ExpandableCard: React.FC<ExpandableCardProps> = ({ kalam }) => {
                   component="span"
                   fontWeight="bold"
                 >
-                  Due:
+                  {t('kalamCard.due')} : {'   '}
                 </Typography>
                 {' 12000'}
               </Typography>
@@ -931,7 +922,7 @@ const ExpandableCard: React.FC<ExpandableCardProps> = ({ kalam }) => {
 
         <Divider />
         <Collapse in={expanded} timeout="auto" unmountOnExit>
-          <CardContent>
+          <CardContent sx={{ display: 'flex', justifyContent: 'center' }}>
             <Button
               variant="contained"
               color="primary"
@@ -941,7 +932,7 @@ const ExpandableCard: React.FC<ExpandableCardProps> = ({ kalam }) => {
                 })
               }
             >
-              View
+              {t('kalamCard.view')}
             </Button>
             <Button
               variant="contained"
@@ -983,7 +974,7 @@ const ExpandableCard: React.FC<ExpandableCardProps> = ({ kalam }) => {
                 setEditModal(true);
               }}
             >
-              Edit
+              {t('kalamCard.edit')}
             </Button>
             <Button
               variant="contained"
@@ -993,7 +984,7 @@ const ExpandableCard: React.FC<ExpandableCardProps> = ({ kalam }) => {
                 deleteloan();
               }}
             >
-              Delete
+              {t('kalamCard.delete')}
             </Button>
           </CardContent>
         </Collapse>

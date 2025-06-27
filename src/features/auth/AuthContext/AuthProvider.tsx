@@ -20,10 +20,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   const [phoneNumber, setPhoneNumber] = useState<string | null>(null);
   const [email, setEmail] = useState<string | null>(null);
   const [fullhash, setFullhash] = useState<string | null>(null);
-  const [otpToken, setOtpToken] = useState<string | null>(null);
   const [emailToken, setEmailToken] = useState<string | null>(null);
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const [otpSent, setOtpSent] = useState<number | undefined | null>(null);
+  const [user, setUser] = useState<any>(null);
 
   const isTokenValid = (token: string): boolean => {
     try {
@@ -36,80 +36,97 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   };
 
   useEffect(() => {
-    const storedOtpToken = localStorage.getItem('otpToken');
-    const storedEmailToken = localStorage.getItem('emailToken');
+    const fetchSession = async () => {
+      try {
+        const res = await fetch('https://sone-taran-backend.onrender.com/api/user/me', {
+          method: 'GET',
+          credentials: 'include',
+        });
 
-    if (storedOtpToken && isTokenValid(storedOtpToken)) {
-      setOtpToken(storedOtpToken);
-      setIsAuthenticated(true);
-    } else if (storedEmailToken && isTokenValid(storedEmailToken)) {
-      setEmailToken(storedEmailToken);
-      setIsAuthenticated(true);
-    } else {
-      logout();
-    }
+        if (!res.ok) throw new Error('Session not valid');
+
+        const data = await res.json();
+        setUser(data.user);
+        setIsAuthenticated(true);
+      } catch (err) {
+        // Check if token is valid for email OTP fallback
+        const storedEmailToken = localStorage.getItem('emailToken');
+        const storedUser = localStorage.getItem('user');
+
+        if (storedEmailToken && isTokenValid(storedEmailToken) && storedUser) {
+          setEmailToken(storedEmailToken);
+          setUser(JSON.parse(storedUser));
+          setIsAuthenticated(true);
+        } else {
+          logout();
+        }
+      }
+    };
+
+    fetchSession();
   }, []);
 
   const requestOtp = async (phone: string) => {
     const response = await requestPhoneOtpApi(phone);
 
     setFullhash(response.fullhash);
-    setOtpToken(response.otpToken);
     setPhoneNumber(phone);
     setOtpSent(response.otp);
   };
 
   const requestEmailOtp = async (email: string) => {
     const response = await requestEmailOtpApi(email);
-    setEmailToken(response.token);
     setEmail(email);
+    setEmailToken(response.token);
   };
 
-  const verifyOtp = async (otp: string) => {
-    if (!fullhash || !phoneNumber || !otpToken) return false;
+  const verifyOtp = async (otp: number) => {
+    if (!fullhash || !phoneNumber) return false;
 
     const response = await verifyPhoneOtpApi(
       String(phoneNumber),
       otp,
-      fullhash,
-      otpToken
+      fullhash
     );
 
-    if (response && response.token) {
-      localStorage.setItem('token', response.token);
-      localStorage.setItem('otpToken', otpToken);
+    if (response?.success) {
+      localStorage.setItem('user', JSON.stringify(response.user));
       setIsAuthenticated(true);
+      setUser(response.user);
       return true;
     }
-
     return false;
   };
 
   const verifyEmailOtp = async (otp: string) => {
     if (!emailToken) return false;
-
     const response = await verifyEmailOtpApi(otp, emailToken);
 
-    if (response?.token) {
-      localStorage.setItem('token', response.token);
-      localStorage.setItem('emailToken', emailToken);
+    if (response?.success) {
+      localStorage.setItem('user', JSON.stringify(response.user));
       setIsAuthenticated(true);
+      setUser(response.user);
       return true;
     }
 
     return false;
   };
 
-  const logout = () => {
+  const logout = async () => {
+    try {
+      await fetch('https://sone-taran-backend.onrender.com/api/user/logout', {
+        method: 'POST',
+        credentials: 'include',
+      });
+    } catch (e) {
+      console.warn('Logout failed:', e);
+    }
     setPhoneNumber(null);
     setEmail(null);
     setIsAuthenticated(false);
-    setOtpToken(null);
     setEmailToken(null);
-    localStorage.removeItem('otpToken');
+    setUser(null);
     localStorage.removeItem('emailToken');
-    localStorage.removeItem('token');
-    localStorage.removeItem('PhoneToken');
   };
 
   return (
@@ -124,6 +141,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
         logout,
         otpSent,
         isAuthenticated,
+        user,
       }}
     >
       {children}

@@ -17,8 +17,11 @@ import {
   calculateRoundedMonthsAndDays,
   calculateMonthsAndDays,
 } from '../../../utils/CountDaysUtil';
+import { useTranslation } from 'react-i18next';
 
 const LoanDurationCalculator = () => {
+  const { t } = useTranslation();
+
   const [actualDuration, setActualDuration] = useState<DurationResult | null>(
     null
   );
@@ -32,9 +35,11 @@ const LoanDurationCalculator = () => {
       waiveOneDayInterest: false,
     },
     validationSchema: Yup.object({
-      startDate: Yup.date().required('Start date is required'),
+      startDate: Yup.date().required(
+        t('calculatorPage.loanDurationCalculator.error.startDateError')
+      ),
       endDate: Yup.date()
-        .required('End date is required')
+        .required(t('calculatorPage.loanDurationCalculator.error.endDateError'))
         .test(
           'is-greater',
           'End date must be greater than start date',
@@ -70,7 +75,7 @@ const LoanDurationCalculator = () => {
       <Container maxWidth="sm">
         <Paper elevation={3} sx={{ padding: { xs: 2, sm: 4 }, mt: 4 }}>
           <Typography variant="h5" align="center" gutterBottom>
-            Loan Duration Calculator
+            {t('calculatorPage.loanDurationCalculator.loanDuration')}
           </Typography>
 
           <Box
@@ -79,7 +84,7 @@ const LoanDurationCalculator = () => {
             sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}
           >
             <DatePicker
-              label="Start Date"
+              label={t('calculatorPage.loanDurationCalculator.startDate')}
               value={formik.values.startDate}
               onChange={(newValue) =>
                 formik.setFieldValue('startDate', newValue)
@@ -96,7 +101,7 @@ const LoanDurationCalculator = () => {
               }}
             />
             <DatePicker
-              label="End Date"
+              label={t('calculatorPage.loanDurationCalculator.endDate')}
               value={formik.values.endDate}
               onChange={(newValue) => formik.setFieldValue('endDate', newValue)}
               slotProps={{
@@ -117,7 +122,7 @@ const LoanDurationCalculator = () => {
                   name="waiveOneDayInterest"
                 />
               }
-              label="1 Day Interest Free"
+              label={t('calculatorPage.loanDurationCalculator.interestFree')}
             />
 
             <Box
@@ -134,7 +139,7 @@ const LoanDurationCalculator = () => {
                 variant="contained"
                 color="primary"
               >
-                Calculate
+                {t('calculatorPage.button.calculate')}
               </Button>
               <Button
                 fullWidth
@@ -142,7 +147,7 @@ const LoanDurationCalculator = () => {
                 variant="outlined"
                 onClick={handleReset}
               >
-                Reset
+                {t('calculatorPage.button.reset')}
               </Button>
             </Box>
           </Box>

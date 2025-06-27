@@ -13,6 +13,7 @@ import {
 import PaymentDetailsCard from '../../../shared/components/payment-details-card/PaymentDetailsCard';
 import WastageDetailsCard from '../../../shared/components/wastage-details-card/WastageDetailsCard';
 import ItemDetailsCard from '../../../shared/components/item-details-card/ItemDetailsCard';
+import { useTranslation } from 'react-i18next';
 
 interface CalculatedValues {
   itemWeight: number;
@@ -25,6 +26,9 @@ interface CalculatedValues {
 }
 
 const WholesaleValueCalculator: React.FC = () => {
+  // for translation
+  const { t } = useTranslation();
+
   const [calculatedValues, setCalculatedValues] =
     useState<CalculatedValues | null>(null);
   const [calculated, setCalculated] = useState<boolean>(false);
@@ -38,11 +42,29 @@ const WholesaleValueCalculator: React.FC = () => {
     },
     validationSchema: Yup.object({
       weight: Yup.number()
-        .required('Weight is required')
-        .positive('Weight must be positive'),
-      purity: Yup.number().required('Purity is required').min(0).max(100),
-      wastage: Yup.number().required('Wastage is required').min(0).max(100),
-      goldRate99_5: Yup.number().required('Gold rate is required').positive(),
+        .required(
+          t('calculatorPage.wholesaleValueCalculator.error.weightError')
+        )
+        .positive(
+          t('calculatorPage.wholesaleValueCalculator.error.weightPositiveError')
+        ),
+      purity: Yup.number()
+        .required(
+          t('calculatorPage.wholesaleValueCalculator.error.purityError')
+        )
+        .min(0)
+        .max(100),
+      wastage: Yup.number()
+        .required(
+          t('calculatorPage.wholesaleValueCalculator.error.wastageError')
+        )
+        .min(0)
+        .max(100),
+      goldRate99_5: Yup.number()
+        .required(
+          t('calculatorPage.wholesaleValueCalculator.error.goldRateError')
+        )
+        .positive(),
     }),
     onSubmit: (values) => {
       const weight = Number(values.weight);
@@ -82,7 +104,7 @@ const WholesaleValueCalculator: React.FC = () => {
     <Container maxWidth="md">
       <Paper elevation={3} sx={{ p: { xs: 2, md: 4 }, mt: 3 }}>
         <Typography variant="h4" align="center" sx={{ mb: 4 }}>
-          Wholesale Value
+          {t('calculatorPage.wholesaleValueCalculator.wholesaleValue')}
         </Typography>
 
         <Box component="form" onSubmit={formik.handleSubmit}>
@@ -91,7 +113,7 @@ const WholesaleValueCalculator: React.FC = () => {
               <TextField
                 fullWidth
                 type="number"
-                label="Weight (grams)"
+                label={t('calculatorPage.wholesaleValueCalculator.weight')}
                 id="weight"
                 name="weight"
                 value={formik.values.weight}
@@ -101,8 +123,8 @@ const WholesaleValueCalculator: React.FC = () => {
                 helperText={formik.touched.weight && formik.errors.weight}
                 InputProps={{
                   sx: {
-                    paddingY: 1.5,
-                    paddingX: 2,
+                    paddingY: { xs: 1.5 },
+                    paddingX: { xs: 2 },
                   },
                 }}
               />
@@ -112,7 +134,7 @@ const WholesaleValueCalculator: React.FC = () => {
               <TextField
                 fullWidth
                 type="number"
-                label="Purity (%)"
+                label={t('calculatorPage.wholesaleValueCalculator.purity')}
                 id="purity"
                 name="purity"
                 value={formik.values.purity}
@@ -122,8 +144,8 @@ const WholesaleValueCalculator: React.FC = () => {
                 helperText={formik.touched.purity && formik.errors.purity}
                 InputProps={{
                   sx: {
-                    paddingY: 1.5,
-                    paddingX: 2,
+                    paddingY: { xs: 1.5 },
+                    paddingX: { xs: 2 },
                   },
                 }}
               />
@@ -144,7 +166,7 @@ const WholesaleValueCalculator: React.FC = () => {
               <TextField
                 fullWidth
                 type="number"
-                label="Wastage (%)"
+                label={t('calculatorPage.wholesaleValueCalculator.wastage')}
                 id="wastage"
                 name="wastage"
                 value={formik.values.wastage}
@@ -154,8 +176,8 @@ const WholesaleValueCalculator: React.FC = () => {
                 helperText={formik.touched.wastage && formik.errors.wastage}
                 InputProps={{
                   sx: {
-                    paddingY: 1.5,
-                    paddingX: 2,
+                    paddingY: { xs: 1.5 },
+                    paddingX: { xs: 2 },
                   },
                 }}
               />
@@ -165,7 +187,7 @@ const WholesaleValueCalculator: React.FC = () => {
               <TextField
                 fullWidth
                 type="number"
-                label="Gold Rate (₹/gram for 99.5%)"
+                label={t('calculatorPage.wholesaleValueCalculator.goldRate')}
                 id="goldRate99_5"
                 name="goldRate99_5"
                 value={formik.values.goldRate99_5}
@@ -180,8 +202,8 @@ const WholesaleValueCalculator: React.FC = () => {
                 }
                 InputProps={{
                   sx: {
-                    paddingY: 1.5,
-                    paddingX: 2,
+                    paddingY: { xs: 1.5 },
+                    paddingX: { xs: 2 },
                   },
                 }}
               />
@@ -194,7 +216,7 @@ const WholesaleValueCalculator: React.FC = () => {
                 variant="contained"
                 color="primary"
               >
-                Calculate
+                {t('calculatorPage.button.calculate')}
               </Button>
             </Grid>
             <Grid item xs={12} sm={6}>
@@ -204,7 +226,7 @@ const WholesaleValueCalculator: React.FC = () => {
                 color="secondary"
                 onClick={handleReset}
               >
-                Reset
+                {t('calculatorPage.button.reset')}
               </Button>
             </Grid>
           </Grid>

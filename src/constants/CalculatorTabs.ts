@@ -4,8 +4,8 @@ import LoanDurationCalculator from '../features/calculators/loan-duration-calcul
 import WholesaleValueCalculator from '../features/calculators/wholesale-value-calculator/WholesaleValueCalculator';
 
 export const calculatorTabs = [
-  { tabName: 'Wholesale Value', component: WholesaleValueCalculator },
-  { tabName: 'Loan Duration', component: LoanDurationCalculator },
-  { tabName: 'Gold Valuation', component: GoldValuation },
-  { tabName: 'Interest Calculator', component: InterestCalculator },
+  { tabName: 'calculatorPage.wholePage', component: WholesaleValueCalculator },
+  { tabName: 'calculatorPage.loanpage', component: LoanDurationCalculator },
+  { tabName: 'calculatorPage.goldPage', component: GoldValuation },
+  { tabName: 'calculatorPage.interestPage', component: InterestCalculator },
 ];

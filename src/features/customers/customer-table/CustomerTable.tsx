@@ -208,8 +208,8 @@ const CustomerTable: React.FC<CustomerProps> = (props) => {
       (item) =>
         item.customer.name.toLowerCase().includes(lowerSearch) ||
         item.customer.contact[0].toLowerCase().includes(lowerSearch) ||
-        item.customer.contact[1].toLowerCase().includes(lowerSearch) ||
-        item.customer.customerId.toLowerCase().includes(lowerSearch)
+        item.customer.contact[1]?.toLowerCase().includes(lowerSearch) ||
+        item.customer.customerId.toString().toLowerCase().includes(lowerSearch)
     );
     setFilteredData(filtered);
     console.log(filtered);

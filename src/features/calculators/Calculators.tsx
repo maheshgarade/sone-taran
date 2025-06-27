@@ -5,6 +5,7 @@ import Box from '@mui/material/Box';
 import { calculatorTabs } from '../../constants/CalculatorTabs';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { useTheme } from '@mui/material/styles';
+import { useTranslation } from 'react-i18next';
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -45,14 +46,12 @@ function a11yProps(index: number) {
 }
 
 export default function Calculators() {
+  const { t } = useTranslation();
+
   const [value, setValue] = React.useState(0);
   const theme = useTheme();
 
   const isXs = useMediaQuery(theme.breakpoints.down('sm'));
-
-  const handleChange = (event: React.SyntheticEvent, newValue: number) => {
-    setValue(newValue);
-  };
 
   // Determine tab behavior based on screen size and number of tabs
   const getTabsVariant = () => {
@@ -61,6 +60,9 @@ export default function Calculators() {
     return 'standard';
   };
 
+  const handleChange = (_event: React.SyntheticEvent, newValue: number) => {
+    setValue(newValue);
+  };
   return (
     <Box
       sx={{
@@ -106,7 +108,7 @@ export default function Calculators() {
         >
           {calculatorTabs.map((tab, index) => (
             <Tab
-              label={tab.tabName}
+              label={t(tab.tabName)}
               {...a11yProps(index)}
               key={index}
               sx={{

@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+
+// Mui
 import {
   Table,
   TableBody,
@@ -25,23 +27,45 @@ import {
   InputBase,
   Slider,
 } from '@mui/material';
+import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+
+// Mui Icons
 import InfoIcon from '@mui/icons-material/Info';
 import { Visibility } from '@mui/icons-material';
+import AddIcon from '@mui/icons-material/Add';
+import SearchIcon from '@mui/icons-material/Search';
+import TuneIcon from '@mui/icons-material/Tune';
+
 import { useNavigate } from 'react-router-dom';
+
+// Models
 import { KalamProps } from '../models/KalamProps';
 import { CustomerDetails, KalamDetails } from '../models/Kalam';
+
+// Utils
 import { calculateMonthsAndDays } from '../../../utils/CountDaysUtil';
 import { calculateAnnualCompoundInterest } from '../../../utils/InterestCalculatorUtil';
-import AddIcon from '@mui/icons-material/Add';
+
+// Formik
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
+
+// Hooks
 import useKalamsData from '../../../hooks/useKalamsData';
 import useMerchantData from '../../../hooks/useMerchantData';
 import useCustomerData from '../../../hooks/useCustomersData';
-import SearchIcon from '@mui/icons-material/Search';
+
+// Loader
 import { TailSpin } from 'react-loader-spinner';
-import TuneIcon from '@mui/icons-material/Tune';
+
+// Translation
 import { useTranslation } from 'react-i18next';
+
+function parseDDMMYYYY(dateStr: string): Date {
+  const [day, month, year] = dateStr.split('-').map(Number);
+  return new Date(year, month - 1, day); // month is 0-based
+}
 
 const KalamsTable: React.FC<KalamProps> = (props) => {
   const { data } = props;
@@ -617,14 +641,38 @@ const KalamsTable: React.FC<KalamProps> = (props) => {
 
   const sortformik = useFormik({
     initialValues: {
-      from: '',
-      to: '',
+      from: null as Date | null,
+      to: null as Date | null,
     },
     validationSchema: Yup.object({
       from: Yup.date().required('Date is required').nullable(),
       to: Yup.date().required('Date is required').nullable(),
     }),
-    onSubmit: async (values) => {},
+    onSubmit: async (values) => {
+      const from = values.from;
+      const to = values.to;
+      const [minAmount, maxAmount] = amountRange;
+
+      const filtered = data.filter((item) => {
+        const rawDateStr = item?.kalam?.loanDetails.loanStartDate;
+        console.log(rawDateStr);
+
+        if (!rawDateStr || typeof rawDateStr !== 'string') return false;
+
+        const date = parseDDMMYYYY(rawDateStr); // safe now
+        const amount = item.kalam.loanDetails?.totalAmt ?? 0;
+
+        const dateValid = from && to ? date >= from && date <= to : true;
+        const amountValid = amount >= minAmount && amount <= maxAmount;
+
+        return dateValid && amountValid;
+      });
+
+      setFilteredData(filtered);
+      console.log(filtered);
+      setSortModal(false);
+      sortformik.resetForm();
+    },
   });
 
   const handleSliderChange = (_event: Event, newValue: number | number[]) => {
@@ -634,8 +682,6 @@ const KalamsTable: React.FC<KalamProps> = (props) => {
   };
   const valuetext = (value: number) => `${value}`;
 
-  console.log(amountRange);
-
   //  For Seraching kalam base don search Input
   const searchFunction = (value: any) => {
     const lowerSearch = value.toLowerCase();
@@ -643,7 +689,7 @@ const KalamsTable: React.FC<KalamProps> = (props) => {
       (item) =>
         item.customerDetails.name.toLowerCase().includes(lowerSearch) ||
         item.kalam.details.name.toLowerCase().includes(lowerSearch) ||
-        item.kalam.loanId.toLowerCase().includes(lowerSearch)
+        item.kalam.loanId.toString().toLowerCase().includes(lowerSearch)
     );
     setFilteredData(filtered);
     console.log(filtered);
@@ -668,49 +714,50 @@ const KalamsTable: React.FC<KalamProps> = (props) => {
   return (
     <>
       {/* Search Bar  */}
-      <Box
-        sx={{
-          width: '100%',
-          display: 'flex',
-          justifyContent: 'flex-end',
-          pr: 2,
-        }}
-      >
-        <Paper
-          component="form"
-          sx={{
-            p: '2px 4px',
-            display: 'flex',
-            flexDirection: 'row',
-            justifyContent: 'flex-end',
-            width: 400,
-          }}
-        >
-          <InputBase
-            sx={{ ml: 1, flex: 1 }}
-            placeholder="Search Kalam"
-            inputProps={{ 'aria-label': 'Search' }}
-            onChange={(e) => {
-              debouncedSearchHandler(e.target.value);
-            }}
-          />
-          <IconButton type="button" sx={{ p: '10px' }} aria-label="search">
-            <SearchIcon />
-          </IconButton>
-          <Button
+
+      <Box sx={{ display: 'flex' }}>
+        <Box>
+          <Paper
+            component="form"
             sx={{
-              ':focus': { outline: 'none' },
-              color: 'black',
-              textTransform: 'none',
-            }}
-            onClick={() => {
-              setSortModal(true);
+              ml: 2,
+              p: '2px 4px',
+              display: 'flex',
+              flexDirection: 'row',
+              justifyContent: 'flex-end',
+              width: 400,
             }}
           >
-            Sort
-            <TuneIcon sx={{ ml: 1 }} />
-          </Button>
-        </Paper>
+            <InputBase
+              sx={{ ml: 1, flex: 1 }}
+              placeholder="Search Kalam"
+              inputProps={{ 'aria-label': 'Search' }}
+              onChange={(e) => {
+                debouncedSearchHandler(e.target.value);
+              }}
+            />
+            <IconButton type="button" sx={{ p: '10px' }} aria-label="search">
+              <SearchIcon />
+            </IconButton>
+          </Paper>
+        </Box>
+
+        <Button
+          sx={{
+            ':focus': { outline: 'none' },
+            color: 'white',
+            textTransform: 'none',
+            marginLeft: 'auto',
+            mr: 4,
+          }}
+          variant="contained"
+          onClick={() => {
+            setSortModal(true);
+          }}
+        >
+          Sort
+          <TuneIcon sx={{ ml: 1 }} />
+        </Button>
       </Box>
 
       {/* Table for Showing Kalam and customer Details  */}
@@ -790,7 +837,7 @@ const KalamsTable: React.FC<KalamProps> = (props) => {
                     )}
                   </TableCell>
                   <TableCell>{kalam.kalam.loanDetails.customerROI}%</TableCell>
-                  <TableCell>{kalam.merchantDetails.name}</TableCell>
+                  <TableCell>{kalam.merchantDetails?.name || '-'}</TableCell>
                   <TableCell>{calculateTodaysValue()}</TableCell>
                   <TableCell>-</TableCell>
 
@@ -978,28 +1025,59 @@ const KalamsTable: React.FC<KalamProps> = (props) => {
         maxWidth="md"
         fullWidth
       >
-        <DialogTitle>Add Kalam</DialogTitle>
+        <DialogTitle>Sort Kalam</DialogTitle>
         <DialogContent>
-          <Box component="form" onSubmit={formik.handleSubmit}>
+          <Box component="form" onSubmit={sortformik.handleSubmit}>
             {/* Customer Information */}
             <Box sx={{ mt: 2 }}>
               <Box sx={{ mb: 4 }}>
                 <Grid container spacing={{ xl: 2, lg: 2, md: 2, sm: 2, xs: 1 }}>
-                  <Grid item xl={6} lg={6} md={6} sm={6} xs={12}>
+                  <Grid item xl={6} lg={6} md={6} sm={6} xs={12} p={4}>
                     <Typography variant="h6" gutterBottom sx={{ mb: 2 }}>
                       Sort by Date
                     </Typography>
-                    <TextField fullWidth type="date" label="From" focused />
-                    <TextField
-                      fullWidth
-                      type="date"
-                      label="To"
-                      focused
-                      sx={{ mt: 3 }}
-                    />
+
+                    <LocalizationProvider dateAdapter={AdapterDateFns}>
+                      <DatePicker
+                        label="from"
+                        value={sortformik.values.from}
+                        onChange={(newValue) =>
+                          sortformik.setFieldValue('from', newValue)
+                        }
+                        slotProps={{
+                          textField: {
+                            fullWidth: true,
+                            error: Boolean(
+                              sortformik.touched.from && sortformik.errors.from
+                            ),
+                            helperText:
+                              sortformik.touched.from && sortformik.errors.from,
+                          },
+                        }}
+                      />
+                      <DatePicker
+                        label="To"
+                        value={sortformik.values.to}
+                        onChange={(newValue) =>
+                          sortformik.setFieldValue('to', newValue)
+                        }
+                        sx={{ mt: 3 }}
+                        slotProps={{
+                          textField: {
+                            fullWidth: true,
+                            error: Boolean(
+                              sortformik.touched.to && sortformik.errors.to
+                            ),
+                            helperText:
+                              sortformik.touched.to && sortformik.errors.to,
+                          },
+                        }}
+                      />
+                    </LocalizationProvider>
                   </Grid>
-                  <Grid item xl={6} lg={6} md={6} sm={6} xs={12}>
-                    <Typography variant="h6" gutterBottom sx={{ mb: 2 }}>
+
+                  <Grid item xl={6} lg={6} md={6} sm={6} xs={12} p={4}>
+                    <Typography variant="h6" gutterBottom sx={{ mb: 2, mt: 5 }}>
                       Sort by Amount
                     </Typography>
                     <Slider
@@ -1018,7 +1096,11 @@ const KalamsTable: React.FC<KalamProps> = (props) => {
             <Box
               sx={{ width: '100%', display: 'flex', justifyContent: 'center' }}
             >
-              <Button variant="contained" sx={{ width: '60%', mt: 4 }}>
+              <Button
+                variant="contained"
+                sx={{ width: '60%', mt: 4 }}
+                type="submit"
+              >
                 Save
               </Button>
             </Box>

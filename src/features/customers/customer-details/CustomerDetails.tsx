@@ -20,8 +20,12 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { TailSpin } from 'react-loader-spinner';
 import useCustomerData from '../../../hooks/useCustomersData';
+import { useTranslation } from 'react-i18next';
 
 const CustomerDetails: React.FC = () => {
+  // For translation
+  const { t } = useTranslation();
+
   // Id of the customer
   const { id } = useParams<{ id: string }>();
 
@@ -241,11 +245,17 @@ const CustomerDetails: React.FC = () => {
         </Typography>
 
         {/* Customer details */}
-        <Section title="Customer Details">
-          <Row label="Name:" value={data.customer.name} />
-          <Row label="Contact:" value={data.customer.contact?.[0] ?? '—'} />
+        <Section title={t('customerDetailsPage.customerDetails')}>
           <Row
-            label="Address:"
+            label={t('customerDetailsPage.customer.name')}
+            value={data.customer.name}
+          />
+          <Row
+            label={t('customerDetailsPage.customer.contact')}
+            value={data.customer.contact?.[0] ?? '—'}
+          />
+          <Row
+            label={t('customerDetailsPage.customer.address')}
             value={
               <>
                 {data.customer.address.street},&nbsp;
@@ -259,10 +269,9 @@ const CustomerDetails: React.FC = () => {
         <Divider sx={{ my: 3 }} />
 
         {/* For showing the Kalam Deatails on customer name  */}
-        <Section title="Loan Details">
+        <Section title={t('customerDetailsPage.loan')}>
           {/* Loan  Details*/}
           {data.LoanDetails.map((loan: any) => {
-            console.log(loan);
             return (
               <Accordion>
                 <AccordionSummary
@@ -271,41 +280,47 @@ const CustomerDetails: React.FC = () => {
                   id="panel1-header"
                 >
                   <Typography component="span">
-                    Loan {loan.loans.loanId}
+                    {t('customerDetailsPage.loan')} {loan.loans.loanId}
                   </Typography>
                 </AccordionSummary>
                 <AccordionDetails>
-                  <Section title="Item Detail">
-                    <Row label="Item name:" value={loan.loans.details.name} />
+                  <Section title={t('customerDetailsPage.loans.itemDetails')}>
                     <Row
-                      label="Material type:"
+                      label={t('customerDetailsPage.loans.item.itemName')}
+                      value={loan.loans.details.name}
+                    />
+                    <Row
+                      label={t('customerDetailsPage.loans.item.materialType')}
                       value={loan.loans.details.materialType}
                     />
                     <Row
-                      label="Net weight:"
+                      label={t('customerDetailsPage.loans.item.netWeight')}
                       value={loan.loans.details.netWeight}
                     />
                     <Row
-                      label="Gross weight:"
+                      label={t('customerDetailsPage.loans.item.grossWeight')}
                       value={loan.loans.details.grossWeight}
                     />
-                    <Row label="Purity:" value={loan.loans.details.purity} />
                     <Row
-                      label="Gold rate(At the time of loan):"
+                      label={t('customerDetailsPage.loans.item.purity')}
+                      value={loan.loans.details.purity}
+                    />
+                    <Row
+                      label={t('customerDetailsPage.loans.item.goldRate')}
                       value={loan.loans.details.goldRateAtLoan}
                     />
                   </Section>
-                  <Section title="Loan Detail">
+                  <Section title={t('customerDetailsPage.loans.loanDetails')}>
                     <Row
-                      label="Loan start date:"
+                      label={t('customerDetailsPage.loans.loan.loanStartDate')}
                       value={loan.loans.loanDetails.loanStartDate}
                     />
                     <Row
-                      label="Loan amount:"
+                      label={t('customerDetailsPage.loans.loan.customerAmt')}
                       value={loan.loans.loanDetails.customerAmt}
                     />
                     <Row
-                      label="Loan ROI:"
+                      label={t('customerDetailsPage.loans.loan.customerROI')}
                       value={loan.loans.loanDetails.customerROI}
                     />
                   </Section>
@@ -333,7 +348,7 @@ const CustomerDetails: React.FC = () => {
               setEditModal(true);
             }}
           >
-            Edit
+            {t('customerDetailsPage.edit')}
           </Button>
 
           <Button
@@ -344,7 +359,7 @@ const CustomerDetails: React.FC = () => {
               deleteCust();
             }}
           >
-            Delete
+            {t('customerDetailsPage.delete')}
           </Button>
         </Box>
       </Paper>

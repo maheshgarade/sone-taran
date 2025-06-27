@@ -9,38 +9,37 @@ import {
   Box,
   Dialog,
   DialogContent,
-  BottomNavigationAction,
-  BottomNavigation,
-  Paper,
   Grid,
   TextField,
-  Fab,
 } from '@mui/material';
 import { purple } from '@mui/material/colors';
 import StatusChip from '../../status-chip/StatusChip';
 import Divider from '@mui/material/Divider';
 import { customer } from '../../../../features/customers/models/Customers';
 import { useNavigate } from 'react-router-dom';
-import AddIcon from '@mui/icons-material/Add';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { TailSpin } from 'react-loader-spinner';
 import useCustomerData from '../../../../hooks/useCustomersData';
+import { useTranslation } from 'react-i18next';
 
 interface ExpandableCardProps {
   customer: customer;
 }
 
 const ExpandableCard: React.FC<ExpandableCardProps> = ({ customer }) => {
+  // for translation
+  const { t } = useTranslation();
+
   // for expanding the card
   const [expanded, setExpanded] = useState(false);
 
   // Opening the modal
-  const [addModal, setAddModal] = useState(false);
+
   const [editModal, setEditModal] = useState(false);
 
   // Custom hooks
-  const { addCustomerData, updateCustomer, deleteCustomer } = useCustomerData();
+  const { updateCustomer, deleteCustomer } = useCustomerData();
 
   const navigate = useNavigate();
 
@@ -140,50 +139,6 @@ const ExpandableCard: React.FC<ExpandableCardProps> = ({ customer }) => {
     },
   });
 
-  // formik for add form
-  const formik = useFormik({
-    initialValues: {
-      name: '',
-      phone: '',
-      altPhone: '',
-      street: '',
-      city: '',
-      zip: '',
-    },
-    validationSchema: Yup.object({
-      name: Yup.string().required('Name is required'),
-      phone: Yup.string()
-        .required('Phone number is required')
-        .matches(/^\d{10}$/, 'Phone number must be exactly 10 digits'),
-      street: Yup.string().required('Street is required'),
-      city: Yup.string().required('City is required'),
-      zip: Yup.string()
-        .required(' Pin code is required')
-        .matches(/^\d{6}$/, 'Invalid Pin code'),
-    }),
-    onSubmit: async (values) => {
-      console.log('Submitting:', values);
-      try {
-        setLoading(true);
-        addCustomerData({
-          name: values.name,
-          contact: [values.phone, values.altPhone],
-          address: {
-            street: values.street,
-            city: values.city,
-            zip: Number(values.zip),
-          },
-        });
-
-        formik.resetForm();
-        setAddModal(false);
-        setLoading(false);
-      } catch (err) {
-        console.error('Add customer error:', err);
-      }
-    },
-  });
-
   // Input box specification
   const formSections = [
     {
@@ -192,25 +147,25 @@ const ExpandableCard: React.FC<ExpandableCardProps> = ({ customer }) => {
         {
           label: 'Customer Name',
           name: 'name',
-          value: formik.values.name,
-          onChange: formik.handleChange,
-          onBlur: formik.handleBlur,
-          error: formik.touched.name && Boolean(formik.errors.name),
-          helperText: formik.touched.name && formik.errors.name,
+          value: editFormik.values.name,
+          onChange: editFormik.handleChange,
+          onBlur: editFormik.handleBlur,
+          error: editFormik.touched.name && Boolean(editFormik.errors.name),
+          helperText: editFormik.touched.name && editFormik.errors.name,
         },
         {
           label: 'Phone',
           name: 'phone',
-          value: formik.values.phone,
-          onChange: formik.handleChange,
-          onBlur: formik.handleBlur,
-          error: formik.touched.phone && Boolean(formik.errors.phone),
-          helperText: formik.touched.phone && formik.errors.phone,
+          value: editFormik.values.phone,
+          onChange: editFormik.handleChange,
+          onBlur: editFormik.handleBlur,
+          error: editFormik.touched.phone && Boolean(editFormik.errors.phone),
+          helperText: editFormik.touched.phone && editFormik.errors.phone,
         },
         {
           label: 'Alt Phone',
           name: 'altPhone',
-          value: formik.values.altPhone,
+          value: editFormik.values.altPhone,
         },
       ],
     },
@@ -220,29 +175,29 @@ const ExpandableCard: React.FC<ExpandableCardProps> = ({ customer }) => {
         {
           label: 'Street',
           name: 'street',
-          value: formik.values.street,
-          onChange: formik.handleChange,
-          onBlur: formik.handleBlur,
-          error: formik.touched.street && Boolean(formik.errors.street),
-          helperText: formik.touched.street && formik.errors.street,
+          value: editFormik.values.street,
+          onChange: editFormik.handleChange,
+          onBlur: editFormik.handleBlur,
+          error: editFormik.touched.street && Boolean(editFormik.errors.street),
+          helperText: editFormik.touched.street && editFormik.errors.street,
         },
         {
           label: 'City',
           name: 'city',
-          value: formik.values.city,
-          onChange: formik.handleChange,
-          onBlur: formik.handleBlur,
-          error: formik.touched.city && Boolean(formik.errors.city),
-          helperText: formik.touched.city && formik.errors.city,
+          value: editFormik.values.city,
+          onChange: editFormik.handleChange,
+          onBlur: editFormik.handleBlur,
+          error: editFormik.touched.city && Boolean(editFormik.errors.city),
+          helperText: editFormik.touched.city && editFormik.errors.city,
         },
         {
           label: 'Zip Code',
           name: 'zip',
-          value: formik.values.zip,
-          onChange: formik.handleChange,
-          onBlur: formik.handleBlur,
-          error: formik.touched.zip && Boolean(formik.errors.zip),
-          helperText: formik.touched.zip && formik.errors.zip,
+          value: editFormik.values.zip,
+          onChange: editFormik.handleChange,
+          onBlur: editFormik.handleBlur,
+          error: editFormik.touched.zip && Boolean(editFormik.errors.zip),
+          helperText: editFormik.touched.zip && editFormik.errors.zip,
         },
       ],
     },
@@ -310,7 +265,7 @@ const ExpandableCard: React.FC<ExpandableCardProps> = ({ customer }) => {
                   component="span"
                   fontWeight="bold"
                 >
-                  Contact:
+                  {t('customerCard.contact')}
                 </Typography>
                 {customer.customer.contact[0] === undefined
                   ? '-'
@@ -331,7 +286,7 @@ const ExpandableCard: React.FC<ExpandableCardProps> = ({ customer }) => {
                   fontWeight="bold"
                   sx={{ fontSize: '12px' }}
                 >
-                  Address:
+                  {t('customerCard.address')}
                 </Typography>
                 {customer.customer.address.street},
                 {customer.customer.address.city},{customer.customer.address.zip}
@@ -342,7 +297,7 @@ const ExpandableCard: React.FC<ExpandableCardProps> = ({ customer }) => {
 
         <Divider />
         <Collapse in={expanded} timeout="auto" unmountOnExit>
-          <CardContent>
+          <CardContent sx={{ display: 'flex', justifyContent: 'center' }}>
             <Button
               variant="contained"
               color="primary"
@@ -352,7 +307,7 @@ const ExpandableCard: React.FC<ExpandableCardProps> = ({ customer }) => {
                 })
               }
             >
-              View
+              {t('customerCard.view')}
             </Button>
             <Button
               variant="contained"
@@ -370,7 +325,7 @@ const ExpandableCard: React.FC<ExpandableCardProps> = ({ customer }) => {
                 setEditModal(true);
               }}
             >
-              Edit
+              {t('customerCard.edit')}
             </Button>
 
             <Button
@@ -381,94 +336,13 @@ const ExpandableCard: React.FC<ExpandableCardProps> = ({ customer }) => {
                 deleteCust();
               }}
             >
-              Delete
+              {t('customerCard.delete')}
             </Button>
           </CardContent>
         </Collapse>
       </Card>
 
-      {/* for the add button at the bottom  */}
-      <Paper
-        sx={{
-          position: 'fixed',
-          bottom: 0,
-          left: 0,
-          right: 0,
-          background: 'none',
-          boxShadow: 'none',
-          display: 'flex',
-          justifyContent: 'flex-end',
-          pr: { xl: 4, xs: 0 },
-          mb: 2,
-        }}
-        elevation={3}
-      >
-        <BottomNavigation
-          sx={{
-            height: '0',
-            background: 'none',
-            boxShadow: 'none',
-          }}
-        >
-          <BottomNavigationAction
-            label="Add"
-            sx={{ boxShadow: 'none' }}
-            icon={
-              <Fab
-                color="primary"
-                aria-label="add"
-                onClick={() => {
-                  setAddModal(true);
-                }}
-              >
-                <AddIcon />
-              </Fab>
-            }
-          />
-        </BottomNavigation>
-      </Paper>
-
-      {/* Modal for the add  */}
-      <Dialog
-        open={addModal}
-        onClose={() => setAddModal(false)}
-        maxWidth="md"
-        fullWidth
-      >
-        <DialogContent>
-          {/* Customer Information */}
-          <Box sx={{ mt: 2 }} component="form" onSubmit={formik.handleSubmit}>
-            <Box sx={{ mt: 2 }}>
-              {formSections.map((section, index) => (
-                <Box key={index} sx={{ mb: 4 }}>
-                  <Typography variant="h6" gutterBottom sx={{ mb: 2 }}>
-                    {section.title}
-                  </Typography>
-                  <Grid container spacing={2}>
-                    {section.fields.map((field, idx) => (
-                      <Grid item xl={6} lg={6} md={6} sm={6} xs={12} key={idx}>
-                        <TextField fullWidth {...field} />
-                      </Grid>
-                    ))}
-                  </Grid>
-                </Box>
-              ))}
-            </Box>
-
-            <Box
-              sx={{ width: '100%', display: 'flex', justifyContent: 'center' }}
-            >
-              <Button
-                variant="contained"
-                sx={{ width: '60%', mt: 4 }}
-                type="submit"
-              >
-                Add Customer
-              </Button>
-            </Box>
-          </Box>
-        </DialogContent>
-      </Dialog>
+      
 
       {/* Modal For edit Customer */}
       <Dialog

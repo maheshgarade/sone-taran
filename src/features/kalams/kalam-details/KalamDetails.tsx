@@ -571,37 +571,38 @@ const KalamDetails: React.FC = () => {
     <Box sx={{ maxWidth: 800, mx: 'auto', p: { xs: 2, md: 3 } }}>
       <Paper elevation={3} sx={{ p: { xs: 2, md: 4 } }}>
         <Typography variant="h4" mb={4}>
-          Kalam&nbsp;ID:&nbsp;{id === undefined ? '-' : id}
+          {t('kalamDetailsPage.kalam')}&nbsp;ID:&nbsp;
+          {id === undefined ? '-' : id}
         </Typography>
 
         {/* Kalam details */}
-        <Section title="Kalam Details">
+        <Section title={t('kalamDetailsPage.kalamDetail')}>
           <Row
-            label={t('kalamDetailsPage.kalam.itemName')}
+            label={t('kalamDetailsPage.kalams.itemName')}
             value={data.kalam.details.name}
           />
           <Row
-            label={t('kalamDetailsPage.kalam.materialType')}
+            label={t('kalamDetailsPage.kalams.materialType')}
             value={data.kalam.details.materialType}
           />
           <Row
-            label={t('kalamDetailsPage.kalam.goldRate')}
+            label={t('kalamDetailsPage.kalams.goldRate')}
             value={data.kalam.details.goldRateAtLoan}
           />
           <Row
-            label={t('kalamDetailsPage.kalam.grossWeight')}
+            label={t('kalamDetailsPage.kalams.grossWeight')}
             value={data.kalam.details.grossWeight}
           />
           <Row
-            label={t('kalamDetailsPage.kalam.netWeight')}
+            label={t('kalamDetailsPage.kalams.netWeight')}
             value={data.kalam.details.netWeight}
           />
           <Row
-            label={t('kalamDetailsPage.kalam.purity')}
+            label={t('kalamDetailsPage.kalams.purity')}
             value={data.kalam.details.purity}
           />
           <Row
-            label={t('kalamDetailsPage.kalam.quantity')}
+            label={t('kalamDetailsPage.kalams.quantity')}
             value={data.kalam.details.number}
           />
         </Section>
@@ -609,7 +610,7 @@ const KalamDetails: React.FC = () => {
         <Divider sx={{ my: 3 }} />
 
         {/* Loan details */}
-        <Section title="Loan Details">
+        <Section title={t('kalamDetailsPage.loanDetails')}>
           <Row
             label={t('kalamDetailsPage.Loan.loanStartDate')}
             value={data.kalam.loanDetails.loanStartDate}
@@ -643,14 +644,17 @@ const KalamDetails: React.FC = () => {
         <Divider sx={{ my: 3 }} />
 
         {/* Customer details */}
-        <Section title="Customer Details">
-          <Row label="Name:" value={data.customerDetails.name} />
+        <Section title={t('kalamDetailsPage.customerDetails')}>
           <Row
-            label="Contact:"
+            label={t('kalamDetailsPage.customerMerchantFields.name')}
+            value={data.customerDetails.name}
+          />
+          <Row
+            label={t('kalamDetailsPage.customerMerchantFields.contact')}
             value={data.customerDetails.contact?.[0] ?? '—'}
           />
           <Row
-            label="Address:"
+            label={t('kalamDetailsPage.customerMerchantFields.address')}
             value={
               <>
                 {data.customerDetails.address.street},
@@ -664,19 +668,22 @@ const KalamDetails: React.FC = () => {
         <Divider sx={{ my: 3 }} />
 
         {/* Merchant details */}
-        <Section title="Merchant Details">
-          <Row label="Name:" value={data.merchantDetails.name} />
+        <Section title={t('kalamDetailsPage.merchantDetails')}>
           <Row
-            label="Contact:"
-            value={data.merchantDetails.contact?.[0] ?? '—'}
+            label={t('kalamDetailsPage.customerMerchantFields.name')}
+            value={data.merchantDetails?.name || '-'}
           />
           <Row
-            label="Address:"
+            label={t('kalamDetailsPage.customerMerchantFields.contact')}
+            value={data.merchantDetails?.contact?.[0] ?? '—'}
+          />
+          <Row
+            label={t('kalamDetailsPage.customerMerchantFields.address')}
             value={
               <>
-                {data.merchantDetails.address.street},&nbsp;
-                {data.merchantDetails.address.city},&nbsp;
-                {data.merchantDetails.address.zip}
+                {data.merchantDetails?.address.street || '-'},&nbsp;
+                {data.merchantDetails?.address.city || '-'},&nbsp;
+                {data.merchantDetails?.address.zip || '-'}
               </>
             }
           />
@@ -722,7 +729,7 @@ const KalamDetails: React.FC = () => {
               setEditModal(true);
             }}
           >
-            Edit
+            {t('kalamDetailsPage.edit')}
           </Button>
           <Button
             variant="contained"
@@ -732,7 +739,7 @@ const KalamDetails: React.FC = () => {
               deleteloan();
             }}
           >
-            Delete{' '}
+            {t('kalamDetailsPage.delete')}
           </Button>
         </Box>
       </Paper>

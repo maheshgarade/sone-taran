@@ -10,12 +10,25 @@ interface RequestEmailOtpResponse {
   token: string;
 }
 
+//For creating a new user
+export interface VerifiedUserResponse {
+  token: string;
+  success: boolean;
+  user: {
+    _id: string;
+    phone?: string;
+    email?: string;
+    createdAt?: string;
+  };
+}
+
 
 const apiClient = axios.create({
   baseURL: "https://sone-taran-backend.onrender.com/api",
   headers: {
     "Content-Type": "application/json",
   },
+  withCredentials: true,
 });
 
 const getAuthHeaders = (token: string) => ({
@@ -39,21 +52,20 @@ export const requestPhoneOtpApi = async (phone: string | { phoneNo: string }): P
 };
 
 // for verifing the phone otp
+
 export const verifyPhoneOtpApi = async (
   phone: string,
-  otp: string,
+  otp: number,
   fullhash: string,
-  otpToken: string
-): Promise<{ token: string } | null> => {
+): Promise<VerifiedUserResponse | null> => {
   try {
     const response = await apiClient.post(
       '/user/verifyPhoneOtp',
       { phone, otp, fullhash },
-      getAuthHeaders(otpToken)
     );
 
-    if (response.status === 200 && response.data.token) {
-      return { token: response.data.token };
+    if (response.status === 200 && response.data.success && response.data.user) {
+      return response.data as VerifiedUserResponse;
     }
 
     return null;
@@ -62,6 +74,7 @@ export const verifyPhoneOtpApi = async (
     return null;
   }
 };
+
 
 // For Email
 
@@ -77,20 +90,19 @@ export const requestEmailOtpApi = async (email: string | { email: string }): Pro
 };
 
 
-// Verifing the email OTP
 export const verifyEmailOtpApi = async (
   otp: string,
-  token: string
-): Promise<{ token: string } | null> => {
+  otpToken: string
+): Promise<VerifiedUserResponse | null> => {
   try {
     const response = await apiClient.post(
-      '/user/verifyEmailOtp', // adjust route if needed
+      '/user/verifyEmailOtp',
       { otp },
-      getAuthHeaders(token)
+      getAuthHeaders(otpToken),
     );
 
-    if (response.status === 200 && response.data.token) {
-      return { token: response.data.token }; // This is the new session token
+    if (response.status === 200 && response.data.success && response.data.user) {
+      return response.data as VerifiedUserResponse;
     }
 
     return null;
@@ -99,3 +111,4 @@ export const verifyEmailOtpApi = async (
     return null;
   }
 };
+

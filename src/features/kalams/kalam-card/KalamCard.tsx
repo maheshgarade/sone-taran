@@ -6,7 +6,6 @@ import { useState } from 'react';
 
 export default function KalamCard(props: KalamProps) {
   const { data } = props;
-  console.log('data ', data);
 
   // For filter data
   const [filteredData, setFilteredData] = useState(data);
@@ -18,10 +17,9 @@ export default function KalamCard(props: KalamProps) {
       (item) =>
         item.customerDetails.name.toLowerCase().includes(lowerSearch) ||
         item.kalam.details.name.toLowerCase().includes(lowerSearch) ||
-        item.kalam.loanId.toLowerCase().includes(lowerSearch)
+        item.kalam.loanId.toString().toLowerCase().includes(lowerSearch)
     );
     setFilteredData(filtered);
-    console.log(filtered);
   };
   // Searching Using Debouncing
   const debouncingSearch = (func: Function, delay: number) => {
@@ -48,11 +46,9 @@ export default function KalamCard(props: KalamProps) {
           sx={{
             width: '60%',
             display: 'flex',
-            justifyContent: 'flex-end',
             pr: 2,
             border: '1px solid lightgray',
             borderRadius: '10px',
-            marginLeft: 'auto',
             mb: 5,
           }}
           component="form"
